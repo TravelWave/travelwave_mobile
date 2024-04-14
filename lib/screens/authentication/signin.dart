@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelwave_mobile/screens/authentication/forgot_password.dart';
 import 'package:travelwave_mobile/screens/authentication/signup.dart';
 
 class SignIn extends StatefulWidget {
@@ -99,9 +100,17 @@ class _SignInState extends State<SignIn> {
               top: 230,
               left: 220,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const ForgotPasswordPage();
+                      },
+                    ),
+                  );
+                },
                 child: const Text(
-                  'Forget password?',
+                  'Forgot password?',
                   style: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
