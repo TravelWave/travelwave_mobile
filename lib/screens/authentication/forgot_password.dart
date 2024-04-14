@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:travelwave_mobile/screens/home/home.dart';
+import 'package:travelwave_mobile/screens/authentication/set_password.dart';
 
-class PhoneVerificationPage extends StatefulWidget {
-  const PhoneVerificationPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
   @override
-  State<PhoneVerificationPage> createState() => _PhoneVerificationPageState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final List<TextEditingController> _otpControllers =
       List.generate(6, (index) => TextEditingController());
 
@@ -26,9 +26,9 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           children: [
             const Positioned(
               top: 50,
-              left: 40,
+              left: 50,
               child: Text(
-                'Phone Verification',
+                'Forgot Password',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
@@ -37,9 +37,9 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             ),
             const Positioned(
               top: 100,
-              left: 90,
+              left: 40,
               child: Text(
-                'Enter your OTP code',
+                'Code has been sent to ***** ***99',
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -93,14 +93,13 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               top: 300,
               child: GestureDetector(
                 onTap: () {
-                  showSignupSuccessDialog(context);
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(
-                  //     builder: (context) {
-                  //       return const MainPage();
-                  //     },
-                  //   ),
-                  // );
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const SetPasswordPage();
+                      },
+                    ),
+                  );
                 },
                 child: Container(
                   height: 60,
@@ -220,16 +219,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const MainPage();
-                    },
-                  ),
-                );
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Text('OK'),
             ),
           ],
