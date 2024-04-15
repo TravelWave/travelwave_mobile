@@ -1,0 +1,17 @@
+com.example.travelwave_mobile.app-jetified-window-1.0.0-beta04-0 /home/minase/.gradle/caches/transforms-3/032f4dff274e516110d9363a9793a3e3/transformed/jetified-window-1.0.0-beta04/res
+com.example.travelwave_mobile.app-jetified-window-java-1.0.0-beta04-1 /home/minase/.gradle/caches/transforms-3/142c24f2530665bb6deb4123ab140714/transformed/jetified-window-java-1.0.0-beta04/res
+com.example.travelwave_mobile.app-jetified-play-services-basement-18.0.0-2 /home/minase/.gradle/caches/transforms-3/1b9fcd709eea412754df2629217faace/transformed/jetified-play-services-basement-18.0.0/res
+com.example.travelwave_mobile.app-core-1.6.0-3 /home/minase/.gradle/caches/transforms-3/2579a7de00054bf46a8dbc332552f622/transformed/core-1.6.0/res
+com.example.travelwave_mobile.app-jetified-annotation-experimental-1.1.0-4 /home/minase/.gradle/caches/transforms-3/3f96ca76068ab400b494bc7d541ee256/transformed/jetified-annotation-experimental-1.1.0/res
+com.example.travelwave_mobile.app-jetified-play-services-base-18.0.1-5 /home/minase/.gradle/caches/transforms-3/456feef7530341a2c919967cc4dde951/transformed/jetified-play-services-base-18.0.1/res
+com.example.travelwave_mobile.app-jetified-play-services-maps-18.2.0-6 /home/minase/.gradle/caches/transforms-3/b4788c193f13f554649fe724431810b5/transformed/jetified-play-services-maps-18.2.0/res
+com.example.travelwave_mobile.app-debug-7 /home/minase/dev/travelwave_mobile/android/app/src/debug/res
+com.example.travelwave_mobile.app-main-8 /home/minase/dev/travelwave_mobile/android/app/src/main/res
+com.example.travelwave_mobile.app-pngs-9 /home/minase/dev/travelwave_mobile/build/app/generated/res/pngs/debug
+com.example.travelwave_mobile.app-resValues-10 /home/minase/dev/travelwave_mobile/build/app/generated/res/resValues/debug
+com.example.travelwave_mobile.app-rs-11 /home/minase/dev/travelwave_mobile/build/app/generated/res/rs/debug
+com.example.travelwave_mobile.app-mergeDebugResources-12 /home/minase/dev/travelwave_mobile/build/app/intermediates/incremental/debug/mergeDebugResources/merged.dir
+com.example.travelwave_mobile.app-mergeDebugResources-13 /home/minase/dev/travelwave_mobile/build/app/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+com.example.travelwave_mobile.app-merged_res-14 /home/minase/dev/travelwave_mobile/build/app/intermediates/merged_res/debug
+com.example.travelwave_mobile.app-packaged_res-15 /home/minase/dev/travelwave_mobile/build/flutter_plugin_android_lifecycle/intermediates/packaged_res/debug
+com.example.travelwave_mobile.app-packaged_res-16 /home/minase/dev/travelwave_mobile/build/google_maps_flutter_android/intermediates/packaged_res/debug

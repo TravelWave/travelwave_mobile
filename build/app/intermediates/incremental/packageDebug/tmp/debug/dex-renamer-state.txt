@@ -1,0 +1,4 @@
+#Mon Apr 15 10:19:23 EAT 2024
+base.0=/home/minase/dev/travelwave_mobile/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
