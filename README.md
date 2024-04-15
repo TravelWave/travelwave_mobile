@@ -14,9 +14,3 @@ The core objective of TravelWave is to provide users with a convenient platform 
 - **Reduce Traffic Congestion**: By sharing rides, users can help reduce traffic congestion and contribute to a greener environment.
 - **Cost-Effective Travel**: Sharing rides helps users save money on transportation costs.
 - **Community Connections**: TravelWave fosters community connections by bringing people together for shared travel experiences.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
