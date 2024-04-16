@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/screens/location/cancel_ride.dart';
+import 'package:travelwave_mobile/screens/location/index.dart';
 import 'package:travelwave_mobile/screens/onboarding/splash_screen.dart';
+import 'package:travelwave_mobile/screens/payment/index.dart';
 import 'package:travelwave_mobile/screens/settings/index.dart';
 
 void main() {
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
         //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         //   useMaterial3: true,
         // ),
-        home: const SettingPage(),
+        home: const CancelRideScreen(),
       );
     });
   }
