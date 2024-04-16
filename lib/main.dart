@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:travelwave_mobile/screens/contact/cancel_ride.dart';
-import 'package:travelwave_mobile/screens/contact/location_confirm.dart';
-import 'package:travelwave_mobile/screens/contact/message_view.dart';
-import 'package:travelwave_mobile/screens/payment/payment_checkout.dart';
 import 'core/app_export.dart';
 
 var globalMessengerKey = GlobalKey<ScaffoldMessengerState>();

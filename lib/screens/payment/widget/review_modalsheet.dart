@@ -152,7 +152,7 @@ class _ReviewScreenBottomsheetState extends State<ReviewScreenBottomsheet> {
                     );
                   },
                   onRatingUpdate: (rating) {
-                    print(rating);
+                    // print(rating);
                   },
                 ),
                 SizedBox(height: 21.v),

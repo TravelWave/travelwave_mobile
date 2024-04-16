@@ -6,7 +6,7 @@ class ArcIndicator extends StatelessWidget {
   final double progress; // Progress value between 0.0 and 1.0
   final Widget child; // The button widget to wrap
 
-  const ArcIndicator({
+  const ArcIndicator({super.key, 
     required this.progress,
     required this.child,
   });
