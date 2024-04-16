@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:travelwave_mobile/constants.dart';
 
 import 'package:travelwave_mobile/widgets/custom_button.dart';
@@ -13,7 +12,6 @@ class ComplainPage extends StatefulWidget {
 }
 
 bool isCopied = false;
-TextEditingController _referalcode = TextEditingController();
 List<String> items = ["Vehicle not clean", "rider not good", "not family car"];
 
 class _ComplainPageState extends State<ComplainPage> {

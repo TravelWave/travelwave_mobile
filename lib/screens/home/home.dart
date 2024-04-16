@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:iconsax/iconsax.dart';
 import 'package:travelwave_mobile/screens/favourites/favourite.dart';
 import 'package:travelwave_mobile/screens/home/home_transport.dart';
