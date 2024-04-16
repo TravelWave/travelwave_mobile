@@ -34,7 +34,7 @@ class _HistoryFilterState extends State<HistoryFilter> {
               });
             },
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 19.h, vertical: 15.v),
+                padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 17.v),
                 decoration: BoxDecoration(
                   color: selected == "upcoming"
                       ? PrimaryColors.amberA400
@@ -54,7 +54,7 @@ class _HistoryFilterState extends State<HistoryFilter> {
               });
             },
             child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 19.h, vertical: 15.v),
+                padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 17.v),
                 decoration: BoxDecoration(
                   color: selected == "completed"
                       ? PrimaryColors.amberA400
@@ -73,9 +73,7 @@ class _HistoryFilterState extends State<HistoryFilter> {
                 });
               },
               child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 15.v, horizontal: 10.h)
-                          .copyWith(left: 10.h),
+                  padding: EdgeInsets.symmetric(vertical: 17.v),
                   decoration: BoxDecoration(
                     color: selected == "cancelled"
                         ? PrimaryColors.amberA400
@@ -83,6 +81,7 @@ class _HistoryFilterState extends State<HistoryFilter> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text("Cancelled",
+                      textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color:
                               selected == "cancelled" ? Colors.white : null))),

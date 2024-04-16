@@ -8,7 +8,7 @@ class FilterList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15.v, horizontal: 15.h),
+      margin: EdgeInsets.symmetric(vertical: 10.v, horizontal: 15.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
