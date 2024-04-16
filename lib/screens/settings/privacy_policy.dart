@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travelwave_mobile/constants.dart';
-import 'package:travelwave_mobile/screens/settings/change_password.dart';
-import 'package:travelwave_mobile/screens/settings/widget/setting_option_list.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
