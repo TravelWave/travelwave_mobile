@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 

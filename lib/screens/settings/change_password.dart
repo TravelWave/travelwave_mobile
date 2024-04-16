@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/settings/widget/custom_textfield.dart';
-import 'package:travelwave_mobile/screens/settings/widget/setting_option_list.dart';
+
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 
 class ChangePassword extends StatelessWidget {

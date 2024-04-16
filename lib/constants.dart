@@ -97,6 +97,11 @@ ThemeData lightTheme() {
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.light,
     primaryColor: const Color(0xFFEDAE10),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      scrolledUnderElevation: 0.0,
+      color: Colors.white, // Set the background color of the AppBar to white
+    ),
     textTheme: TextTheme(
       bodyLarge: TextStyle(
         color: PrimaryColors.gray800,

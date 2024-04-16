@@ -123,6 +123,8 @@ class MessageScreen extends StatelessWidget {
   /// Section Widget
   PreferredSizeWidget _buildAppbar(BuildContext context) {
     return AppBar(
+      scrolledUnderElevation: 0.0,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       leadingWidth: 32.h,
       leading: InkWell(
