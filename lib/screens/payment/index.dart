@@ -199,7 +199,9 @@ class PaymentCheckOutScreen extends StatelessWidget {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: Padding(
                   padding: EdgeInsets.only(bottom: 3.v),
                   child: Text("Back",

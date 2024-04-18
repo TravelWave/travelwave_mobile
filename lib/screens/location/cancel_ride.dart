@@ -79,6 +79,8 @@ void showCancelDialog(context) {
                           .copyWith(top: 26.v),
                   child: CustomElevatedButton(
                       onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                         // print("object");
                         // reviewDialog(context);
                       },
@@ -197,7 +199,9 @@ class _CancelRideScreenState extends State<CancelRideScreen> {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+              },
               child: Padding(
                   padding: EdgeInsets.only(
                     bottom: 1.v,

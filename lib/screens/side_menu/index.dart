@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/about_us/index.dart';
+import 'package:travelwave_mobile/screens/complain/index.dart';
 import 'package:travelwave_mobile/screens/history/index.dart';
 import 'package:travelwave_mobile/screens/referral/index.dart';
 import 'package:travelwave_mobile/screens/settings/index.dart';
@@ -29,21 +30,22 @@ class _SideMenuState extends State<SideMenu> {
               children: [
                 Container(
                   padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 5.h,
-                      ),
-                      InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(Icons.arrow_back_ios)),
-                      Text(
-                        'Back',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ],
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 5.h,
+                        ),
+                        const Icon(Icons.arrow_back_ios),
+                        Text(
+                          'Back',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
@@ -131,7 +133,7 @@ class _SideMenuState extends State<SideMenu> {
                     // Handle settings tile tap
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) {
-                        return const SettingPage();
+                        return const ComplainPage();
                       },
                     ));
                   },
