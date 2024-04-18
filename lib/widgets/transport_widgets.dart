@@ -21,7 +21,7 @@ Widget carFeaturesWidget(
             style: TextStyle(
               color: Colors.grey[700],
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 14,
             ),
           ),
         ),
@@ -32,7 +32,7 @@ Widget carFeaturesWidget(
             style: TextStyle(
               color: Colors.grey[700],
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 14,
             ),
           ),
         ),

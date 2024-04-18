@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travelwave_mobile/screens/authentication/forgot_password.dart';
 import 'package:travelwave_mobile/screens/authentication/signup.dart';
+import 'package:travelwave_mobile/screens/home/home.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -15,57 +16,71 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Container(
         margin: const EdgeInsets.all(10),
         width: double.infinity,
         height: double.infinity,
         child: Stack(
           children: [
+            Positioned(
+              top: 150,
+              left: 40,
+              child: SizedBox(
+                height: 150,
+                width: 250,
+                child: Image.asset('assets/01_onboarding.png'),
+              ),
+            ),
             const Positioned(
-              top: 10,
-              left: 100,
+              top: 80,
+              left: 130,
               child: Text(
                 'Sign In',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontSize: 20,
                 ),
               ),
             ),
             Positioned(
-              top: 80,
+              top: 370,
+              left: 20,
               child: SizedBox(
-                height: 100,
-                width: 340,
+                height: 45,
+                width: 300,
                 child: TextField(
+                  cursorColor: Colors.grey[800],
+                  keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: 'Phone Number',
+                    hintStyle: const TextStyle(fontSize: 13),
                     fillColor: Colors.grey,
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).primaryColor,
                         width: 2,
                       ),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
                         width: 1,
                       ),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
               ),
             ),
             Positioned(
-              top: 160,
+              top: 430,
+              left: 20,
               child: SizedBox(
-                height: 100,
-                width: 340,
+                height: 45,
+                width: 300,
                 child: TextField(
+                  cursorColor: Colors.grey[800],
                   obscureText: isObscure,
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
@@ -76,20 +91,23 @@ class _SignInState extends State<SignIn> {
                       },
                       icon: Icon(
                         isObscure
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        size: 18,
                       ),
                       color: Colors.grey[700],
                     ),
-                    labelText: 'Enter Your Password',
+                    hintText: 'Enter Your Password',
+                    hintStyle: const TextStyle(fontSize: 13),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: Colors.grey),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
                         color: Theme.of(context).primaryColor,
+                        width: 2,
                       ),
                     ),
                   ),
@@ -97,8 +115,8 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             Positioned(
-              top: 230,
-              left: 220,
+              top: 490,
+              left: 200,
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).pushReplacement(
@@ -114,27 +132,37 @@ class _SignInState extends State<SignIn> {
                   style: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
+                    fontSize: 14,
                   ),
                 ),
               ),
             ),
             Positioned(
-              top: 300,
+              top: 530,
+              left: 20,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const MainPage();
+                      },
+                    ),
+                  );
+                },
                 child: Container(
-                  height: 60,
-                  width: 340,
+                  height: 45,
+                  width: 300,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Center(
                     child: Text(
                       'Sign In',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 16,
                         color: Colors.white,
                       ),
                     ),
@@ -143,7 +171,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             const Positioned(
-              top: 400,
+              top: 610,
               left: 0,
               right: 0,
               child: Divider(
@@ -153,7 +181,7 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             Positioned(
-              top: 420,
+              top: 600,
               child: Container(
                 height: 80,
                 width: 340,
@@ -167,7 +195,7 @@ class _SignInState extends State<SignIn> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[700],
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                     GestureDetector(
@@ -183,7 +211,7 @@ class _SignInState extends State<SignIn> {
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ),

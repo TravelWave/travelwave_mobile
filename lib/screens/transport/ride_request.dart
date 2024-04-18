@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:travelwave_mobile/screens/home/home.dart';
 
 class RideRequestPage extends StatefulWidget {
   const RideRequestPage({super.key});
@@ -31,20 +31,21 @@ class _RideRequestPageState extends State<RideRequestPage> {
                     padding: const EdgeInsets.all(5),
                     child: const Row(
                       children: [
-                        Icon(Icons.arrow_back_ios),
+                        Icon(Icons.arrow_back_ios, size: 18),
                         Text('Back'),
                       ],
                     ),
                   ),
                 ),
+                const SizedBox(width: 20),
                 Container(
                   height: 50,
-                  padding: const EdgeInsets.only(left: 20, top: 20),
+                  padding: const EdgeInsets.only(left: 20, top: 25),
                   child: const Text(
                     'Request for Ride',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 19,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -56,21 +57,22 @@ class _RideRequestPageState extends State<RideRequestPage> {
                   leading: const Icon(
                     Icons.location_on,
                     color: Colors.red,
-                    size: 20,
+                    size: 16,
                   ),
                   title: Text(
                     'Current Location',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                   subtitle: const Text(
-                    '2972 Westheimer Rd. Santa Ana',
+                    '2972 Westheimer Rd. Santa Ana, Illinois 85486',
                     style: TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
+                      fontSize: 11,
                     ),
                   ),
                 ),
@@ -78,33 +80,35 @@ class _RideRequestPageState extends State<RideRequestPage> {
                   leading: Icon(
                     Icons.location_on,
                     color: Theme.of(context).primaryColor,
-                    size: 20,
+                    size: 16,
                   ),
                   title: Text(
                     'Office',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                   subtitle: const Text(
-                    '1901 Thornridge Cir',
+                    '1901 Thornridge Cir. Shiloh, Hawaii 81063',
                     style: TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
+                      fontSize: 11,
                     ),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 30),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: Theme.of(context).primaryColor,
-                  width: 2,
+                  width: 1,
                 ),
               ),
               child: Row(
@@ -118,7 +122,7 @@ class _RideRequestPageState extends State<RideRequestPage> {
                         style: TextStyle(
                           color: Colors.grey[700],
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Row(
@@ -126,12 +130,14 @@ class _RideRequestPageState extends State<RideRequestPage> {
                           Icon(
                             Icons.star_rounded,
                             color: Theme.of(context).primaryColor,
+                            size: 18,
                           ),
                           const Text(
                             '4.9 (531 reviews)',
                             style: TextStyle(
                               color: Colors.grey,
                               fontWeight: FontWeight.bold,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -146,6 +152,7 @@ class _RideRequestPageState extends State<RideRequestPage> {
                 ],
               ),
             ),
+            const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -155,7 +162,7 @@ class _RideRequestPageState extends State<RideRequestPage> {
                     'Charge',
                     style: TextStyle(
                       color: Colors.grey[500],
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -166,14 +173,14 @@ class _RideRequestPageState extends State<RideRequestPage> {
                         'Mustang/per hours',
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
                         '\$200',
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       )
                     ],
@@ -185,14 +192,14 @@ class _RideRequestPageState extends State<RideRequestPage> {
                         'Vat (5%)',
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
                         '\$10',
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       )
                     ],
@@ -204,14 +211,14 @@ class _RideRequestPageState extends State<RideRequestPage> {
                         'Promo Code',
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       ),
                       Text(
                         '-\$5',
                         style: TextStyle(
                           color: Colors.grey[500],
-                          fontSize: 16,
+                          fontSize: 13,
                         ),
                       )
                     ],
@@ -219,91 +226,74 @@ class _RideRequestPageState extends State<RideRequestPage> {
                 ],
               ),
             ),
-
-            // Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-            //   children: [
-            //     const Text(
-            //       'Select payment method',
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.bold,
-            //         fontSize: 20,
-            //       ),
-            //     ),
-            //     const SizedBox(height: 8),
-            //     paymentCardWidget(context, 'assets/visa.png',
-            //         '*** **** **** 8970', 'Expires: 12/26'),
-            //     paymentCardWidget(context, 'assets/cash.png', 'Cash', ' '),
-            //   ],
-            // ),
-            const Text(
-              'Please select date and time of the pickup',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                selectDate(context);
-                selectTime(context);
-              },
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Theme.of(context).primaryColor,
-                    width: 2,
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                const SizedBox(width: 10),
+                Text(
+                  'Pickup day: ',
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 60),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        DateFormat.yMMMd().add_jm().format(
-                              DateTime(
-                                selectedDate.year,
-                                selectedDate.month,
-                                selectedDate.day,
-                                selectedTime.hour,
-                                selectedTime.minute,
-                              ),
-                            ),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
+                Text(
+                  DateFormat.yMMMd().format(
+                    DateTime(
+                      selectedDate.year,
+                      selectedDate.month,
+                      selectedDate.day,
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[700],
+                    fontSize: 13,
                   ),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 80),
+            Row(
+              children: [
+                const SizedBox(width: 10),
+                Text(
+                  'Pickup time: ',
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  DateFormat('hh:mm a').format(
+                    DateTime(
+                      selectedDate.hour,
+                      selectedDate.minute,
+                    ),
+                  ),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[700],
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 100),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) {
-                      return const RideRequestPage();
+                      return const MainPage();
                     },
                   ),
                 );
               },
               child: Container(
-                height: 55,
-                width: 340,
+                height: 40,
+                width: 250,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10),
@@ -317,7 +307,7 @@ class _RideRequestPageState extends State<RideRequestPage> {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                 ),

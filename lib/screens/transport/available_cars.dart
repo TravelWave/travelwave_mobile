@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:travelwave_mobile/screens/transport/car_details.dart';
 
@@ -18,7 +16,6 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(10),
-        color: const Color(0xFFFFFBE7),
         child: Column(
           children: [
             GestureDetector(
@@ -30,7 +27,7 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                 padding: const EdgeInsets.all(5),
                 child: const Row(
                   children: [
-                    Icon(Icons.arrow_back_ios),
+                    Icon(Icons.arrow_back_ios, size: 18),
                     Text('Back'),
                   ],
                 ),
@@ -40,32 +37,32 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
               'Available cars for ride',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 24,
+                fontSize: 18,
               ),
             ),
             Text(
               '$availableRides cars found',
               style: const TextStyle(
                 color: Colors.grey,
-                fontSize: 16,
+                fontSize: 15,
               ),
             ),
             SizedBox(
               height: 541,
               width: double.infinity,
               child: ListView.builder(
-                itemCount: 20,
+                itemCount: 10,
                 itemBuilder: (context, index) {
                   return Container(
-                    width: 300,
-                    height: 135,
-                    margin: const EdgeInsets.only(top: 15),
+                    width: 220,
+                    height: 125,
+                    margin: const EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFFBE7),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: Theme.of(context).primaryColor,
-                        width: 2,
+                        width: 1,
                       ),
                     ),
                     child: Column(
@@ -82,7 +79,7 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                     'BMW Cabrio',
                                     style: TextStyle(
                                       color: Colors.grey[700],
-                                      fontSize: 16,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),
@@ -92,6 +89,7 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                     'Automatic | 3 seats | Octane',
                                     style: TextStyle(
                                       color: Colors.grey,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
@@ -100,13 +98,14 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                       left: 10, bottom: 3, top: 5),
                                   child: Row(
                                     children: [
-                                      const Icon(Iconsax.location5, size: 15),
+                                      const Icon(Icons.location_on, size: 15),
                                       const SizedBox(width: 5),
                                       Text(
                                         '800m (5 mins away)',
                                         style: TextStyle(
                                           color: Colors.grey[700],
                                           fontWeight: FontWeight.bold,
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ],
@@ -127,15 +126,24 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const CarDetailPage();
+                                    },
+                                  ),
+                                );
+                              },
                               child: Container(
-                                height: 45,
-                                width: 150,
+                                height: 35,
+                                width: 130,
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFFFFBE7),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: Theme.of(context).primaryColor,
-                                    width: 2,
+                                    width: 1,
                                   ),
                                 ),
                                 child: Center(
@@ -144,7 +152,7 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                     style: TextStyle(
                                       color: Theme.of(context).primaryColor,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -161,8 +169,8 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                 );
                               },
                               child: Container(
-                                height: 45,
-                                width: 150,
+                                height: 35,
+                                width: 130,
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).primaryColor,
                                   borderRadius: BorderRadius.circular(10),
@@ -176,7 +184,7 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),

@@ -11,14 +11,16 @@ Widget onboardingWidget(BuildContext context, String img, String title,
     child: Stack(
       children: [
         Positioned(
+          top: 60,
+          left: 20,
           child: SizedBox(
-            width: 350,
-            height: 200,
+            width: 300,
+            height: 180,
             child: Image.asset(img),
           ),
         ),
         Positioned(
-          top: 200,
+          top: 250,
           left: 10,
           child: Container(
             height: 150,
@@ -30,7 +32,7 @@ Widget onboardingWidget(BuildContext context, String img, String title,
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 26,
+                    fontSize: 18,
                   ),
                 ),
                 Expanded(
@@ -39,7 +41,7 @@ Widget onboardingWidget(BuildContext context, String img, String title,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 16,
+                      fontSize: 13,
                     ),
                   ),
                 ),
@@ -49,7 +51,7 @@ Widget onboardingWidget(BuildContext context, String img, String title,
         ),
         Positioned(
           bottom: 80,
-          left: 120,
+          left: 140,
           child: GestureDetector(
             onTap: () {
               func();
@@ -59,8 +61,8 @@ Widget onboardingWidget(BuildContext context, String img, String title,
                 progress: (pageIndex + 1) / 3,
               ),
               child: Container(
-                width: 80,
-                height: 80,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(80),
@@ -69,7 +71,7 @@ Widget onboardingWidget(BuildContext context, String img, String title,
                     ? const Icon(
                         Icons.arrow_forward,
                         weight: 100,
-                        size: 32,
+                        size: 20,
                       )
                     : const Center(
                         child: Text(

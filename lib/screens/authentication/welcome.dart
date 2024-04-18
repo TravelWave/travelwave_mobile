@@ -15,40 +15,42 @@ class WelcomePage extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
+              top: 50,
+              left: 50,
               child: SizedBox(
-                height: 300,
-                width: 350,
+                height: 250,
+                width: 250,
                 child: Image.asset('assets/05_welcome.png'),
               ),
             ),
             const Positioned(
               top: 300,
-              left: 100,
+              left: 130,
               child: Text(
                 'Welcome',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontSize: 18,
                 ),
               ),
             ),
             const Positioned(
-              top: 350,
-              left: 50,
+              top: 340,
+              left: 70,
               child: Text(
                 'Have a better sharing experience',
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 16,
+                  fontSize: 13,
                 ),
               ),
             ),
             Positioned(
               top: 540,
-              left: 12,
+              left: 34,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) {
                         return const SignUp();
@@ -57,8 +59,8 @@ class WelcomePage extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  height: 50,
-                  width: 320,
+                  height: 35,
+                  width: 280,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(10),
@@ -69,7 +71,7 @@ class WelcomePage extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 13,
                       ),
                     ),
                   ),
@@ -77,11 +79,11 @@ class WelcomePage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 600,
-              left: 12,
+              top: 590,
+              left: 34,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) {
                         return const SignIn();
@@ -90,8 +92,8 @@ class WelcomePage extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  height: 50,
-                  width: 320,
+                  height: 35,
+                  width: 280,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
@@ -105,7 +107,7 @@ class WelcomePage extends StatelessWidget {
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 13,
                       ),
                     ),
                   ),

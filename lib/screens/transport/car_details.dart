@@ -50,17 +50,18 @@ class _CarDetailPageState extends State<CarDetailPage> {
                 padding: const EdgeInsets.all(5),
                 child: const Row(
                   children: [
-                    Icon(Icons.arrow_back_ios),
+                    Icon(Icons.arrow_back_ios, size: 18),
                     Text('Back'),
                   ],
                 ),
               ),
             ),
+            const SizedBox(height: 20),
             const Text(
               'Mustang Shelby GT',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 22,
+                fontSize: 18,
               ),
             ),
             Row(
@@ -68,19 +69,20 @@ class _CarDetailPageState extends State<CarDetailPage> {
                 Icon(
                   Iconsax.star1,
                   color: Theme.of(context).primaryColor,
-                  size: 30,
+                  size: 20,
                 ),
                 const SizedBox(width: 5),
                 const Text(
                   '4.9 (531 reviews)',
                   style: TextStyle(
                     color: Colors.grey,
+                    fontSize: 13,
                   ),
                 ),
               ],
             ),
             SizedBox(
-              height: 150,
+              height: 110,
               child: Row(
                 children: [
                   GestureDetector(
@@ -106,14 +108,16 @@ class _CarDetailPageState extends State<CarDetailPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 20),
                 Text(
                   'Car features',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 16,
                   ),
                 ),
+                const SizedBox(height: 20),
                 carFeaturesWidget(context, 'Model', 'GT5000'),
                 carFeaturesWidget(context, 'Capacity', '760hp'),
                 carFeaturesWidget(context, 'Color', 'Red'),
@@ -122,66 +126,39 @@ class _CarDetailPageState extends State<CarDetailPage> {
               ],
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  child: Container(
-                    height: 45,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFFBE7),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Book Later',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const RideRequestPage();
+                    },
+                  ),
+                );
+              },
+              child: Container(
+                height: 40,
+                width: 250,
+                margin: const EdgeInsets.only(left: 40),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 1,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Ride Now',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const RideRequestPage();
-                        },
-                      ),
-                    );
-                  },
-                  child: Container(
-                    height: 45,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Ride Now',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
