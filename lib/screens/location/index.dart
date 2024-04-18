@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/location/cancel_ride.dart';
@@ -11,8 +15,64 @@ import 'package:travelwave_mobile/widgets/custom_image_view.dart';
 
 // ignore_for_file: must_be_immutable
 
-class LocationScreenConfirmBottomsheet extends StatelessWidget {
-  const LocationScreenConfirmBottomsheet({super.key});
+class LocationScreenConfirmBottomsheet extends StatefulWidget {
+  LocationScreenConfirmBottomsheet({super.key});
+
+  @override
+  State<LocationScreenConfirmBottomsheet> createState() =>
+      _LocationScreenConfirmBottomsheetState();
+}
+
+class _LocationScreenConfirmBottomsheetState
+    extends State<LocationScreenConfirmBottomsheet> {
+  bool shareRide = false;
+
+  LatLng myLocation = const LatLng(9.0192, 38.7525);
+
+  MapController mapController = MapController();
+  @override
+  void initState() {
+    super.initState();
+    getCurrentLocation().then((value) {
+      setState(() {
+        myLocation = value;
+      });
+    });
+  }
+
+  TileLayer get openStreetMapTileLayer => TileLayer(
+        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+      );
+
+  Future<LatLng> getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    return LatLng(
+      position.latitude,
+      position.longitude,
+    );
+  }
+
+  void onMapTap(TapPosition tapPosition, point) async {
+    String locationName = await getLocationName(point);
+    print('Location name: $locationName');
+  }
+
+  Future<String> getLocationName(LatLng location) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      location.latitude,
+      location.longitude,
+    );
+
+    if (placemarks.isNotEmpty) {
+      return placemarks[0].name!;
+    } else {
+      return "Unknown location";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +109,40 @@ class LocationScreenConfirmBottomsheet extends StatelessWidget {
       ),
       drawer: const SideMenu(),
       body: Stack(children: [
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.black.withOpacity(0.4),
+        SizedBox(
+          width: double.infinity,
+          child: FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              onTap: (tapPosition, point) {},
+              initialCenter: const LatLng(9.0192, 38.7525),
+              initialZoom: 15,
+              interactionOptions: const InteractionOptions(
+                flags: ~InteractiveFlag.doubleTapZoom,
+              ),
+            ),
+            children: [
+              openStreetMapTileLayer,
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: myLocation,
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.red[900],
+                      size: 40,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+        // Container(
+        //   height: MediaQuery.of(context).size.height,
+        //   width: MediaQuery.of(context).size.width,
+        //   color: Colors.black.withOpacity(0.4),
+        // ),
         Positioned(
           left: 0,
           right: 0,

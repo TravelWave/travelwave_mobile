@@ -8,6 +8,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:travelwave_mobile/screens/home/search.dart';
 import 'package:travelwave_mobile/screens/notification/notifications.dart';
+import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/screens/transport/select_transport.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   bool shareRide = false;
   LatLng myLocation = const LatLng(9.0192, 38.7525);
   MapController mapController = MapController();
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -35,6 +36,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: const SideMenu(),
       body: Stack(
         children: [
           SizedBox(
@@ -72,7 +75,9 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
                   child: Container(
                     height: 30,
                     width: 30,

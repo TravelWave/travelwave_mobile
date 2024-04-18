@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travelwave_mobile/screens/home/home.dart';
+import 'package:travelwave_mobile/screens/location/index.dart';
 
 class RideRequestPage extends StatefulWidget {
   const RideRequestPage({super.key});
@@ -283,10 +284,10 @@ class _RideRequestPageState extends State<RideRequestPage> {
             const SizedBox(height: 100),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return const MainPage();
+                      return LocationScreenConfirmBottomsheet();
                     },
                   ),
                 );
