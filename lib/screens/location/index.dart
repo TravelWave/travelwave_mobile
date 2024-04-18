@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/screens/location/cancel_ride.dart';
 import 'package:travelwave_mobile/screens/location/message_screen.dart';
+import 'package:travelwave_mobile/screens/payment/index.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 import 'package:travelwave_mobile/widgets/custom_icon_button.dart';
@@ -31,7 +33,7 @@ class LocationScreenConfirmBottomsheet extends StatelessWidget {
             ),
           ),
         ],
-        leading: Padding(
+        leading: Container(
           padding: EdgeInsets.only(left: 30.h, top: 20.v),
           child: Builder(
             builder: (BuildContext context) {
@@ -220,52 +222,61 @@ class LocationScreenConfirmBottomsheet extends StatelessWidget {
 
   /// Section Widget
   Widget _buildRowtelevision(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15.h),
-      padding: EdgeInsets.symmetric(
-        horizontal: 16.h,
-        vertical: 5.v,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadiusStyle.roundedBorder4,
-        color: PrimaryColors.yellow50,
-        border: Border.all(
-          color: PrimaryColors.amberA400,
-          width: 1.h,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return const PaymentCheckOutScreen();
+          },
+        ));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 15.h),
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.h,
+          vertical: 5.v,
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          CustomImageView(
-            imagePath: ImageConstant.imgTelevision,
-            height: 35.v,
-            width: 45.h,
-            margin: EdgeInsets.only(
-              top: 5.v,
-              bottom: 6.v,
-            ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadiusStyle.roundedBorder4,
+          color: PrimaryColors.yellow50,
+          border: Border.all(
+            color: PrimaryColors.amberA400,
+            width: 1.h,
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 13.h,
-              top: 3.v,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            CustomImageView(
+              imagePath: ImageConstant.imgTelevision,
+              height: 35.v,
+              width: 45.h,
+              margin: EdgeInsets.only(
+                top: 5.v,
+                bottom: 6.v,
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "**** **** **** 8970",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  "Expires: 12/26",
-                  style: Theme.of(context).textTheme.titleSmall,
-                )
-              ],
-            ),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.only(
+                left: 13.h,
+                top: 3.v,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "**** **** **** 8970",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(
+                    "Expires: 12/26",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -312,6 +323,13 @@ class LocationScreenConfirmBottomsheet extends StatelessWidget {
           ),
           const Spacer(),
           CustomElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return const CancelRideScreen();
+                  },
+                ));
+              },
               width: 189.h,
               center: true,
               text: "Cancel Ride",

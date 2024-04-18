@@ -150,7 +150,9 @@ class MessageScreen extends StatelessWidget {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: Padding(
                   padding: EdgeInsets.only(
                     bottom: 1.v,

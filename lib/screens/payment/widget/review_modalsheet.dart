@@ -73,6 +73,8 @@ class _ReviewScreenBottomsheetState extends State<ReviewScreenBottomsheet> {
                             .copyWith(top: 26.v),
                     child: CustomElevatedButton(
                         onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                           // print("object");
                           // reviewDialog(context);
                         },

@@ -60,17 +60,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         leadingWidth: 150.h,
-        leading: Row(
-          children: [
-            SizedBox(width: 16.h),
-            const Icon(Icons.arrow_back_ios),
-            Expanded(
-              child: Text(
-                "Back",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            )
-          ],
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Row(
+            children: [
+              SizedBox(width: 16.h),
+              const Icon(Icons.arrow_back_ios),
+              Expanded(
+                child: Text(
+                  "Back",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       body: Column(

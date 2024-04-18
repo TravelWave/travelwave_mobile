@@ -17,17 +17,22 @@ class SettingPage extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         leadingWidth: 150.h,
-        leading: Row(
-          children: [
-            SizedBox(width: 16.h),
-            const Icon(Icons.arrow_back_ios),
-            Expanded(
-              child: Text(
-                "Back",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            )
-          ],
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Row(
+            children: [
+              SizedBox(width: 16.h),
+              const Icon(Icons.arrow_back_ios),
+              Expanded(
+                child: Text(
+                  "Back",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              )
+            ],
+          ),
         ),
       ),
       body: Column(
@@ -42,10 +47,10 @@ class SettingPage extends StatelessWidget {
               ));
             },
           ),
-          SettingListTile(
-            option: "Change Language",
-            onPressed: () {},
-          ),
+          // SettingListTile(
+          //   option: "Change Language",
+          //   onPressed: () {},
+          // ),
           SettingListTile(
             option: "Privacy Policy",
             onPressed: () {
