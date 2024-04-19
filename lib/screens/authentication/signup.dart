@@ -24,60 +24,75 @@ class _SignUpState extends State<SignUp> {
         height: double.infinity,
         child: Stack(
           children: [
+            Positioned(
+              top: 50,
+              left: 40,
+              child: SizedBox(
+                height: 120,
+                width: 250,
+                child: Image.asset('assets/03_onboarding.png'),
+              ),
+            ),
             const Positioned(
               top: 10,
-              left: 100,
+              left: 130,
               child: Text(
                 'Sign Up',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontSize: 20,
                 ),
               ),
             ),
             Positioned(
-              top: 80,
+              top: 210,
+              left: 20,
               child: SizedBox(
-                height: 100,
-                width: 340,
+                height: 45,
+                width: 300,
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Name',
+                    hintStyle: const TextStyle(fontSize: 13),
                     fillColor: Colors.grey,
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).primaryColor,
                         width: 2,
                       ),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
                         width: 1,
                       ),
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
               ),
             ),
             Positioned(
-              top: 160,
+              top: 270,
+              left: 20,
               child: SizedBox(
-                width: 340,
-                height: 100,
+                width: 300,
+                height: 45,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      height: 100,
-                      width: 100,
+                      height: 45,
+                      width: 80,
                       child: DropdownButtonFormField(
                         value: countryCode,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(color: Colors.grey),
                           ),
                         ),
@@ -86,11 +101,17 @@ class _SignUpState extends State<SignUp> {
                         items: const [
                           DropdownMenuItem(
                             value: 'eth',
-                            child: Text('+251'),
+                            child: Text(
+                              '+251',
+                              style: TextStyle(fontSize: 13),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: 'usa',
-                            child: Text('+1'),
+                            child: Text(
+                              '+1',
+                              style: TextStyle(fontSize: 13),
+                            ),
                           ),
                         ],
                         onChanged: (value) {
@@ -100,18 +121,21 @@ class _SignUpState extends State<SignUp> {
                         },
                       ),
                     ),
+                    const SizedBox(width: 10),
                     SizedBox(
-                      height: 100,
-                      width: 230,
+                      height: 45,
+                      width: 210,
                       child: TextField(
+                        cursorColor: Colors.grey[800],
                         decoration: InputDecoration(
-                          labelText: 'Phone number',
+                          hintText: 'Phone number',
+                          hintStyle: const TextStyle(fontSize: 13),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: const BorderSide(color: Colors.grey),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide(
                               color: Theme.of(context).primaryColor,
                             ),
@@ -124,18 +148,21 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             Positioned(
-              top: 240,
+              top: 340,
+              left: 20,
               child: Container(
-                width: 340,
-                height: 100,
+                height: 45,
+                width: 300,
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 child: DropdownButtonFormField(
                   menuMaxHeight: 100,
                   value: selectedValue,
                   decoration: InputDecoration(
-                    labelText: 'Select your gender',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   validator: (value) =>
@@ -144,15 +171,21 @@ class _SignUpState extends State<SignUp> {
                     DropdownMenuItem(
                       value: 'male',
                       child: SizedBox(
-                        width: 250,
-                        child: Text('Male'),
+                        width: 200,
+                        child: Text(
+                          'Male',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                     ),
                     DropdownMenuItem(
                       value: 'female',
                       child: SizedBox(
-                        width: 250,
-                        child: Text('Female'),
+                        width: 200,
+                        child: Text(
+                          'Female',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                     ),
                   ],
@@ -165,8 +198,10 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             Positioned(
-              top: 350,
+              top: 410,
+              left: 10,
               child: SizedBox(
+                height: 45,
                 width: 330,
                 child: Row(
                   children: [
@@ -183,7 +218,7 @@ class _SignUpState extends State<SignUp> {
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ),
                   ],
@@ -191,7 +226,8 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             Positioned(
-              top: 410,
+              top: 460,
+              left: 20,
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -201,18 +237,18 @@ class _SignUpState extends State<SignUp> {
                   );
                 },
                 child: Container(
-                  height: 60,
-                  width: 340,
+                  height: 45,
+                  width: 300,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Center(
                     child: Text(
                       'Sign Up',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 16,
                         color: Colors.white,
                       ),
                     ),
@@ -221,7 +257,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             const Positioned(
-              top: 500,
+              top: 530,
               left: 0,
               right: 0,
               child: Divider(
@@ -231,7 +267,7 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             Positioned(
-              top: 500,
+              top: 530,
               child: Container(
                 height: 80,
                 width: 340,
@@ -245,7 +281,7 @@ class _SignUpState extends State<SignUp> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[700],
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                     GestureDetector(
@@ -263,7 +299,7 @@ class _SignUpState extends State<SignUp> {
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ),

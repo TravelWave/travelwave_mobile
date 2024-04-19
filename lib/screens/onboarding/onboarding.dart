@@ -23,8 +23,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
         0,
         () {
           pageController.nextPage(
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.easeIn);
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeIn,
+          );
         },
       ),
       onboardingWidget(
@@ -35,8 +36,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
         1,
         () {
           pageController.nextPage(
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.bounceIn);
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeIn,
+          );
         },
       ),
       onboardingWidget(
@@ -79,9 +81,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         ],
       ),
       body: PageView.builder(
-        onPageChanged: (index) {
-          setState(() {});
-        },
         controller: pageController,
         itemCount: pages.length,
         itemBuilder: (context, index) {

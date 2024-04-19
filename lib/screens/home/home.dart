@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:iconsax/iconsax.dart';
 import 'package:travelwave_mobile/screens/favourites/favourite.dart';
 import 'package:travelwave_mobile/screens/home/home_transport.dart';
@@ -28,38 +27,69 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+ 
       body: pages[currentPage],
+ 
+      
+ 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
-        showSelectedLabels: true,
         showUnselectedLabels: true,
         selectedItemColor: Theme.of(context).primaryColor,
+        selectedIconTheme: IconThemeData(color: Theme.of(context).primaryColor),
         unselectedItemColor: Colors.grey[800],
         onTap: (index) {
           setState(() {
             currentPage = index;
           });
         },
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Iconsax.home),
             label: 'Home',
             activeIcon: Icon(Iconsax.home),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Iconsax.heart),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
             label: 'Favourite',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Iconsax.wallet),
+            icon: SizedBox(
+              height: 30,
+              width: 30,
+              child: Image.asset(
+                'assets/wallet.png',
+                color: currentPage == 2
+                    ? Theme.of(context).primaryColor
+                    : Colors.black,
+              ),
+            ),
             label: 'Wallet',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Iconsax.notification),
+            icon: SizedBox(
+              height: 30,
+              width: 30,
+              child: Image.asset(
+                'assets/offer.png',
+                color: currentPage == 3
+                    ? Theme.of(context).primaryColor
+                    : Colors.black,
+              ),
+            ),
             label: 'Offer',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Iconsax.user),
+            icon: SizedBox(
+              height: 30,
+              width: 30,
+              child: Image.asset(
+                'assets/profile.png',
+                color: currentPage == 4
+                    ? Theme.of(context).primaryColor
+                    : Colors.black,
+              ),
+            ),
             label: 'Profile',
           ),
         ],
