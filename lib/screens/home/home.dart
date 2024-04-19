@@ -16,21 +16,22 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentPage = 0;
 
-  final pages = const [
-    HomePage(),
-    FavouritePage(),
-    WalletPage(),
+  final pages = [
+    const HomePage(),
+    const FavouritePage(),
+    const WalletPage(),
     OfferPage(),
-    ProfilePage(),
+    const ProfilePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        // margin: const EdgeInsets.all(20),
-        child: pages[currentPage],
-      ),
+ 
+      body: pages[currentPage],
+ 
+      
+ 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
         showUnselectedLabels: true,
