@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/widgets/custom_image_view.dart';
 
 class FilterList extends StatelessWidget {
   final Map item;
-  const FilterList({super.key, required this.item});
+  final String? image;
+  const FilterList({super.key, required this.item, this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,11 @@ class FilterList extends StatelessWidget {
         ),
       ),
       child: ListTile(
+        leading: image != null
+            ? CustomImageView(
+                imagePath: image,
+              )
+            : null,
         title: Text(
           overflow: TextOverflow.ellipsis,
           item["name"].toString(),

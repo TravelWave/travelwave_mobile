@@ -16,56 +16,54 @@ class _HomePageState extends State<HomePage> {
   );
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        margin: const EdgeInsets.all(10),
-        child: Stack(
-          children: [
-            GoogleMap(
-              initialCameraPosition: initialCameraPosition,
-              mapType: MapType.normal,
-              myLocationEnabled: true,
+    return Container(
+      margin: const EdgeInsets.all(30),
+      height: double.infinity,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: initialCameraPosition,
+            mapType: MapType.normal,
+            myLocationEnabled: true,
+          ),
+          Positioned(
+            top: 30,
+            child: Row(
+              children: [
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.orange[200],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Icon(Iconsax.menu_1),
+                ),
+                const SizedBox(width: 180),
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.orange[200],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Icon(Iconsax.search_normal),
+                ),
+                const SizedBox(width: 20),
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.orange[200],
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Icon(Iconsax.notification),
+                ),
+              ],
             ),
-            Positioned(
-              top: 30,
-              child: Row(
-                children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.orange[200],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Icon(Iconsax.menu_1),
-                  ),
-                  const SizedBox(width: 180),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.orange[200],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Icon(Iconsax.search_normal),
-                  ),
-                  const SizedBox(width: 20),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.orange[200],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Icon(Iconsax.notification),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

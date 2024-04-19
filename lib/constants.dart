@@ -197,6 +197,7 @@ class PrimaryColors {
   static Color get gray700 => const Color(0XFF5A5A5A);
   static Color get gray800 => const Color(0XFF414141);
   static Color get gray900 => const Color(0XFF2A2A2A);
+  static Color get yellowish => const Color(0xffFFF1B1);
 // Green
   static Color get green600 => const Color(0XFF43A048);
 // Indigo
@@ -229,6 +230,7 @@ class ImageConstant {
   static String imgHistory = '$imagePath/History.png';
 
   static String imgUser = '$imagePath/img_user.svg';
+  static String imgProfileedit = '$imagePath/edit.svg';
   static String imgComplain = '$imagePath/Complain.png';
   static String imgReferral = '$imagePath/Referral.png';
   static String imgsuccess = '$imagePath/success.png';
@@ -256,10 +258,15 @@ class ImageConstant {
   static String imgSignal = '$imagePath/img_signal.svg';
 
   static String imgImage3 = '$imagePath/img_image_3.png';
+  static String imgDown = '$imagePath/Down.png';
+  static String imgUp = '$imagePath/Up.png';
 
   static String imgTelevision = '$imagePath/img_television.svg';
 
   static String imgArrowLeft = '$imagePath/img_arrow_left.svg';
+  static String imgGreenshop = '$imagePath/greenshop.png';
+  static String imgRedshop = '$imagePath/redshop.png';
+  static String imgBlueshop = '$imagePath/blueshop.png';
 
   static String imgUserYellow800 = '$imagePath/img_user_yellow_800.svg';
 
