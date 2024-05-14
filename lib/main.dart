@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travelwave_mobile/constants.dart';
-
-import 'package:travelwave_mobile/screens/history/index.dart';
-import 'package:travelwave_mobile/screens/home/home_transport.dart';
-import 'package:travelwave_mobile/screens/location/index.dart';
+import 'package:travelwave_mobile/screens/onboarding/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,12 +16,7 @@ class MyApp extends StatelessWidget {
         title: 'TravelWave',
         theme: lightTheme(),
         debugShowCheckedModeBanner: false,
-        // theme: ThemeData(
-        //   primaryColor: primaryColor,
-        //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        //   useMaterial3: true,
-        // ),
-        home: HomePage(),
+        home: const SplashScreen(),
       );
     });
   }

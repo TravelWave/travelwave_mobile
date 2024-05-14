@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/authentication/welcome.dart';
 import 'package:travelwave_mobile/widgets/onboarding_widgets.dart';
 
@@ -70,22 +71,25 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 ),
               );
             },
-            child: const Text(
+            child: Text(
               'Skip',
               style: TextStyle(
-                color: Colors.grey,
+                color: Colors.grey[700],
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.h),
         ],
       ),
-      body: PageView.builder(
-        controller: pageController,
-        itemCount: pages.length,
-        itemBuilder: (context, index) {
-          return pages[index];
-        },
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.h),
+        child: PageView.builder(
+          controller: pageController,
+          itemCount: pages.length,
+          itemBuilder: (context, index) {
+            return pages[index];
+          },
+        ),
       ),
     );
   }

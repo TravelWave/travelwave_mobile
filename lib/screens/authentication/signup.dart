@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/authentication/set_password.dart';
 import 'package:travelwave_mobile/screens/authentication/signin.dart';
 
@@ -19,292 +20,263 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
-        margin: const EdgeInsets.all(10),
+        margin: EdgeInsets.all(10.v),
         width: double.infinity,
         height: double.infinity,
-        child: Stack(
+        child: Column(
           children: [
-            Positioned(
-              top: 50,
-              left: 40,
-              child: SizedBox(
-                height: 120,
-                width: 250,
-                child: Image.asset('assets/03_onboarding.png'),
+            SizedBox(height: 50.v),
+            SizedBox(
+              height: 150.v,
+              width: 250.h,
+              child: Image.asset('assets/03_onboarding.png'),
+            ),
+            SizedBox(height: 10.v),
+            const Text(
+              'Sign Up',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
-            const Positioned(
-              top: 10,
-              left: 130,
-              child: Text(
-                'Sign Up',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 210,
-              left: 20,
-              child: SizedBox(
-                height: 45,
-                width: 300,
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Name',
-                    hintStyle: const TextStyle(fontSize: 13),
-                    fillColor: Colors.grey,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
+            SizedBox(height: 20.v),
+            SizedBox(
+              height: 45.v,
+              width: 300.h,
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Name',
+                  hintStyle: const TextStyle(fontSize: 13),
+                  fillColor: Colors.grey,
+                  contentPadding: EdgeInsets.all(20.v),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor,
+                      width: 2,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.v),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1,
                     ),
+                    borderRadius: BorderRadius.circular(10.v),
                   ),
                 ),
               ),
             ),
-            Positioned(
-              top: 270,
-              left: 20,
-              child: SizedBox(
-                width: 300,
-                height: 45,
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 45,
-                      width: 80,
-                      child: DropdownButtonFormField(
-                        value: countryCode,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
+            SizedBox(height: 10.v),
+            SizedBox(
+              width: 300.h,
+              height: 45.v,
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 45.v,
+                    width: 80.h,
+                    child: DropdownButtonFormField(
+                      value: countryCode,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.v),
+                          borderSide: const BorderSide(color: Colors.grey),
                         ),
-                        validator: (value) =>
-                            value == null ? 'country code' : null,
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'eth',
-                            child: Text(
-                              '+251',
-                              style: TextStyle(fontSize: 13),
-                            ),
-                          ),
-                          DropdownMenuItem(
-                            value: 'usa',
-                            child: Text(
-                              '+1',
-                              style: TextStyle(fontSize: 13),
-                            ),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            countryCode = value!;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      height: 45,
-                      width: 210,
-                      child: TextField(
-                        cursorColor: Colors.grey[800],
-                        decoration: InputDecoration(
-                          hintText: 'Phone number',
-                          hintStyle: const TextStyle(fontSize: 13),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.v),
+                          borderSide: const BorderSide(color: Colors.grey),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 340,
-              left: 20,
-              child: Container(
-                height: 45,
-                width: 300,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: DropdownButtonFormField(
-                  menuMaxHeight: 100,
-                  value: selectedValue,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  validator: (value) =>
-                      value == null ? 'Please select your gender' : null,
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'male',
-                      child: SizedBox(
-                        width: 200,
-                        child: Text(
-                          'Male',
-                          style: TextStyle(fontSize: 12),
+                      validator: (value) =>
+                          value == null ? 'country code' : null,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'eth',
+                          child: Text(
+                            '+251',
+                            style: TextStyle(fontSize: 13),
+                          ),
                         ),
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: 'female',
-                      child: SizedBox(
-                        width: 200,
-                        child: Text(
-                          'Female',
-                          style: TextStyle(fontSize: 12),
+                        DropdownMenuItem(
+                          value: 'usa',
+                          child: Text(
+                            '+1',
+                            style: TextStyle(fontSize: 13),
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      selectedValue = value!;
-                    });
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              top: 410,
-              left: 10,
-              child: SizedBox(
-                height: 45,
-                width: 330,
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: isChecked,
-                      activeColor: Theme.of(context).primaryColor,
-                      onChanged: (_) {
-                        setState(() => isChecked = !isChecked);
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          countryCode = value!;
+                        });
                       },
                     ),
-                    const Expanded(
-                      child: Text(
-                        'By signing up, you agree to the Terms of service and and Privacy policy.',
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  SizedBox(width: 10.v),
+                  SizedBox(
+                    height: 45.v,
+                    width: 210.h,
+                    child: TextField(
+                      cursorColor: Colors.grey[800],
+                      decoration: InputDecoration(
+                        hintText: 'Phone number',
+                        hintStyle: const TextStyle(fontSize: 13),
+                        contentPadding: EdgeInsets.all(10.v),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.v),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.v),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Positioned(
-              top: 460,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const SetPasswordPage(),
+            SizedBox(height: 10.v),
+            Container(
+              height: 45.v,
+              width: 300.h,
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              child: DropdownButtonFormField(
+                menuMaxHeight: 100,
+                value: selectedValue,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.v),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.v),
+                    borderSide: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                ),
+                validator: (value) =>
+                    value == null ? 'Please select your gender' : null,
+                items: [
+                  DropdownMenuItem(
+                    value: 'male',
+                    child: SizedBox(
+                      width: 200.h,
+                      child: const Text(
+                        'Male',
+                        style: TextStyle(fontSize: 12),
+                      ),
                     ),
-                  );
+                  ),
+                  DropdownMenuItem(
+                    value: 'female',
+                    child: SizedBox(
+                      width: 200.h,
+                      child: const Text(
+                        'Female',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    selectedValue = value!;
+                  });
                 },
-                child: Container(
-                  height: 45,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            SizedBox(height: 20.v),
+            SizedBox(
+              height: 45.v,
+              width: 327.h,
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: isChecked,
+                    activeColor: Theme.of(context).primaryColor,
+                    onChanged: (_) {
+                      setState(() => isChecked = !isChecked);
+                    },
                   ),
-                  child: const Center(
+                  const Expanded(
                     child: Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
+                      'By signing up, you agree to the Terms of service and and Privacy policy.',
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SetPasswordPage(),
+                  ),
+                );
+              },
+              child: Container(
+                height: 45.v,
+                width: 300.h,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.circular(10.v),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
             ),
-            const Positioned(
-              top: 530,
-              left: 0,
-              right: 0,
-              child: Divider(
-                height: 1,
-                thickness: 1,
-                color: Colors.grey,
-              ),
-            ),
-            Positioned(
-              top: 530,
-              child: Container(
-                height: 80,
-                width: 340,
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Already have an account?',
+            SizedBox(height: 100.v),
+            const Divider(),
+            Container(
+              height: 80.v,
+              width: 340.h,
+              padding: EdgeInsets.symmetric(horizontal: 40.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Already have an account?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[700],
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const SignIn();
+                          },
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Sign in',
                       style: TextStyle(
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[700],
                         fontSize: 14,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const SignIn();
-                            },
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Sign in',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
