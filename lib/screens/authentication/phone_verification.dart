@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/screens/authentication/forgot_password.dart';
 import 'package:travelwave_mobile/screens/home/home.dart';
 
 class PhoneVerificationPage extends StatefulWidget {
@@ -20,9 +22,6 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
     for (var controller in _otpControllers) {
       controller.dispose();
     }
-    // for (var focusNode in _focusNodes.) {
-    //   focusNode.dispose();
-    // }
   }
 
   @override
@@ -31,120 +30,106 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        margin: const EdgeInsets.all(10),
-        child: Stack(
+        margin: EdgeInsets.all(10.v),
+        child: Column(
           children: [
-            Positioned(
-              top: 10,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(top: 30, bottom: 20),
-                  padding: const EdgeInsets.all(5),
-                  child: const Row(
-                    children: [
-                      Icon(Icons.arrow_back_ios, size: 18),
-                      Text('Back'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const Positioned(
-              top: 90,
-              left: 80,
-              child: Text(
-                'Phone Verification',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            const Positioned(
-              top: 120,
-              left: 90,
-              child: Text(
-                'Enter your OTP code',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 200,
-              left: 30,
-              child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.spaceEvenly, // Distribute boxes evenly
-                children: List.generate(
-                  5,
-                  (index) => buildOtpTextField(index),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 260,
+            SizedBox(height: 5.v),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
               child: Container(
-                width: 340,
-                height: 50,
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                margin: EdgeInsets.only(top: 30.v, bottom: 20.v),
+                padding: EdgeInsets.all(5.v),
+                child: const Row(
                   children: [
-                    Text(
-                      "Didn't receive code?",
-                      style: TextStyle(
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        'Resend again',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
+                    Icon(Icons.arrow_back_ios, size: 18),
+                    Text('Back'),
                   ],
                 ),
               ),
             ),
-            Positioned(
-              top: 320,
-              left: 20,
-              child: GestureDetector(
-                onTap: () {
-                  showSignupSuccessDialog(context);
-                },
-                child: Container(
-                  height: 45,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    color: (completed
-                        ? Theme.of(context).primaryColor
-                        : Colors.white),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Theme.of(context).primaryColor),
+            SizedBox(height: 50.v),
+            const Text(
+              'Phone Verification',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+            const Text(
+              'Enter your OTP code',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 20.v),
+            SizedBox(
+              width: 300.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(5, (index) => buildOtpTextField(index)),
+              ),
+            ),
+            Container(
+              width: 340.h,
+              height: 50.v,
+              padding: EdgeInsets.symmetric(horizontal: 40.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "Didn't receive code?",
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
-                  child: Center(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) {
+                          return const ForgotPasswordPage();
+                        }),
+                      );
+                    },
                     child: Text(
-                      'Verify',
+                      'Resend again',
                       style: TextStyle(
-                        color: completed
-                            ? Colors.white
-                            : Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: 14,
                       ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                showSignupSuccessDialog(context);
+              },
+              child: Container(
+                height: 45.v,
+                width: 300.h,
+                decoration: BoxDecoration(
+                  color: (completed
+                      ? Theme.of(context).primaryColor
+                      : Colors.white),
+                  borderRadius: BorderRadius.circular(10.v),
+                  border: Border.all(color: Theme.of(context).primaryColor),
+                ),
+                child: Center(
+                  child: Text(
+                    'Verify',
+                    style: TextStyle(
+                      color: completed
+                          ? Colors.white
+                          : Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
                 ),
@@ -158,9 +143,9 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 
   Widget buildOtpTextField(int index) {
     return Container(
-      height: 60,
-      width: 50,
-      margin: const EdgeInsets.all(3),
+      height: 60.v,
+      width: 50.h,
+      margin: EdgeInsets.all(3.v),
       child: TextField(
         style: const TextStyle(
           fontWeight: FontWeight.bold,
@@ -172,7 +157,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
         maxLength: 1,
         cursorColor: Colors.grey[800],
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(bottom: 3),
+          contentPadding: EdgeInsets.only(bottom: 3.v),
           filled: true,
           fillColor: _otpControllers[index].text.isNotEmpty
               ? Theme.of(context).primaryColor.withOpacity(0.3)
@@ -186,7 +171,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(10.v),
             borderSide: BorderSide(
               color: Theme.of(context).primaryColor,
               width: 3,
@@ -221,8 +206,8 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           icon: SizedBox(
-            height: 100,
-            width: 100,
+            height: 100.v,
+            width: 100.h,
             child: Image.asset('assets/success.png'),
           ),
           title: const Text(

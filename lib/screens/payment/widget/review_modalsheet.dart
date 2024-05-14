@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 import 'package:travelwave_mobile/widgets/custom_image_view.dart';
@@ -40,32 +40,34 @@ class _ReviewScreenBottomsheetState extends State<ReviewScreenBottomsheet> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 23.h),
-                    child: Column(children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 20.v),
-                        child: Image.asset(
-                          ImageConstant.imgsuccess,
-                          scale: 1.4,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 20.v),
+                          child: Image.asset(
+                            ImageConstant.imgsuccess,
+                            scale: 1.4,
+                          ),
                         ),
-                      ),
-                      Text('Thank You',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w600)),
-                      SizedBox(height: 10.v),
-                      Text('Thank you for your valuable feedback and tip',
+                        Text('Thank You',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)),
+                        SizedBox(height: 10.v),
+                        Text(
+                          'Thank you for your valuable feedback and tip',
                           textAlign: TextAlign.center,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w400,
-                                  )),
-                    ]),
+                                  ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  SizedBox(
-                    height: 16.v,
-                  ),
+                  SizedBox(height: 16.v),
 
                   Padding(
                     padding:
@@ -136,26 +138,26 @@ class _ReviewScreenBottomsheetState extends State<ReviewScreenBottomsheet> {
                   alignment: Alignment.centerRight,
                 ),
                 SizedBox(height: 33.v),
-                RatingBar.builder(
-                  ignoreGestures: false,
-                  initialRating: 5,
-                  minRating: 0,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemSize: 24.v,
-                  unratedColor: PrimaryColors.yellow700,
-                  itemCount: 5,
-                  updateOnDrag: true,
-                  itemBuilder: (context, _) {
-                    return Icon(
-                      Icons.star,
-                      color: PrimaryColors.yellow700,
-                    );
-                  },
-                  onRatingUpdate: (rating) {
-                    // print(rating);
-                  },
-                ),
+                // RatingBar.builder(
+                //   ignoreGestures: false,
+                //   initialRating: 5,
+                //   minRating: 0,
+                //   direction: Axis.horizontal,
+                //   allowHalfRating: true,
+                //   itemSize: 24.v,
+                //   unratedColor: PrimaryColors.yellow700,
+                //   itemCount: 5,
+                //   updateOnDrag: true,
+                //   itemBuilder: (context, _) {
+                //     return Icon(
+                //       Icons.star,
+                //       color: PrimaryColors.yellow700,
+                //     );
+                //   },
+                //   onRatingUpdate: (rating) {
+                //     // print(rating);
+                //   },
+                // ),
                 SizedBox(height: 21.v),
                 Text(
                   "Excellent",
