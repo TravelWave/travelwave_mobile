@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   LatLng myLocation = const LatLng(9.0192, 38.7525);
   MapController mapController = MapController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -126,7 +125,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Positioned(
-            left: 30,
+            left: 70,
             bottom: 20,
             child: Container(
               height: 130,
