@@ -33,23 +33,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
         margin: EdgeInsets.all(10.v),
         child: Column(
           children: [
-            SizedBox(height: 5.v),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Container(
-                margin: EdgeInsets.only(top: 30.v, bottom: 20.v),
-                padding: EdgeInsets.all(5.v),
-                child: const Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios, size: 18),
-                    Text('Back'),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 50.v),
+            SizedBox(height: 80.v),
             const Text(
               'Phone Verification',
               style: TextStyle(
