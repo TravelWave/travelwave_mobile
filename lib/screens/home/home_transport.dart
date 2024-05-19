@@ -540,22 +540,4 @@ class _HomePageState extends State<HomePage> {
       position.longitude,
     );
   }
-
-  void onMapTap(TapPosition tapPosition, point) async {
-    String locationName = await getLocationName(point);
-    print('Location name: $locationName');
-  }
-
-  Future<String> getLocationName(LatLng location) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-      location.latitude,
-      location.longitude,
-    );
-
-    if (placemarks.isNotEmpty) {
-      return placemarks[0].name!;
-    } else {
-      return "Unknown location";
-    }
-  }
 }
