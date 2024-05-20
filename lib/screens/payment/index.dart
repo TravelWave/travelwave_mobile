@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travelwave_mobile/blocs/feedback/feedback_bloc_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/payment/widget/review_modalsheet.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
@@ -142,6 +144,97 @@ class PaymentCheckOutScreen extends StatelessWidget {
     );
   }
 
+  void showThanksDialog(context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.h),
+            child: Container(
+              color: Theme.of(context).colorScheme.background,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 23.h),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 20.v),
+                          child: Image.asset(
+                            ImageConstant.imgsuccess,
+                            scale: 1.4,
+                          ),
+                        ),
+                        Text('Thank You',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)),
+                        SizedBox(height: 10.v),
+                        Text(
+                          'Thank you for your valuable feedback and tip',
+                          textAlign: TextAlign.center,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 16.v),
+
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 13.h, vertical: 10.v)
+                            .copyWith(top: 26.v),
+                    child: CustomElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          // print("object");
+                          // reviewDialog(context);
+                        },
+                        // width: 189.h,
+                        center: true,
+                        text: "Back Home",
+                        buttonTextStyle: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.background)),
+                  )
+                  // Align(
+                  //   alignment: Alignment.bottomCenter,
+                  //   child: RaisedButton(
+                  //     child: Text('Submit'),
+                  //     onPressed: () {
+                  //       // Perform submit action
+                  //     },
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -149,22 +242,32 @@ class PaymentCheckOutScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.background,
         resizeToAvoidBottomInset: false,
         appBar: _buildAppbar(context),
-        body: Container(
-          width: double.maxFinite,
-          padding: EdgeInsets.symmetric(
-            horizontal: 15.h,
-            vertical: 23.v,
-          ),
-          child: Column(
-            children: [
-              _buildRowmustangshelb(context),
-              SizedBox(height: 17.v),
-              _buildColumncharge(context),
-              SizedBox(height: 30.v),
-              _buildColumnselectpay(context),
-              SizedBox(height: 5.v)
-            ],
-          ),
+        body: BlocConsumer<FeedbackBlocBloc, FeedbackBlocState>(
+          listener: (context, state) {
+            if (state is FeedbackSubmitted) {
+              showThanksDialog(context);
+            }
+          },
+          builder: (context, state) {
+            print(state);
+            return Container(
+              width: double.maxFinite,
+              padding: EdgeInsets.symmetric(
+                horizontal: 15.h,
+                vertical: 23.v,
+              ),
+              child: Column(
+                children: [
+                  _buildRowmustangshelb(context),
+                  SizedBox(height: 17.v),
+                  _buildColumncharge(context),
+                  SizedBox(height: 30.v),
+                  _buildColumnselectpay(context),
+                  SizedBox(height: 5.v)
+                ],
+              ),
+            );
+          },
         ),
         bottomNavigationBar: _buildConfirmride(context),
       ),

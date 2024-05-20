@@ -39,6 +39,7 @@ class BaseButton extends StatelessWidget {
 }
 
 class CustomElevatedButton extends BaseButton {
+  final bool isloading;
   const CustomElevatedButton(
       {super.key,
       this.decoration,
@@ -50,6 +51,7 @@ class CustomElevatedButton extends BaseButton {
       super.alignment,
       super.buttonTextStyle,
       super.isDisabled,
+      this.isloading = false,
       super.height,
       super.width,
       this.center = false,
@@ -79,21 +81,27 @@ class CustomElevatedButton extends BaseButton {
         child: ElevatedButton(
           style: buttonStyle,
           onPressed: isDisabled ?? false ? null : onPressed ?? () {},
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              leftIcon ?? const SizedBox.shrink(),
-              Expanded(
-                child: Text(
-                  textAlign: center ? TextAlign.center : null,
-                  text,
-                  style: buttonTextStyle,
+          child: !isloading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    leftIcon ?? const SizedBox.shrink(),
+                    Expanded(
+                      child: Text(
+                        textAlign: center ? TextAlign.center : null,
+                        text,
+                        style: buttonTextStyle,
+                      ),
+                    ),
+                    rightIcon ?? const SizedBox.shrink()
+                  ],
+                )
+              : const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              rightIcon ?? const SizedBox.shrink()
-            ],
-          ),
         ),
       );
 }
