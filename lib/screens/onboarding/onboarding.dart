@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/authentication/welcome.dart';
 import 'package:travelwave_mobile/widgets/onboarding_widgets.dart';
@@ -49,11 +51,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
         'Enjoy a comfortable ride to your destination with our ridesharing service.',
         2,
         () {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) {
-              return const WelcomePage();
-            },
-          ));
+          BlocProvider.of<AuthenticationBloc>(context).add(OnBoardSeen());
+          // Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //   builder: (context) {
+          //     return const WelcomePage();
+          //   },
+          // ));
         },
         isLastPage: true,
       ),
@@ -63,13 +66,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const WelcomePage();
-                  },
-                ),
-              );
+              BlocProvider.of<AuthenticationBloc>(context).add(OnBoardSeen());
+              // Navigator.of(context).pushReplacement(
+              //   MaterialPageRoute(
+              //     builder: (context) {
+              //       return const WelcomePage();
+              //     },
+              //   ),
+              // );
             },
             child: Text(
               'Skip',
