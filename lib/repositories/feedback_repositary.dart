@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:travelwave_mobile/data/local_data.dart';
+
 import 'package:travelwave_mobile/models/feedback_model.dart';
 
 class FeedbackRepository {
@@ -23,7 +22,7 @@ class FeedbackRepository {
           'rating': feedback.rating.toString(),
         },
       );
-      print(response.body);
+
       if (response.statusCode == 200) {
         // Feedback submitted successfully
       }
