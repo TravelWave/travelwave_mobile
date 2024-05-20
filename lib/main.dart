@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
             title: 'TravelWave',
             theme: lightTheme(),
             debugShowCheckedModeBanner: false,
-            home: const PaymentCheckOutScreen(),
+            home: const SplashScreen(),
           );
         },
       ),
