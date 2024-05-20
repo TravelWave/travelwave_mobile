@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
+import 'package:travelwave_mobile/screens/authentication/signin.dart';
+import 'package:travelwave_mobile/screens/authentication/welcome.dart';
+import 'package:travelwave_mobile/screens/home/home_transport.dart';
 import 'package:travelwave_mobile/screens/onboarding/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) {
-            return const OnboardingPage();
+            return const SecondScreen();
           },
         ),
       );
@@ -49,6 +54,38 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        if (state is AuthenticationUninitialized) {
+          return const OnboardingPage();
+        }
+        if (state is AuthenticationUnauthenticated) {
+          if (Navigator.of(context).canPop()) {
+            Navigator.pop(context);
+          }
+          return const WelcomePage();
+        }
+        // if (state is AuthenticationAuthenticated) {
+        //   // context.read<UserProfileBloc>().add(LoadUserProfile());
+        //   // if (Navigator.of(context).canPop()) {
+        //   //   Navigator.pop(context);
+        //   // }
+        //   // final user = LocalStorage(storage: storage)
+        //   // if (user.role == "admin"){
+        //   return const HiddenDrawer();
+        //   // }
+        // }
+        return HomePage();
+      },
     );
   }
 }
