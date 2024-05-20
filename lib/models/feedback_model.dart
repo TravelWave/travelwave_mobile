@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class FeedBackMsg {
   double rating;
   String? feedback;
