@@ -75,7 +75,10 @@ class AuthRepository {
           'message': 'OTP sent successfully.',
         };
       } else {
-        throw Exception('An error occurred. Please try again later.');
+        return {
+          'status': 'error',
+          'message': 'An error occurred. Please try again later.',
+        };
       }
     } catch (e) {
       return {
