@@ -6,14 +6,14 @@ abstract class RegistrationEvent {}
 class RegisterUser extends RegistrationEvent {
   final String fullName;
   final String phoneNumber;
-  final bool is_driver;
+  final bool isDriver;
   final String password;
   final String gender;
 
   RegisterUser({
     required this.fullName,
     required this.phoneNumber,
-    required this.is_driver,
+    required this.isDriver,
     required this.password,
     required this.gender,
   });

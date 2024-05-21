@@ -6,7 +6,7 @@ import 'package:travelwave_mobile/blocs/feedback/feedback_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
-
+import 'package:travelwave_mobile/screens/authentication/phone_verification.dart';
 import 'package:travelwave_mobile/screens/onboarding/splash_screen.dart';
 
 void main() {
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
             title: 'TravelWave',
             theme: lightTheme(),
             debugShowCheckedModeBanner: false,
-            home: const SplashScreen(),
+            home: const PhoneVerificationPage(),
           );
         },
       ),

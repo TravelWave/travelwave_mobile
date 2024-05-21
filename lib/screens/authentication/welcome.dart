@@ -15,9 +15,9 @@ class WelcomePage extends StatelessWidget {
         margin: const EdgeInsets.all(10),
         child: Column(
           children: [
-            SizedBox(height: 100.v),
+            SizedBox(height: 50.v),
             SizedBox(
-              height: 220.v,
+              height: 320.v,
               width: 350.h,
               child: Image.asset('assets/05_welcome.png'),
             ),
@@ -25,17 +25,17 @@ class WelcomePage extends StatelessWidget {
               'Welcome',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 22,
               ),
             ),
             const Text(
               'Have a better sharing experience',
               style: TextStyle(
                 color: Colors.grey,
-                fontSize: 13,
+                fontSize: 16,
               ),
             ),
-            SizedBox(height: 200.v),
+            SizedBox(height: 150.v),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -47,8 +47,8 @@ class WelcomePage extends StatelessWidget {
                 );
               },
               child: Container(
-                height: 35.v,
-                width: 280.h,
+                height: 45.v,
+                width: 340.h,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10.v),
@@ -59,7 +59,7 @@ class WelcomePage extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 13,
+                      fontSize: 15,
                     ),
                   ),
                 ),
@@ -77,8 +77,8 @@ class WelcomePage extends StatelessWidget {
                 );
               },
               child: Container(
-                height: 35.v,
-                width: 280.h,
+                height: 45.v,
+                width: 340.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.v),
                   border: Border.all(
@@ -92,7 +92,7 @@ class WelcomePage extends StatelessWidget {
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold,
-                      fontSize: 13,
+                      fontSize: 15,
                     ),
                   ),
                 ),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:travelwave_mobile/blocs/signup/signup_bloc.dart';
 import 'package:travelwave_mobile/blocs/signup/signup_event.dart';
 import 'package:travelwave_mobile/blocs/signup/signup_state.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/authentication/phone_verification.dart';
 import 'package:travelwave_mobile/screens/authentication/signin.dart';
+import 'package:travelwave_mobile/widgets/custom_textformfield.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -45,13 +47,19 @@ class _SignUpState extends State<SignUp> {
                     },
                   ),
                 );
+              } else if (state is RegistrationFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Center(child: Text(state.error)),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               }
             },
             child: BlocBuilder<RegistrationBloc, RegistrationState>(
               builder: (context, state) {
                 return Form(
                   key: _formKey,
-                  // autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
                       SizedBox(
@@ -67,75 +75,32 @@ class _SignUpState extends State<SignUp> {
                           fontSize: 20,
                         ),
                       ),
-                      SizedBox(height: 20.v),
-                      SizedBox(
-                        height: 45.v,
-                        width: 300.h,
-                        child: TextFormField(
-                          controller: fullName,
-                          validator: validateFullName,
-                          decoration: InputDecoration(
-                            hintText: 'Full name',
-                            hintStyle: const TextStyle(fontSize: 13),
-                            fillColor: Colors.grey,
-                            contentPadding: EdgeInsets.all(10.v),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(10.v),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(10.v),
-                            ),
+                      SizedBox(height: 10.v),
+                      Container(
+                        width: 340.h,
+                        margin: EdgeInsets.all(5.v),
+                        child: CustomTextFieldWidget(
+                          function: validateFullName,
+                          prefixIcon: const Icon(
+                            Ionicons.person_outline,
+                            size: 18,
                           ),
+                          title: 'Full name',
+                          controller: fullName,
                         ),
                       ),
-                      SizedBox(height: 15.v),
-                      SizedBox(
-                        width: 300.h,
-                        height: 45.v,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              height: 50.v,
-                              width: 300.h,
-                              child: TextFormField(
-                                controller: phoneNumber,
-                                validator: validatePhoneNumber,
-                                cursorColor: Colors.grey[800],
-                                keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                  hintText: 'Phone number',
-                                  hintStyle: const TextStyle(fontSize: 13),
-                                  contentPadding: EdgeInsets.all(10.v),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.v),
-                                    borderSide:
-                                        const BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.v),
-                                    borderSide: BorderSide(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // ),
-                          ],
+                      Container(
+                        width: 340.h,
+                        margin: EdgeInsets.all(5.v),
+                        child: CustomTextFieldWidget(
+                          function: validatePhoneNumber,
+                          prefixIcon: const Icon(Ionicons.call_outline),
+                          title: 'Phone number',
+                          controller: phoneNumber,
                         ),
                       ),
-                      SizedBox(height: 15.v),
                       SizedBox(
-                        height: 45.v,
-                        width: 300.h,
+                        width: 340.h,
                         child: DropdownButtonFormField(
                           menuMaxHeight: 100,
                           value: selectedValue,
@@ -143,17 +108,18 @@ class _SignUpState extends State<SignUp> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.v),
                               borderSide: const BorderSide(
-                                  color: Colors.grey, width: 1),
+                                color: Colors.black,
+                                width: 1,
+                              ),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.v),
                               borderSide: const BorderSide(
-                                  color: Colors.grey, width: 1),
+                                color: Colors.black,
+                                width: 1,
+                              ),
                             ),
                           ),
-                          validator: (value) => value == null
-                              ? 'Please select your gender'
-                              : null,
                           items: [
                             DropdownMenuItem(
                               value: 'male',
@@ -161,7 +127,7 @@ class _SignUpState extends State<SignUp> {
                                 width: 200.h,
                                 child: const Text(
                                   'Male',
-                                  style: TextStyle(fontSize: 12),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                               ),
                             ),
@@ -171,7 +137,7 @@ class _SignUpState extends State<SignUp> {
                                 width: 200.h,
                                 child: const Text(
                                   'Female',
-                                  style: TextStyle(fontSize: 12),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                               ),
                             ),
@@ -183,92 +149,36 @@ class _SignUpState extends State<SignUp> {
                           },
                         ),
                       ),
-                      SizedBox(height: 25.v),
-                      SizedBox(
-                        height: 45.v,
-                        width: 300.h,
-                        child: TextFormField(
-                          obscureText: isObscure1,
+                      Container(
+                        width: 340.h,
+                        margin: EdgeInsets.all(5.v),
+                        child: CustomTextFieldWidget(
+                          function: validatePassword,
+                          prefixIcon: const Icon(
+                            Ionicons.lock_closed_outline,
+                            size: 18,
+                          ),
+                          title: 'Password',
                           controller: password,
-                          validator: validatePassword,
-                          cursorColor: Colors.grey[800],
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isObscure1 = !isObscure1;
-                                });
-                              },
-                              icon: Icon(
-                                isObscure1
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: Colors.grey[600],
-                                size: 18,
-                              ),
-                            ),
-                            hintText: 'Enter Your Password',
-                            hintStyle: const TextStyle(fontSize: 13),
-                            contentPadding: EdgeInsets.all(10.v),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.v),
-                              borderSide: const BorderSide(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.v),
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ),
                         ),
                       ),
-                      SizedBox(height: 25.v),
-                      SizedBox(
-                        height: 45.v,
-                        width: 300.h,
-                        child: TextFormField(
-                          obscureText: isObscure2,
-                          controller: confirm,
-                          validator: (value) =>
+                      Container(
+                        width: 340.h,
+                        margin: EdgeInsets.all(5.v),
+                        child: CustomTextFieldWidget(
+                          function: (value) =>
                               confirmPassword(value, password.text),
-                          cursorColor: Colors.grey[800],
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isObscure2 = !isObscure2;
-                                });
-                              },
-                              icon: Icon(
-                                isObscure2
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: Colors.grey[600],
-                                size: 18,
-                              ),
-                            ),
-                            hintText: 'Confirm Password',
-                            hintStyle: const TextStyle(fontSize: 13),
-                            contentPadding: EdgeInsets.all(10.v),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.v),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.v),
-                              borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor),
-                            ),
+                          prefixIcon: const Icon(
+                            Ionicons.lock_closed_outline,
+                            size: 18,
                           ),
+                          title: 'Confirm password',
+                          controller: confirm,
                         ),
                       ),
-                      SizedBox(height: 15.v),
                       SizedBox(
                         height: 45.v,
-                        width: 327.h,
+                        width: 350.h,
                         child: Row(
                           children: [
                             Checkbox(
@@ -285,7 +195,7 @@ class _SignUpState extends State<SignUp> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
                                 style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
+                                    TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                             ),
                           ],
@@ -299,15 +209,15 @@ class _SignUpState extends State<SignUp> {
                                     fullName: fullName.text,
                                     phoneNumber: phoneNumber.text,
                                     password: password.text,
-                                    is_driver: false,
+                                    isDriver: false,
                                     gender: selectedValue,
                                   ),
                                 );
                           }
                         },
                         child: Container(
-                          height: 45.v,
-                          width: 300.h,
+                          height: 50.v,
+                          width: 340.h,
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10.v),
@@ -319,14 +229,14 @@ class _SignUpState extends State<SignUp> {
                                     'Sign Up',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                      fontSize: 18,
                                       color: Colors.white,
                                     ),
                                   ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 20.v),
+                      SizedBox(height: 10.v),
                       const Divider(),
                       TextButton(
                         onPressed: () {
@@ -342,6 +252,7 @@ class _SignUpState extends State<SignUp> {
                           'Already have an account? Sign in',
                           style: TextStyle(
                             color: Colors.amber,
+                            fontSize: 15,
                           ),
                         ),
                       ),
@@ -389,12 +300,6 @@ String? validateFullName(String? value) {
     return 'Full name must contain only alphabetic characters and spaces';
   }
 
-  // Optional: Check if the full name has at least two words
-  final List<String> words = value.split(' ');
-  if (words.length < 2) {
-    return 'Please enter your full name';
-  }
-
   // If all checks pass, return null
   return null;
 }
@@ -408,26 +313,6 @@ String? validatePassword(String? value) {
   // Check if the password length is at least 8 characters
   if (value.length < 8) {
     return 'Password must be at least 8 characters long';
-  }
-
-  // Check if the password contains at least one uppercase letter
-  if (!RegExp(r'[A-Z]').hasMatch(value)) {
-    return 'Password must contain at least one uppercase letter';
-  }
-
-  // Check if the password contains at least one lowercase letter
-  if (!RegExp(r'[a-z]').hasMatch(value)) {
-    return 'Password must contain at least one lowercase letter';
-  }
-
-  // Check if the password contains at least one digit
-  if (!RegExp(r'\d').hasMatch(value)) {
-    return 'Password must contain at least one digit';
-  }
-
-  // Check if the password contains at least one special character
-  if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-    return 'Password must contain at least one special character';
   }
 
   // If all checks pass, return null
