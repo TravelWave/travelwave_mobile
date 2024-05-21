@@ -7,7 +7,6 @@ import 'package:travelwave_mobile/repositories/auth_repository.dart';
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(RegistrationInitial()) {
     on<RegisterUser>((event, emit) async {
-      // TODO: implement event handler
       emit(RegistrationLoading());
       await Future.delayed(const Duration(seconds: 2));
 

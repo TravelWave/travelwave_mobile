@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_event.dart';
@@ -24,135 +25,232 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => SignInBloc(),
-        child: BlocListener<SignInBloc, SignInState>(
-          listener: (context, state) {
-            if (state is SignInSuccess) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const MainPage();
-                  },
-                ),
-              );
-            }
-          },
-          child: BlocBuilder<SignInBloc, SignInState>(
-            builder: (context, state) {
-              return Form(
-                key: _formKey,
-                child: Container(
-                  margin: EdgeInsets.all(10.v),
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 150.v),
-                        SizedBox(
-                          height: 150.v,
-                          width: 250.h,
-                          child: Image.asset('assets/01_onboarding.png'),
+      body: BlocListener<SignInBloc, SignInState>(
+        listener: (context, state) {
+          // if (state is SignInSuccess) {
+          //   Navigator.of(context).pop();
+          // }
+          if (state is SignInFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: PrimaryColors.amberA400,
+              ),
+            );
+          }
+        },
+        child: BlocBuilder<SignInBloc, SignInState>(
+          builder: (context, state) {
+            return Form(
+              key: _formKey,
+              child: Container(
+                margin: EdgeInsets.all(10.v),
+                width: double.infinity,
+                height: double.infinity,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 150.v),
+                      SizedBox(
+                        height: 150.v,
+                        width: 250.h,
+                        child: Image.asset('assets/01_onboarding.png'),
+                      ),
+                      SizedBox(height: 50.v),
+                      const Text(
+                        'Sign In',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
-                        SizedBox(height: 50.v),
-                        const Text(
-                          'Sign In',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(height: 10.v),
-                        SizedBox(
-                          height: 45.v,
-                          width: 300.h,
-                          child: TextFormField(
-                            cursorColor: Colors.grey[800],
-                            keyboardType: TextInputType.phone,
-                            controller: phoneNumberController,
-                            validator: validatePhoneNumber,
-                            decoration: InputDecoration(
-                              hintText: 'Phone Number',
-                              hintStyle: const TextStyle(fontSize: 13),
-                              fillColor: Colors.grey,
-                              contentPadding: EdgeInsets.all(10.v),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(10.v),
+                      ),
+                      SizedBox(height: 10.v),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 25.h),
+                        child: TextFormField(
+                          cursorColor: Colors.grey[800],
+                          keyboardType: TextInputType.phone,
+                          controller: phoneNumberController,
+                          validator: validatePhoneNumber,
+                          decoration: InputDecoration(
+                            hintText: 'Phone Number',
+                            hintStyle: const TextStyle(fontSize: 13),
+                            fillColor: Colors.grey,
+                            contentPadding: EdgeInsets.all(10.v),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                                width: 2,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(10.v),
+                              borderRadius: BorderRadius.circular(10.v),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(10.v),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(10.v),
+                            ),
+                            focusedErrorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                                width: 1,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 10.v),
-                        SizedBox(
-                          height: 45.v,
-                          width: 300.h,
-                          child: TextField(
-                            cursorColor: Colors.grey[800],
-                            obscureText: isObscure,
-                            controller: passwordController,
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isObscure = !isObscure;
-                                  });
-                                },
-                                icon: Icon(
-                                  isObscure
-                                      ? Icons.visibility_off_outlined
-                                      : Icons.visibility_outlined,
-                                  size: 18,
-                                ),
-                                color: Colors.grey[700],
+                      ),
+                      SizedBox(height: 10.v),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 25.h),
+                        child: TextFormField(
+                          validator: validatePassword,
+                          cursorColor: Colors.grey[800],
+                          obscureText: isObscure,
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isObscure = !isObscure;
+                                });
+                              },
+                              icon: Icon(
+                                isObscure
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                size: 18,
                               ),
-                              hintText: 'Enter Your Password',
-                              hintStyle: const TextStyle(fontSize: 13),
-                              contentPadding: EdgeInsets.all(10.v),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
+                              color: Colors.grey[700],
+                            ),
+                            hintText: 'Enter Your Password',
+                            hintStyle: const TextStyle(fontSize: 13),
+                            contentPadding: EdgeInsets.all(10.v),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                                width: 2,
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 2,
-                                ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.red,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(10.v),
+                            ),
+                            focusedErrorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.red,
+                                width: 1,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 10.v),
-                        Row(
+                      ),
+                      SizedBox(height: 10.v),
+                      Row(
+                        children: [
+                          SizedBox(width: 220.h),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const ForgotPasswordPage();
+                                  },
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Forgot password?',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.v),
+                      GestureDetector(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<SignInBloc>().add(
+                                  SignInUser(
+                                      phoneNumber:
+                                          "+251${phoneNumberController.text.substring(1)}",
+                                      password: passwordController.text),
+                                );
+                          }
+                        },
+                        child: Container(
+                          height: 45.v,
+                          width: 300.h,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(10.v),
+                          ),
+                          child: Center(
+                            child: state is SignInLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    'Sign In',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 150.v),
+                      const Divider(),
+                      Container(
+                        height: 80.v,
+                        width: 340.h,
+                        padding: EdgeInsets.symmetric(horizontal: 40.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(width: 220.h),
+                            Text(
+                              "Don't have an account?",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[700],
+                                fontSize: 14,
+                              ),
+                            ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return const ForgotPasswordPage();
-                                    },
-                                  ),
-                                );
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                  builder: (context) {
+                                    return const SignUp();
+                                  },
+                                ));
                               },
-                              child: const Text(
-                                'Forgot password?',
+                              child: Text(
+                                'Sign Up',
                                 style: TextStyle(
-                                  color: Colors.red,
+                                  color: Theme.of(context).primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                 ),
@@ -160,106 +258,60 @@ class _SignInState extends State<SignIn> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10.v),
-                        GestureDetector(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<SignInBloc>().add(
-                                    SignInUser(
-                                        phoneNumber: phoneNumberController.text,
-                                        password: passwordController.text),
-                                  );
-                            }
-                          },
-                          child: Container(
-                            height: 45.v,
-                            width: 300.h,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10.v),
-                            ),
-                            child: Center(
-                              child: state is SignInLoading
-                                  ? const CircularProgressIndicator()
-                                  : const Text(
-                                      'Sign In',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 150.v),
-                        const Divider(),
-                        Container(
-                          height: 80.v,
-                          width: 340.h,
-                          padding: EdgeInsets.symmetric(horizontal: 40.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Don't have an account?",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[700],
-                                  fontSize: 14,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushReplacement(MaterialPageRoute(
-                                    builder: (context) {
-                                      return const SignUp();
-                                    },
-                                  ));
-                                },
-                                child: Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 }
 
-String? validatePhoneNumber(String? value) {
-  // Check if the phone number is empty
+String? validatePassword(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Phone number is required';
+    return 'Please enter a password';
   }
 
-  // Check if the phone number contains only digits
-  final RegExp digitRegExp = RegExp(r'^[0-9]+$');
-  if (!digitRegExp.hasMatch(value)) {
-    return 'Phone number must contain only digits';
+  if (value.length < 8) {
+    return 'Password must be at least 8 characters long';
   }
 
-  // Check the length of the phone number
-  if (value.length != 10) {
-    return 'Phone number must be 10 digits long';
-  }
+  // bool hasUppercase = false;
+  // bool hasLowercase = false;
+  // bool hasDigit = false;
+  // bool hasSpecialChar = false;
+
+  // for (int i = 0; i < value.length; i++) {
+  //   if (RegExp(r'[A-Z]').hasMatch(value[i])) {
+  //     hasUppercase = true;
+  //   } else if (RegExp(r'[a-z]').hasMatch(value[i])) {
+  //     hasLowercase = true;
+  //   } else if (RegExp(r'[0-9]').hasMatch(value[i])) {
+  //     hasDigit = true;
+  //   } else if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value[i])) {
+  //     hasSpecialChar = true;
+  //   }
+  // }
+
+  // if (!hasUppercase) {
+  //   return 'Password must contain at least one uppercase letter';
+  // }
+
+  // if (!hasLowercase) {
+  //   return 'Password must contain at least one lowercase letter';
+  // }
+
+  // if (!hasDigit) {
+  //   return 'Password must contain at least one number';
+  // }
+
+  // if (!hasSpecialChar) {
+  //   return 'Password must contain at least one special character';
+  // }
 
   return null;
 }

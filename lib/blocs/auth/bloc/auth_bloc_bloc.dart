@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
+import 'package:travelwave_mobile/models/user_info.dart';
 
 part 'auth_bloc_event.dart';
 part 'auth_bloc_state.dart';
@@ -35,6 +36,7 @@ class AuthenticationBloc
       }
       if (event is LoggedIn) {
         await localData.writeToStorage('Token', event.token);
+        await localData.writeUserData(event.user.toJson().toString());
 
         emit(AuthenticationAuthenticated());
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
-import 'package:travelwave_mobile/screens/authentication/signin.dart';
+
 import 'package:travelwave_mobile/screens/authentication/welcome.dart';
 import 'package:travelwave_mobile/screens/home/home_transport.dart';
 import 'package:travelwave_mobile/screens/onboarding/onboarding.dart';
@@ -84,7 +84,7 @@ class SecondScreen extends StatelessWidget {
         //   return const HiddenDrawer();
         //   // }
         // }
-        return HomePage();
+        return const HomePage();
       },
     );
   }

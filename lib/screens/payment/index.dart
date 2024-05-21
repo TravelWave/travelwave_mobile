@@ -249,7 +249,6 @@ class PaymentCheckOutScreen extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            print(state);
             return Container(
               width: double.maxFinite,
               padding: EdgeInsets.symmetric(
