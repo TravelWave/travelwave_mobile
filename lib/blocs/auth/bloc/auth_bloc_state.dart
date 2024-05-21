@@ -10,6 +10,7 @@ class AuthenticationUninitialized extends AuthenticationState {
 }
 
 class AuthenticationAuthenticated extends AuthenticationState {
+  @override
   List<Object> get props => [];
 }
 

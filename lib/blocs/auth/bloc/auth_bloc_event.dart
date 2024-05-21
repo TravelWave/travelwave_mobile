@@ -19,8 +19,9 @@ class OnBoardSeen extends AuthenticationEvent {
 
 class LoggedIn extends AuthenticationEvent {
   final String token;
+  final UserInfo user;
 
-  const LoggedIn({required this.token});
+  const LoggedIn({required this.token, required this.user});
 
   @override
   List<Object> get props => [token];

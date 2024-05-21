@@ -22,12 +22,12 @@ class Passenger {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['full_name'] = this.fullName;
-    data['phone_number'] = this.phoneNumber;
-    data['is_driver'] = this.isDriver;
-    data['password'] = this.password;
-    data['gender'] = this.gender;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['full_name'] = fullName;
+    data['phone_number'] = phoneNumber;
+    data['is_driver'] = isDriver;
+    data['password'] = password;
+    data['gender'] = gender;
     return data;
   }
 }

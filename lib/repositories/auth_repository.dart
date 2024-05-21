@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:travelwave_mobile/models/passenger_model.dart';
+import 'package:travelwave_mobile/services/utils/app_constant.dart';
 
 class AuthRepository {
-  static const baseURL = 'http://localhost:8000/v1/users/';
+  // static const baseURL = 'http://localhost:8000/v1/users/';
+  static const baseURL = '$baseUrl/users';
 
   static Future<Map<String, dynamic>> registerUser(Passenger user) async {
     try {
@@ -44,10 +46,13 @@ class AuthRepository {
         return {
           'status': 'success',
           'message': 'User logged in successfully.',
-          'access': jsonDecode(response.body)['access'],
+          'access': jsonDecode(response.body),
         };
       } else {
-        throw Exception('An error occurred. Please try again later.');
+        return {
+          'status': 'error',
+          'message': jsonDecode(response.body)['error'],
+        };
       }
     } catch (e) {
       return {
