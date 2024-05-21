@@ -1,32 +1,42 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:travelwave_mobile/models/passenger_model.dart';
 import 'package:travelwave_mobile/services/utils/app_constant.dart';
 
 class AuthRepository {
   // static const baseURL = 'http://localhost:8000/v1/users/';
   static const baseURL = '$baseUrl/users';
 
-  static Future<Map<String, dynamic>> registerUser(Passenger user) async {
+  static Future<Map<String, dynamic>> registerUser({
+    required String fullName,
+    required String phoneNumber,
+    required String password,
+    required bool isDriver,
+  }) async {
     try {
       final response = await http.post(
         Uri.parse(baseURL),
-        body: user.toJson(),
+        body: {
+          'full_name': fullName,
+          'phone_number': phoneNumber,
+          'password': password,
+          'is_driver': isDriver,
+        },
       );
-
-      if (response.statusCode == 201) {
+      if (response.statusCode >= 200 && response.statusCode < 300) {
         return {
           'status': 'success',
           'message': 'User registered successfully.'
         };
       } else {
-        throw Exception('An error occurred. Please try again later.');
+        return {
+          'status': 'error',
+          'message': 'An error occurred. Please try again later.',
+        };
       }
     } catch (e) {
       return {
         'status': 'error',
-        'message': e.toString(),
+        'message': 'An error occurred. Please try again later.',
       };
     }
   }
@@ -62,17 +72,23 @@ class AuthRepository {
     }
   }
 
-  static Future<Map<String, dynamic>> sendOTP(String phoneNumber) async {
+  static Future<Map<String, dynamic>> sendOTP({
+    required String phoneNumber,
+    required String otp,
+  }) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseURL/verify/'),
-        body: {'phone_number': phoneNumber},
+        Uri.parse("$baseURL/verify/"),
+        body: {
+          "phone_number": phoneNumber,
+          "otp": otp,
+        },
       );
 
-      if (response.statusCode == 200) {
+      if (!jsonDecode(response.body).containsKey('error')) {
         return {
           'status': 'success',
-          'message': 'OTP sent successfully.',
+          'message': 'User verified successfully.',
         };
       } else {
         return {
