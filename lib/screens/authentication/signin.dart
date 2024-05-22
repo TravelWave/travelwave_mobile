@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+ 
 import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
+ 
+import 'package:ionicons/ionicons.dart';
+ 
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_event.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
@@ -9,6 +13,9 @@ import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/data/decode_token.dart';
 import 'package:travelwave_mobile/screens/authentication/forgot_password.dart';
 import 'package:travelwave_mobile/screens/authentication/signup.dart';
+import 'package:travelwave_mobile/screens/home/home.dart';
+import 'package:travelwave_mobile/widgets/custom_textformfield.dart';
+ 
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -66,120 +73,57 @@ class _SignInState extends State<SignIn> {
                           fontSize: 20,
                         ),
                       ),
-                      SizedBox(height: 10.v),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25.h),
-                        child: TextFormField(
-                          cursorColor: Colors.grey[800],
-                          keyboardType: TextInputType.phone,
+                      Container(
+                        height: 60.v,
+                        width: 340.h,
+                        margin: EdgeInsets.all(5.v),
+                        child: CustomTextFieldWidget(
+                          function: validatePhoneNumber,
+                          prefixIcon: const Icon(
+                            Ionicons.person_outline,
+                            size: 18,
+                          ),
+                          title: 'Phone number',
                           controller: phoneNumberController,
-                          validator: validatePhoneNumber,
-                          decoration: InputDecoration(
-                            hintText: 'Phone Number',
-                            hintStyle: const TextStyle(fontSize: 13),
-                            fillColor: Colors.grey,
-                            contentPadding: EdgeInsets.all(10.v),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(10.v),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(10.v),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(10.v),
-                            ),
-                            focusedErrorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.red,
-                                width: 1,
-                              ),
-                            ),
-                          ),
                         ),
                       ),
-                      SizedBox(height: 10.v),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 25.h),
-                        child: TextFormField(
-                          validator: validatePassword,
-                          cursorColor: Colors.grey[800],
-                          obscureText: isObscure,
+                      Container(
+                        height: 60.v,
+                        width: 340.h,
+                        margin: EdgeInsets.all(10.v),
+                        child: CustomTextFieldWidget(
+                          function: validatePassword,
+                          prefixIcon: const Icon(
+                            Ionicons.lock_closed_outline,
+                            size: 18,
+                          ),
+                          title: 'Password',
                           controller: passwordController,
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isObscure = !isObscure;
-                                });
-                              },
-                              icon: Icon(
-                                isObscure
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                size: 18,
-                              ),
-                              color: Colors.grey[700],
-                            ),
-                            hintText: 'Enter Your Password',
-                            hintStyle: const TextStyle(fontSize: 13),
-                            contentPadding: EdgeInsets.all(10.v),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                                width: 2,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.red,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(10.v),
-                            ),
-                            focusedErrorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.red,
-                                width: 1,
-                              ),
-                            ),
-                          ),
                         ),
                       ),
-                      SizedBox(height: 10.v),
                       Row(
                         children: [
-                          SizedBox(width: 220.h),
+                          Text(
+                            "Don't have an account?",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[700],
+                              fontSize: 14,
+                            ),
+                          ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const ForgotPasswordPage();
-                                  },
-                                ),
-                              );
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (context) {
+                                  return const SignUp();
+                                },
+                              ));
                             },
-                            child: const Text(
-                              'Forgot password?',
+                            child: Text(
+                              'Sign Up',
                               style: TextStyle(
-                                color: Colors.red,
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
                               ),
@@ -193,29 +137,27 @@ class _SignInState extends State<SignIn> {
                           if (_formKey.currentState!.validate()) {
                             context.read<SignInBloc>().add(
                                   SignInUser(
-                                      phoneNumber:
-                                          "+251${phoneNumberController.text.substring(1)}",
-                                      password: passwordController.text),
+                                    phoneNumber: phoneNumberController.text,
+                                    password: passwordController.text,
+                                  ),
                                 );
                           }
                         },
                         child: Container(
-                          height: 45.v,
-                          width: 300.h,
+                          height: 50.v,
+                          width: 340.h,
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(10.v),
                           ),
                           child: Center(
                             child: state is SignInLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
+                                ? const CircularProgressIndicator()
                                 : const Text(
                                     'Sign In',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                      fontSize: 17,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -224,41 +166,22 @@ class _SignInState extends State<SignIn> {
                       ),
                       SizedBox(height: 150.v),
                       const Divider(),
-                      Container(
-                        height: 80.v,
-                        width: 340.h,
-                        padding: EdgeInsets.symmetric(horizontal: 40.h),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account?",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[700],
-                                fontSize: 14,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                  builder: (context) {
-                                    return const SignUp();
-                                  },
-                                ));
-                              },
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ],
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) {
+                              return const SignUp();
+                            },
+                          ));
+                        },
+                        child: Text(
+                          "Don't have an account? Sign Up",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ],
