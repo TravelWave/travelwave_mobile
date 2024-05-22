@@ -22,7 +22,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         }
         final token = res['access'];
         final user = UserInfo.fromJson(token);
-        print(user);
+
         authBloc.add(LoggedIn(
           token: token,
           user: user,
@@ -30,8 +30,6 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         emit(SignInSuccess(message: res['message'], user: user));
         print('emitted success state ...');
       } catch (e) {
-        print("error in ");
-        print(e);
         emit(SignInFailure(message: e.toString()));
       }
     });

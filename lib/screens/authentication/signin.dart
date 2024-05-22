@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+ 
+import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
+ 
 import 'package:ionicons/ionicons.dart';
+ 
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_event.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
 import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/data/decode_token.dart';
 import 'package:travelwave_mobile/screens/authentication/forgot_password.dart';
 import 'package:travelwave_mobile/screens/authentication/signup.dart';
 import 'package:travelwave_mobile/screens/home/home.dart';
 import 'package:travelwave_mobile/widgets/custom_textformfield.dart';
+ 
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -27,15 +33,16 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<SignInBloc, SignInState>(
+      body: BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
-          // if (state is SignInSuccess) {
-          //   Navigator.of(context).pop();
-          // }
+          if (state is AuthenticationAuthenticated) {
+            Navigator.of(context).pop();
+          }
           if (state is SignInFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message),
+                content: const Text(
+                    "Something went wrong: Please check Your credentials"),
                 backgroundColor: PrimaryColors.amberA400,
               ),
             );

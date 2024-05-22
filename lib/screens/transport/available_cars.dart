@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+ 
 import 'package:travelwave_mobile/screens/transport/car_details.dart';
 
 class AvailableCarsPage extends StatefulWidget {
