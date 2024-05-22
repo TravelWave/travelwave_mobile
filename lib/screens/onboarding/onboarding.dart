@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
-import 'package:travelwave_mobile/screens/authentication/welcome.dart';
+ 
 import 'package:travelwave_mobile/widgets/onboarding_widgets.dart';
 
 class OnboardingPage extends StatefulWidget {

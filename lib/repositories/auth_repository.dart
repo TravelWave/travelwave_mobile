@@ -35,7 +35,7 @@ class AuthRepository {
       String phoneNumber, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseURL/login/'),
+        Uri.parse('$baseURL/login'),
         body: {
           'phone_number': phoneNumber,
           'password': password,
@@ -46,7 +46,7 @@ class AuthRepository {
         return {
           'status': 'success',
           'message': 'User logged in successfully.',
-          'access': jsonDecode(response.body),
+          'access': jsonDecode(response.body)["token"],
         };
       } else {
         return {

@@ -22,6 +22,7 @@ class UserInfo {
 
   UserInfo.fromJson(String token) {
     final json = parseJwt(token);
+
     userId = json['userId'];
     fullName = json['full_name'];
     phoneNumber = json['phone_number'];

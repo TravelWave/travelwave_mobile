@@ -20,21 +20,18 @@ String _decodeBase64(String str) {
 }
 
 Map<String, dynamic> parseJwt(String token) {
-  final parts = token.split('.');
+  List<String> tokenParts = token.split('.');
 
-  // if (parts.length != 3) {
-  //   print("oo");
-  //   throw Exception(
-  //       'invalid token');
-  // }
-
-  final payload = _decodeBase64(parts[0]);
-
-  final payloadMap = json.decode(payload);
-
-  if (payloadMap is! Map<String, dynamic>) {
-    throw Exception('invalid payload');
+// Decode the payload part (the middle part)
+  String payloadString = tokenParts[1];
+  while (payloadString.length % 4 != 0) {
+    payloadString += '=';
   }
+// Decode the base64 payload string
+  String decodedPayload = utf8.decode(base64Url.decode(payloadString));
 
-  return payloadMap;
+// Parse the JSON payload
+  Map<String, dynamic> payload = jsonDecode(decodedPayload);
+
+  return payload;
 }
