@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
             title: 'TravelWave',
             theme: lightTheme(),
             debugShowCheckedModeBanner: false,
-            home: const PhoneVerificationPage(),
+            home: const SplashScreen(),
           );
         },
       ),
