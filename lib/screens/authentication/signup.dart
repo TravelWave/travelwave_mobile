@@ -60,6 +60,7 @@ class _SignUpState extends State<SignUp> {
               builder: (context, state) {
                 return Form(
                   key: _formKey,
+                  // autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
                       SizedBox(

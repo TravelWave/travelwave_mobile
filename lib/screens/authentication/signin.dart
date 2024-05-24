@@ -168,7 +168,6 @@ class _SignInState extends State<SignIn> {
                       SizedBox(height: 10.v),
                       Row(
                         children: [
-                          SizedBox(width: 220.h),
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).pushReplacement(
@@ -284,39 +283,6 @@ String? validatePassword(String? value) {
   if (value.length < 8) {
     return 'Password must be at least 8 characters long';
   }
-
-  // bool hasUppercase = false;
-  // bool hasLowercase = false;
-  // bool hasDigit = false;
-  // bool hasSpecialChar = false;
-
-  // for (int i = 0; i < value.length; i++) {
-  //   if (RegExp(r'[A-Z]').hasMatch(value[i])) {
-  //     hasUppercase = true;
-  //   } else if (RegExp(r'[a-z]').hasMatch(value[i])) {
-  //     hasLowercase = true;
-  //   } else if (RegExp(r'[0-9]').hasMatch(value[i])) {
-  //     hasDigit = true;
-  //   } else if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value[i])) {
-  //     hasSpecialChar = true;
-  //   }
-  // }
-
-  // if (!hasUppercase) {
-  //   return 'Password must contain at least one uppercase letter';
-  // }
-
-  // if (!hasLowercase) {
-  //   return 'Password must contain at least one lowercase letter';
-  // }
-
-  // if (!hasDigit) {
-  //   return 'Password must contain at least one number';
-  // }
-
-  // if (!hasSpecialChar) {
-  //   return 'Password must contain at least one special character';
-  // }
 
   return null;
 }

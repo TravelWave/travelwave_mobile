@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:travelwave_mobile/models/riderequest_model.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
@@ -8,9 +9,13 @@ import 'package:latlong2/latlong.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
 import 'package:travelwave_mobile/data/decode_token.dart';
+
 import 'package:travelwave_mobile/screens/home/search.dart';
+import 'package:travelwave_mobile/screens/home/search_location.dart';
+import 'package:travelwave_mobile/screens/location/index.dart';
 import 'package:travelwave_mobile/screens/notification/notifications.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
+import 'package:travelwave_mobile/screens/transport/ride_request.dart';
 import 'package:travelwave_mobile/screens/transport/select_transport.dart';
 
 class HomePage extends StatefulWidget {
@@ -58,6 +63,64 @@ class _HomePageState extends State<HomePage> {
                         flags: ~InteractiveFlag.doubleTapZoom,
                       ),
                     ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 40,
+            left: 40,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _scaffoldKey.currentState?.openDrawer();
+                  },
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF1B1),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Icon(Iconsax.menu_1),
+                  ),
+                ),
+                const SizedBox(width: 180),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const SearchPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF1B1),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Icon(Icons.search),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () {
+                    showNotifications(context);
+                  },
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF1B1),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Icon(Iconsax.notification),
                     children: [
                       openStreetMapTileLayer,
                       MarkerLayer(
@@ -319,6 +382,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void selectAddress(BuildContext context) {
+    TextEditingController fromController = TextEditingController();
+    TextEditingController toController = TextEditingController();
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -337,72 +403,74 @@ class _HomePageState extends State<HomePage> {
               ),
               Divider(color: Colors.grey[500], thickness: 1),
               const SizedBox(height: 20),
-              SizedBox(
-                height: 50,
-                width: 300,
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.my_location),
-                    labelText: 'From',
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                      ),
+              GestureDetector(
+                onTap: () async {
+                  fromController.text = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const LocationSearch();
+                      },
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
+                  );
+                },
+                child: SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: TextField(
+                    enabled: false,
+                    controller: fromController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.my_location),
+                      labelText: 'From',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
-              SizedBox(
-                height: 50,
-                width: 300,
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.location_on),
-                    labelText: 'To',
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                      ),
+              GestureDetector(
+                onTap: () async {
+                  toController.text = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const LocationSearch();
+                      },
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
+                  );
+                },
+                child: SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: TextField(
+                    enabled: false,
+                    controller: toController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.location_on),
+                      labelText: 'To',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Recent places',
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              const Text(
-                'Empty',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 80),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
-                  confirmAddress(context);
+                  confirmAddress(
+                    context,
+                    fromController.text,
+                    toController.text,
+                  );
                 },
                 child: Container(
                   height: 45,
@@ -433,7 +501,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void confirmAddress(BuildContext context) {
+  void confirmAddress(
+    BuildContext context,
+    String fromLocation,
+    String toLocation,
+  ) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -444,7 +516,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               const Text(
-                'Select address',
+                'Selected address',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -461,16 +533,16 @@ class _HomePageState extends State<HomePage> {
                       size: 20,
                     ),
                     title: Text(
-                      'Current Location',
+                      parseLocation(fromLocation)['placeName']!,
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
-                    subtitle: const Text(
-                      '2972 Westheimer Rd. Santa Ana',
-                      style: TextStyle(
+                    subtitle: Text(
+                      parseLocation(fromLocation)['address']!,
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
                       ),
@@ -483,16 +555,16 @@ class _HomePageState extends State<HomePage> {
                       size: 20,
                     ),
                     title: Text(
-                      'Office',
+                      parseLocation(toLocation)['placeName']!,
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
-                    subtitle: const Text(
-                      '1901 Thornridge Cir',
-                      style: TextStyle(
+                    subtitle: Text(
+                      parseLocation(toLocation)['address']!,
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
                       ),
@@ -506,7 +578,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) {
-                        return const SelectTransportPage();
+                        return LocationScreenConfirmBottomsheet();
                       },
                     ),
                   );
@@ -555,4 +627,16 @@ class _HomePageState extends State<HomePage> {
       position.longitude,
     );
   }
+}
+
+Map<String, String> parseLocation(String locationString) {
+  final parts = locationString.split(',');
+  if (parts.length < 3) {
+    return {'placeName': locationString, 'address': ''};
+  }
+
+  final placeName = parts.sublist(0, 3).join(', ');
+  final address = parts.skip(3).join(', ');
+
+  return {'placeName': placeName, 'address': address};
 }
