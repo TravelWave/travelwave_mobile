@@ -16,7 +16,7 @@ import 'package:travelwave_mobile/widgets/custom_image_view.dart';
 // ignore_for_file: must_be_immutable
 
 class LocationScreenConfirmBottomsheet extends StatefulWidget {
-  LocationScreenConfirmBottomsheet({super.key});
+ const  LocationScreenConfirmBottomsheet({super.key});
 
   @override
   State<LocationScreenConfirmBottomsheet> createState() =>

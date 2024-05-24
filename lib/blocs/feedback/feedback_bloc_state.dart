@@ -16,5 +16,5 @@ class FeedbackSubmitted extends FeedbackBlocState {}
 class FeedbackError extends FeedbackBlocState {
   final String error;
 
-  FeedbackError(this.error);
+  const FeedbackError(this.error);
 }

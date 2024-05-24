@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travelwave_mobile/blocs/signup/signup_event.dart';
 import 'package:travelwave_mobile/blocs/signup/signup_state.dart';
+ 
 import 'package:travelwave_mobile/repositories/auth_repository.dart';
+ 
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   RegistrationBloc() : super(RegistrationInitial()) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:travelwave_mobile/screens/home/home.dart';
+ 
 import 'package:travelwave_mobile/screens/location/index.dart';
 
 class RideRequestPage extends StatefulWidget {
@@ -293,7 +293,7 @@ class _RideRequestPageState extends State<RideRequestPage> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return LocationScreenConfirmBottomsheet();
+                      return const  LocationScreenConfirmBottomsheet();
                     },
                   ),
                 );

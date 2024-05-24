@@ -38,8 +38,7 @@ class MyApp extends StatelessWidget {
             title: 'TravelWave',
             theme: lightTheme(),
             debugShowCheckedModeBanner: false,
-            home: const MainPage(),
-          );
+            home: const SplashScreen(),          );
         },
       ),
     );
