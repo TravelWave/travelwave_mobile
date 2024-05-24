@@ -22,6 +22,7 @@ class AuthRepository {
           'is_driver': isDriver,
         },
       );
+      print(jsonDecode(response.body));
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return {
           'status': 'success',
@@ -37,6 +38,7 @@ class AuthRepository {
       return {
         'status': 'error',
         'message': 'An error occurred. Please try again later.',
+        "detail": e.toString(),
       };
     }
   }

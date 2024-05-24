@@ -14,7 +14,6 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         isDriver: event.isDriver,
         password: event.password,
       );
-      await Future.delayed(const Duration(seconds: 4));
 
       if (response['status'] == "success") {
         emit(RegistrationSuccess());

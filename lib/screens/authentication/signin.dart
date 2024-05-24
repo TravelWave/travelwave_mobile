@@ -96,6 +96,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       Row(
                         children: [
+                          SizedBox(width: 30.h),
                           Text(
                             "Don't have an account?",
                             style: TextStyle(

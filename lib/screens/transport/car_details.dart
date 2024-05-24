@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:travelwave_mobile/screens/transport/ride_request.dart';
 import 'package:travelwave_mobile/widgets/transport_widgets.dart';
 
 class CarDetailPage extends StatefulWidget {
@@ -128,13 +127,13 @@ class _CarDetailPageState extends State<CarDetailPage> {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const RideRequestPage();
-                    },
-                  ),
-                );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) {
+                //       return const RideRequestPage();
+                //     },
+                //   ),
+                // );
               },
               child: Container(
                 height: 40,

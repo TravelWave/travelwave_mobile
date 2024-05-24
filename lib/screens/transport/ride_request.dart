@@ -4,7 +4,13 @@ import 'package:travelwave_mobile/screens/home/home.dart';
 import 'package:travelwave_mobile/screens/location/index.dart';
 
 class RideRequestPage extends StatefulWidget {
-  const RideRequestPage({super.key});
+  final String fromLocation;
+  final String toLocation;
+  const RideRequestPage({
+    super.key,
+    required this.fromLocation,
+    required this.toLocation,
+  });
 
   @override
   State<RideRequestPage> createState() => _RideRequestPageState();
@@ -61,16 +67,16 @@ class _RideRequestPageState extends State<RideRequestPage> {
                     size: 16,
                   ),
                   title: Text(
-                    'Current Location',
+                    parseLocation(widget.fromLocation)['placeName']!,
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                     ),
                   ),
-                  subtitle: const Text(
-                    '2972 Westheimer Rd. Santa Ana, Illinois 85486',
-                    style: TextStyle(
+                  subtitle: Text(
+                    parseLocation(widget.fromLocation)['address']!,
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
@@ -84,16 +90,16 @@ class _RideRequestPageState extends State<RideRequestPage> {
                     size: 16,
                   ),
                   title: Text(
-                    'Office',
+                    parseLocation(widget.toLocation)['placeName']!,
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                     ),
                   ),
-                  subtitle: const Text(
-                    '1901 Thornridge Cir. Shiloh, Hawaii 81063',
-                    style: TextStyle(
+                  subtitle: Text(
+                    parseLocation(widget.toLocation)['address']!,
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.bold,
                       fontSize: 11,
@@ -345,4 +351,16 @@ class _RideRequestPageState extends State<RideRequestPage> {
       });
     }
   }
+}
+
+Map<String, String> parseLocation(String locationString) {
+  final parts = locationString.split(',');
+  if (parts.length < 3) {
+    return {'placeName': locationString, 'address': ''};
+  }
+
+  final placeName = parts.sublist(0, 3).join(', ');
+  final address = parts.skip(3).join(', ');
+
+  return {'placeName': placeName, 'address': address};
 }
