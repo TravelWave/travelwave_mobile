@@ -48,290 +48,241 @@ class _HomePageState extends State<HomePage> {
       drawer: const SideMenu(),
       body: BlocBuilder<SignInBloc, SignInState>(
         builder: (context, state) {
-          if (state is SignInSuccess) {
-            return Stack(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: FlutterMap(
-                    mapController: mapController,
-                    options: MapOptions(
-                      onTap: (tapPosition, point) {},
-                      initialCenter: const LatLng(9.0192, 38.7525),
-                      initialZoom: 15,
-                      interactionOptions: const InteractionOptions(
-                        flags: ~InteractiveFlag.doubleTapZoom,
-                      ),
+          print(state);
+
+          return Stack(children: [
+            SizedBox(
+                width: double.infinity,
+                child: FlutterMap(
+                  mapController: mapController,
+                  options: MapOptions(
+                    onTap: (tapPosition, point) {},
+                    initialCenter: const LatLng(9.0192, 38.7525),
+                    initialZoom: 15,
+                    interactionOptions: const InteractionOptions(
+                      flags: ~InteractiveFlag.doubleTapZoom,
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 40,
-            left: 40,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF1B1),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Icon(Iconsax.menu_1),
                   ),
-                ),
-                const SizedBox(width: 180),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const SearchPage();
-                        },
-                      ),
-                    );
-                  },
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF1B1),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Icon(Icons.search),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {
-                    showNotifications(context);
-                  },
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF1B1),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Icon(Iconsax.notification),
-                    children: [
-                      openStreetMapTileLayer,
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: myLocation,
-                            child: Icon(
-                              Icons.location_on,
-                              color: Colors.red[900],
-                              size: 25,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: 40,
-                  left: 40,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _scaffoldKey.currentState?.openDrawer();
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFF1B1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: const Icon(Iconsax.menu_1),
-                        ),
-                      ),
-                      const SizedBox(width: 180),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) {
-                              return const SearchPage();
-                            },
-                          ));
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFF1B1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: const Icon(Icons.search),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      GestureDetector(
-                        onTap: () {
-                          showNotifications(context);
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFF1B1),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: const Icon(Iconsax.notification),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  left: 70,
-                  bottom: 20,
-                  child: Container(
-                    height: 130,
-                    width: 300,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFFBE7),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 45,
-                          width: 264,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFFBE7),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                              width: 1,
-                            ),
-                          ),
-                          child: GestureDetector(
-                            onTap: () {
-                              selectAddress(context);
-                            },
-                            child: TextField(
-                              enabled: false,
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.search,
-                                  color: Colors.grey[700],
-                                ),
-                                suffixIcon: Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.grey[700],
-                                ),
-                                contentPadding:
-                                    const EdgeInsets.only(left: 0, top: 7),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                hintText: 'Where would you go?',
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          height: 45,
-                          width: 264,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFFBE7),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                              width: 1,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    shareRide = false;
-                                  });
-                                },
-                                child: Container(
-                                  height: 45,
-                                  width: 130,
-                                  decoration: BoxDecoration(
-                                    color: shareRide
-                                        ? const Color(0xFFFFFBE7)
-                                        : Theme.of(context).primaryColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Single Ride',
-                                      style: TextStyle(
-                                        color: shareRide
-                                            ? Colors.black
-                                            : Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    shareRide = true;
-                                  });
-                                },
-                                child: Container(
-                                  height: 45,
-                                  width: 130,
-                                  decoration: BoxDecoration(
-                                    color: shareRide
-                                        ? Theme.of(context).primaryColor
-                                        : const Color(0xFFFFFBE7),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Share Ride',
-                                      style: TextStyle(
-                                        color: shareRide
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                  children: [
+                    openStreetMapTileLayer,
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: myLocation,
+                          child: Icon(
+                            Icons.location_on,
+                            color: Colors.red[900],
+                            size: 25,
                           ),
                         ),
                       ],
                     ),
+                  ],
+                ))
+            //     ],
+            //   ),
+            //     ],
+            //   ),
+            // ),
+            ,
+            Positioned(
+              top: 40,
+              left: 40,
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _scaffoldKey.currentState?.openDrawer();
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF1B1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Icon(Iconsax.menu_1),
+                    ),
+                  ),
+                  const SizedBox(width: 180),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const SearchPage();
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF1B1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Icon(Icons.search),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {
+                      showNotifications(context);
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF1B1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: const Icon(Iconsax.notification),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  height: 130,
+                  width: 300,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFBE7),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Theme.of(context).primaryColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 45,
+                        width: 264,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFBE7),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                            width: 1,
+                          ),
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            selectAddress(context);
+                          },
+                          child: TextField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: Colors.grey[700],
+                              ),
+                              suffixIcon: Icon(
+                                Icons.favorite_border,
+                                color: Colors.grey[700],
+                              ),
+                              contentPadding:
+                                  const EdgeInsets.only(left: 0, top: 7),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'Where would you go?',
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 45,
+                        width: 264,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFBE7),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  shareRide = false;
+                                });
+                              },
+                              child: Container(
+                                height: 45,
+                                width: 130,
+                                decoration: BoxDecoration(
+                                  color: shareRide
+                                      ? const Color(0xFFFFFBE7)
+                                      : Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Single Ride',
+                                    style: TextStyle(
+                                      color: shareRide
+                                          ? Colors.black
+                                          : Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  shareRide = true;
+                                });
+                              },
+                              child: Container(
+                                height: 45,
+                                width: 130,
+                                decoration: BoxDecoration(
+                                  color: shareRide
+                                      ? Theme.of(context).primaryColor
+                                      : const Color(0xFFFFFBE7),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Share Ride',
+                                    style: TextStyle(
+                                      color: shareRide
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+              ),
+            ),
+          ]);
+
+          // return const Center(
+          //   child: CircularProgressIndicator(),
+          // );
         },
       ),
     );

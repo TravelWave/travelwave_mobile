@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/about_us/index.dart';
 import 'package:travelwave_mobile/screens/complain/index.dart';
@@ -220,7 +222,9 @@ class _SideMenuState extends State<SideMenu> {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   onTap: () {
-                    // Handle settings tile tap
+                    BlocProvider.of<AuthenticationBloc>(context)
+                        .add(LoggedOut());
+                    Navigator.pop(context);
                   },
                 ),
                 const Divider(),

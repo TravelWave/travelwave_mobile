@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
- 
+import 'package:flutter/material.dart';
+
 import 'package:travelwave_mobile/data/local_data.dart';
 import 'package:travelwave_mobile/models/user_info.dart';
 
