@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travelwave_mobile/blocs/user/delete_user_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 
@@ -45,23 +47,31 @@ class DeleteAccountScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400),
             ),
           ),
-          CustomElevatedButton(
-            onPressed: () {},
-            text: "Delete",
-            center: true,
-            buttonStyle: ButtonStyle(
-              side: MaterialStateProperty.all<BorderSide>(BorderSide.none),
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(const Color(0xffF44336)),
-            ),
-            margin: EdgeInsets.only(
-              left: 15.h,
-              right: 16.h,
-              bottom: 42.v,
-            ),
-            buttonTextStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.background,
+          BlocBuilder<DeleteuserBloc, DeleteuserState>(
+            builder: (context, state) {
+              return CustomElevatedButton(
+                onPressed: () {
+                  BlocProvider.of<DeleteuserBloc>(context).add(DeleteUser());
+                },
+                isloading: state is DeleteuserRequesting ? true : false,
+                text: "Delete",
+                center: true,
+                buttonStyle: ButtonStyle(
+                  side: MaterialStateProperty.all<BorderSide>(BorderSide.none),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(const Color(0xffF44336)),
                 ),
+                margin: EdgeInsets.only(
+                  left: 15.h,
+                  right: 16.h,
+                  bottom: 42.v,
+                ),
+                buttonTextStyle:
+                    Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.background,
+                        ),
+              );
+            },
           ),
         ],
       ),
