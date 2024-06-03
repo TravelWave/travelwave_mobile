@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
 
 import 'package:travelwave_mobile/screens/authentication/welcome.dart';
+import 'package:travelwave_mobile/screens/home/home.dart';
+import 'package:travelwave_mobile/screens/home/home_driver.dart';
 import 'package:travelwave_mobile/screens/home/home_transport.dart';
 import 'package:travelwave_mobile/screens/onboarding/onboarding.dart';
 
@@ -84,7 +86,14 @@ class SecondScreen extends StatelessWidget {
         //   return const HiddenDrawer();
         //   // }
         // }
-        return const HomePage();
+        if (state is AuthenticationAuthenticated) {
+          if (!state.userInfo.isDriver) {
+            return const HomePageDriver();
+          } else {
+            return const MainPage();
+          }
+        }
+        return const SplashScreen();
       },
     );
   }

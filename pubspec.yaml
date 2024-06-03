@@ -8,6 +8,7 @@ environment:
   sdk: ">=3.3.3 <4.0.0"
 
 dependencies:
+  avatars: ^3.0.2
   bloc: ^8.1.4
   cached_network_image: ^3.3.1
   cupertino_icons: ^1.0.6

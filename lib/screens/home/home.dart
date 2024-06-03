@@ -18,7 +18,6 @@ class _MainPageState extends State<MainPage> {
 
   final pages = [
     const HomePage(),
-    const FavouritePage(),
     const WalletPage(),
     OfferPage(),
     const ProfilePage(),
@@ -44,10 +43,6 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Iconsax.home),
             label: 'Home',
             activeIcon: Icon(Iconsax.home),
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Favourite',
           ),
           BottomNavigationBarItem(
             icon: SizedBox(

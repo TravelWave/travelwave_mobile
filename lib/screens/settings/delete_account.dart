@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travelwave_mobile/blocs/user/delete_user_bloc.dart';
+import 'package:travelwave_mobile/blocs/user/user_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 
@@ -47,11 +47,11 @@ class DeleteAccountScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400),
             ),
           ),
-          BlocBuilder<DeleteuserBloc, DeleteuserState>(
+          BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
               return CustomElevatedButton(
                 onPressed: () {
-                  BlocProvider.of<DeleteuserBloc>(context).add(DeleteUser());
+                  BlocProvider.of<UserBloc>(context).add(DeleteUser());
                 },
                 isloading: state is DeleteuserRequesting ? true : false,
                 text: "Delete",

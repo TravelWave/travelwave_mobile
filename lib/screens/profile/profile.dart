@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
+import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,7 +18,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String selectedValue = 'male';
   String countryCode = "eth";
-  final TextEditingController _phone = TextEditingController(text: "977876788");
+
   final TextEditingController _email =
       TextEditingController(text: "nate@email.con");
   @override
@@ -48,211 +51,204 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.h),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is AuthenticationAuthenticated) {
+                print(state.userInfo.userId);
+                final TextEditingController phone = TextEditingController(
+                    text: state.userInfo.phoneNumber?.split("+251")[1]);
+                return Column(
                   children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 24.v),
-                      child: Center(
-                        child: Stack(children: [
-                          CircleAvatar(
-                            radius: 70,
-                            backgroundImage:
-                                AssetImage(ImageConstant.imgEllipse42),
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 24.v),
+                            child: Center(
+                              child: CircleAvatar(
+                                radius: 40,
+                                child: Avatar(
+                                    textStyle: const TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                    name: state.userInfo.fullName,
+                                    shape: AvatarShape.circle(50)),
+                              ),
+                            ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 35.v,
-                                width: 50.h,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                    border: Border.all(
-                                      width: 1.5,
-                                      color: PrimaryColors.amberA400,
-                                    )),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: SvgPicture.asset(
-                                    ImageConstant.imgProfileedit,
+                          Center(
+                            child: Text(
+                              state.userInfo.fullName ?? "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                      fontSize: 21.fSize,
+                                      fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 24.v,
+                          ),
+                          TextField(
+                            controller: _email,
+                            decoration: InputDecoration(
+                              hintText: 'Name',
+                              fillColor: Colors.grey,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 16.v,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: DropdownButtonFormField(
+                                  value: countryCode,
+                                  decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                  validator: (value) =>
+                                      value == null ? 'country code' : null,
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 'eth',
+                                      child: Text('+251'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'usa',
+                                      child: Text('+1'),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      countryCode = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 16.h,
+                              ),
+                              Flexible(
+                                flex: 3,
+                                child: TextField(
+                                  controller: phone,
+                                  decoration: InputDecoration(
+                                    labelText: 'Phone number',
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide:
+                                          const BorderSide(color: Colors.grey),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                        ]),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        "Nate Samson",
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            fontSize: 21.fSize, fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 24.v,
-                    ),
-                    TextField(
-                      controller: _email,
-                      decoration: InputDecoration(
-                        hintText: 'Name',
-                        fillColor: Colors.grey,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
-                            width: 2,
+                            ],
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1,
+                          SizedBox(
+                            height: 16.v,
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16.v,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: DropdownButtonFormField(
-                            value: countryCode,
+                          DropdownButtonFormField(
+                            menuMaxHeight: 100,
+                            value: selectedValue,
                             decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
+                              labelText: 'Select your gender',
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
                               ),
                             ),
-                            validator: (value) =>
-                                value == null ? 'country code' : null,
+                            validator: (value) => value == null
+                                ? 'Please select your gender'
+                                : null,
                             items: const [
                               DropdownMenuItem(
-                                value: 'eth',
-                                child: Text('+251'),
+                                value: 'male',
+                                child: SizedBox(
+                                  width: 250,
+                                  child: Text('Male'),
+                                ),
                               ),
                               DropdownMenuItem(
-                                value: 'usa',
-                                child: Text('+1'),
+                                value: 'female',
+                                child: SizedBox(
+                                  width: 250,
+                                  child: Text('Female'),
+                                ),
                               ),
                             ],
                             onChanged: (value) {
                               setState(() {
-                                countryCode = value!;
+                                selectedValue = value!;
                               });
                             },
                           ),
-                        ),
-                        SizedBox(
-                          width: 16.h,
-                        ),
-                        Flexible(
-                          flex: 3,
-                          child: TextField(
-                            controller: _phone,
+                          SizedBox(
+                            height: 16.v,
+                          ),
+                          TextField(
                             decoration: InputDecoration(
-                              labelText: 'Phone number',
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide:
-                                    const BorderSide(color: Colors.grey),
-                              ),
+                              hintText: 'Address',
+                              fillColor: Colors.grey,
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide(
                                   color: Theme.of(context).primaryColor,
+                                  width: 2,
                                 ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16.v,
-                    ),
-                    DropdownButtonFormField(
-                      menuMaxHeight: 100,
-                      value: selectedValue,
-                      decoration: InputDecoration(
-                        labelText: 'Select your gender',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      validator: (value) =>
-                          value == null ? 'Please select your gender' : null,
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'male',
-                          child: SizedBox(
-                            width: 250,
-                            child: Text('Male'),
-                          ),
-                        ),
-                        DropdownMenuItem(
-                          value: 'female',
-                          child: SizedBox(
-                            width: 250,
-                            child: Text('Female'),
-                          ),
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          selectedValue = value!;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 16.v,
-                    ),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Address',
-                        fillColor: Colors.grey,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Theme.of(context).primaryColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
+                        ],
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: CustomElevatedButton(
+                        text: "Update",
+                        onPressed: () {},
+                        center: true,
+                      ),
+                    )
                   ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: CustomElevatedButton(
-                  text: "Update",
-                  onPressed: () {},
-                  center: true,
-                ),
-              )
-            ],
+                );
+              } else {
+                return const Center(
+                  child: Text("Not authorized"),
+                );
+              }
+            },
           ),
         ));
   }

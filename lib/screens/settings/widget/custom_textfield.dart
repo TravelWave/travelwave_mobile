@@ -3,7 +3,9 @@ import 'package:travelwave_mobile/constants.dart';
 
 class CustomPasswordField extends StatefulWidget {
   final String hint;
-  const CustomPasswordField({super.key, required this.hint});
+  final TextEditingController controller;
+  const CustomPasswordField(
+      {super.key, required this.hint, required this.controller});
 
   @override
   State<CustomPasswordField> createState() => _CustomPasswordFieldState();
@@ -16,6 +18,7 @@ class _CustomPasswordFieldState extends State<CustomPasswordField> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15.h, vertical: 6.v),
       child: TextField(
+        controller: widget.controller,
         obscureText: !isClicked,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(

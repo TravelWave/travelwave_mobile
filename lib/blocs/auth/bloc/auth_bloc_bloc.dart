@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -23,23 +25,24 @@ class AuthenticationBloc
         emit(AuthenticationLoading());
         final isfirstTime = await localData.readFromStorage('first');
         final hasToken = await localData.readFromStorage('Token');
+
         if (isfirstTime == '') {
           await localData.writeToStorage('first', 'True');
           emit(AuthenticationUninitialized());
         } else if (isfirstTime != '' && hasToken == '') {
           emit(AuthenticationUnauthenticated());
         } else {
-          // final userdata = await localData.readUserData();
           hasToken.isEmpty
               ? emit(AuthenticationUnauthenticated())
-              : emit(AuthenticationAuthenticated());
+              : emit(AuthenticationAuthenticated(
+                  userInfo: UserInfo.fromJson(hasToken)));
         }
       }
       if (event is LoggedIn) {
         await localData.writeToStorage('Token', event.token);
-        await localData.writeUserData(event.user.toJson().toString());
+        await localData.writeUserData(jsonEncode(event.user.toJson()));
 
-        emit(AuthenticationAuthenticated());
+        emit(AuthenticationAuthenticated(userInfo: event.user));
       }
       if (event is LoggedOut) {
         await localData.deleteToken('Token');

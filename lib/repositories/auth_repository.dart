@@ -74,6 +74,40 @@ class AuthRepository {
     }
   }
 
+  static Future<Map<String, dynamic>> changePassword(
+      String oldPass, String newPass, String token) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseURL/changePassword/'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        body: {
+          'old_password': oldPass,
+          'new_password': newPass,
+        },
+      );
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        return {
+          'status': 'success',
+          'message': 'User Change password successfully.',
+        };
+      } else {
+        return {
+          'status': 'error',
+          'message': jsonDecode(response.body)['error'],
+        };
+      }
+    } catch (e) {
+      return {
+        'status': 'error',
+        'message': e.toString(),
+      };
+    }
+  }
+
   static Future<Map<String, dynamic>> sendOTP({
     required String phoneNumber,
     required String otp,
