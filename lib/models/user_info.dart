@@ -5,7 +5,7 @@ class UserInfo {
   String? fullName;
   String? phoneNumber;
   bool? isStaff;
-  bool? isDriver;
+  late bool isDriver;
   int? rating;
   bool? isActive;
   int? iat;
@@ -15,7 +15,7 @@ class UserInfo {
       this.fullName,
       this.phoneNumber,
       this.isStaff,
-      this.isDriver,
+      this.isDriver = false,
       this.rating,
       this.isActive,
       this.iat});
@@ -27,7 +27,7 @@ class UserInfo {
     fullName = json['full_name'];
     phoneNumber = json['phone_number'];
     isStaff = json['is_staff'];
-    isDriver = json['is_driver'];
+    isDriver = json['is_driver'] ?? false;
     rating = json['rating'];
     isActive = json['is_active'];
     iat = json['iat'];

@@ -8,6 +8,8 @@ import 'package:travelwave_mobile/screens/complain/index.dart';
 import 'package:travelwave_mobile/screens/history/index.dart';
 import 'package:travelwave_mobile/screens/referral/index.dart';
 import 'package:travelwave_mobile/screens/settings/index.dart';
+import 'package:travelwave_mobile/services/utils/avater.dart';
+import 'package:travelwave_mobile/widgets/log_out_dialog.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -52,55 +54,49 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage:
-                              AssetImage(ImageConstant.imgEllipse42),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: 30.v,
-                              width: 30.h,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color:
-                                      Theme.of(context).colorScheme.background,
-                                  border: Border.all(
-                                    width: 1.5,
-                                    color: PrimaryColors.amberA400,
-                                  )),
-                              child: Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: SvgPicture.asset(
-                                  ImageConstant.imgCamera,
-                                ),
+                  child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                    builder: (context, state) {
+                      if (state is AuthenticationAuthenticated) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 35,
+                              child: Avatar(
+                                  textStyle: const TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                  name: state.userInfo.fullName,
+                                  shape: AvatarShape.circle(50)),
+                            ),
+                            SizedBox(height: 10.v),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                state.userInfo.fullName ?? "",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ),
-                          ),
-                        )
-                      ]),
-                      SizedBox(height: 15.v),
-                      Text(
-                        'John Doe',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'johndoe@example.com',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      SizedBox(height: 25.v),
-                    ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10)
+                                      .copyWith(top: 5),
+                              child: Text(
+                                "Phone:    ${state.userInfo.phoneNumber ?? ""}",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            SizedBox(height: 15.v),
+                          ],
+                        );
+                      } else {
+                        return const Center(
+                            child: Text(
+                                'Unexpected error: User not authenticated'));
+                      }
+                    },
                   ),
                 ),
                 ListTile(
@@ -222,9 +218,14 @@ class _SideMenuState extends State<SideMenu> {
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   onTap: () {
-                    BlocProvider.of<AuthenticationBloc>(context)
-                        .add(LoggedOut());
-                    Navigator.pop(context);
+                    loginDialogBox(context,
+                        title: "Log Out",
+                        subtitle: "Are you sure you want to logout ?",
+                        onpressed: () {
+                      BlocProvider.of<AuthenticationBloc>(context)
+                          .add(LoggedOut());
+                      Navigator.pop(context);
+                    });
                   },
                 ),
                 const Divider(),

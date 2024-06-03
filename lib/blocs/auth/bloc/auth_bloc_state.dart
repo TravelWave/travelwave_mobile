@@ -10,8 +10,10 @@ class AuthenticationUninitialized extends AuthenticationState {
 }
 
 class AuthenticationAuthenticated extends AuthenticationState {
+  final UserInfo userInfo;
+  const AuthenticationAuthenticated({required this.userInfo});
   @override
-  List<Object> get props => [];
+  List<Object> get props => [userInfo];
 }
 
 class AuthenticationUnauthenticated extends AuthenticationState {
