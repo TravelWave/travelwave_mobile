@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/feedback/feedback_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/user/user_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
-import 'package:travelwave_mobile/screens/home/home.dart';
 import 'package:travelwave_mobile/screens/onboarding/splash_screen.dart';
 
 void main() {
@@ -34,7 +35,14 @@ class MyApp extends StatelessWidget {
               authBloc: BlocProvider.of<AuthenticationBloc>(context)),
         ),
         BlocProvider(
+          create: (context) =>
+              RideRequestBloc(localData: data)..add(const GetRideRequest()),
+        ),
+        BlocProvider(
           create: (context) => UserBloc(localData: data),
+        ),
+        BlocProvider(
+          create: (context) => CreateRideBloc(localData: data),
         ),
       ],
       child: Sizer(

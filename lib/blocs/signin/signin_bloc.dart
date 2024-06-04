@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_event.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
 import 'package:travelwave_mobile/models/user_info.dart';

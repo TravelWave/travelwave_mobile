@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:travelwave_mobile/blocs/auth/bloc/auth_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/services/utils/avater.dart';
