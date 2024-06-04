@@ -16,6 +16,13 @@ class CreateRideRequest extends RideRequestEvent {
   List<Object> get props => [rideRequest];
 }
 
+class GetRideRequest extends RideRequestEvent {
+  const GetRideRequest();
+
+  @override
+  List<Object> get props => [];
+}
+
 class CancelRideRequest extends RideRequestEvent {
   final String rideId;
 
@@ -23,4 +30,16 @@ class CancelRideRequest extends RideRequestEvent {
 
   @override
   List<Object> get props => [rideId];
+}
+
+class DeclineRideRequest extends RideRequestEvent {
+  final String requestId;
+
+  const DeclineRideRequest(this.requestId);
+}
+
+class AcceptRideRequest extends RideRequestEvent {
+  final RideRequestWithLocation rideRequest;
+
+  const AcceptRideRequest({required this.rideRequest});
 }
