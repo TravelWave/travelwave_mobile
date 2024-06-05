@@ -83,15 +83,9 @@ class RideRequestBloc extends Bloc<RideRequestEvent, RideRequestState> {
         try {
           Map res = {};
           final token = await localData.readFromStorage('Token');
-          if (isPooled && isScheduled) {
-            await RideRequestRepository(token: token).acceptPooledRideRequest(
-                event.rideRequest.id, event.rideRequest.passenger);
-          } else if (isScheduled && !isPooled) {
+          if (isScheduled) {
             await RideRequestRepository(token: token)
                 .acceptRideRequestScheduled(event.rideRequest.id);
-          } else if (!isScheduled && isPooled) {
-            await RideRequestRepository(token: token).acceptPooledRideRequest(
-                event.rideRequest.id, event.rideRequest.passenger);
           } else {
             print("object");
             res = await RideRequestRepository(token: token)
