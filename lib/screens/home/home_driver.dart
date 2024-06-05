@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/notification/notification_bloc.dart';
+import 'package:travelwave_mobile/blocs/notification/notification_event.dart';
+import 'package:travelwave_mobile/blocs/notification/notification_state.dart';
 import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/models/create_ride.dart';
 import 'package:travelwave_mobile/models/riderequest_model.dart';
-
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:latlong2/latlong.dart';
@@ -22,9 +25,11 @@ import 'package:travelwave_mobile/screens/notification/notifications.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/screens/transport/ride_request.dart';
 import 'package:travelwave_mobile/screens/transport/select_transport.dart';
+import 'package:travelwave_mobile/services/utils/app_constant.dart';
 import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/services/utils/formatter.dart';
 import 'package:travelwave_mobile/services/utils/location.dart';
+import 'package:travelwave_mobile/widgets/notification_dialog.dart';
 import 'package:travelwave_mobile/widgets/res_handle.dart';
 
 class HomePageDriver extends StatefulWidget {
@@ -38,7 +43,7 @@ class _HomePageDriverState extends State<HomePageDriver>
     with SingleTickerProviderStateMixin {
   bool isOnline = false;
   bool notCreated = true;
-
+  io.Socket? socket;
   late double latitude;
   late double longitude;
   late TabController _tabController;
@@ -47,14 +52,29 @@ class _HomePageDriverState extends State<HomePageDriver>
   @override
   void initState() {
     super.initState();
-    getLocation();
+    initDataWithSocket();
     _tabController = TabController(length: 2, vsync: this);
   }
 
-  void getLocation() async {
+  void initDataWithSocket() async {
     final position = await getCurrentLocation();
-    print("object");
-    print(position);
+    socket = io.io(socketUrl, <String, dynamic>{
+      'transports': ['websocket'],
+    });
+
+    socket?.on('connect', (_) {
+      print('connected');
+    });
+
+    socket?.on('notification', (data) {
+      BlocProvider.of<NotificationBloc>(context)
+          .add(NewNotificationReceived(data['message'], data['userId']));
+    });
+
+    socket?.on('disconnect', (_) {
+      print('disconnected');
+    });
+
     latitude = position.latitude;
     longitude = position.longitude;
   }
@@ -169,121 +189,134 @@ class _HomePageDriverState extends State<HomePageDriver>
   }
 
   @override
+  void dispose() {
+    socket?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       drawer: const SideMenu(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 25.0),
-        child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-            if (state is AuthenticationAuthenticated) {
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: GestureDetector(
-                            onTap: () {
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFF1B1),
-                                borderRadius: BorderRadius.circular(5),
+      body: BlocConsumer<NotificationBloc, NotificationState>(
+          listener: (context, state) {
+        if (state is NotificationReceived) {
+          notificationDialogBox(context, msg: state.message);
+        }
+      }, builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is AuthenticationAuthenticated) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: GestureDetector(
+                              onTap: () {
+                                _scaffoldKey.currentState?.openDrawer();
+                              },
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFF1B1),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: const Icon(Iconsax.menu_1),
                               ),
-                              child: const Icon(Iconsax.menu_1),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 15.h,
-                        ),
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              child: Avatar(
-                                  textStyle: const TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                  name: state.userInfo.fullName,
-                                  shape: AvatarShape.circle(50)),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: CircleAvatar(
-                                radius: 6,
-                                backgroundColor: isOnline
-                                    ? Colors.green
-                                    : PrimaryColors.gray200,
+                          SizedBox(
+                            width: 15.h,
+                          ),
+                          Stack(
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                child: Avatar(
+                                    textStyle: const TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                    name: state.userInfo.fullName,
+                                    shape: AvatarShape.circle(50)),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 10),
-                        Text(state.userInfo.fullName ?? ""),
-                        Spacer(),
-                        Switch(
-                          value: isOnline,
-                          onChanged: (value) {
-                            if (!isOnline && notCreated) {
-                              _showRideOptionsModal(context, value);
-                            } else {
-                              setState(() {
-                                isOnline = value;
-                              });
-                            }
-                          },
-                          activeColor: Colors.green,
-                          inactiveThumbColor: PrimaryColors.gray700,
-                        ),
-                      ],
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: CircleAvatar(
+                                  radius: 6,
+                                  backgroundColor: isOnline
+                                      ? Colors.green
+                                      : PrimaryColors.gray200,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 10),
+                          Text(state.userInfo.fullName ?? ""),
+                          Spacer(),
+                          Switch(
+                            value: isOnline,
+                            onChanged: (value) {
+                              if (!isOnline && notCreated) {
+                                _showRideOptionsModal(context, value);
+                              } else {
+                                setState(() {
+                                  isOnline = value;
+                                });
+                              }
+                            },
+                            activeColor: Colors.green,
+                            inactiveThumbColor: PrimaryColors.gray700,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  TabBar(
-                    controller: _tabController,
-                    indicatorColor: PrimaryColors.amber500,
-                    tabs: const [
-                      Tab(text: 'Upcoming Requests'),
-                      Tab(text: 'Accepted Requests'),
-                    ],
-                  ),
-                  Expanded(
-                    child: TabBarView(
+                    TabBar(
                       controller: _tabController,
-                      children: [
-                        UpcomingRequestsTab(),
-                        AcceptedRequestsTab(),
+                      indicatorColor: PrimaryColors.amber500,
+                      tabs: const [
+                        Tab(text: 'Upcoming Requests'),
+                        Tab(text: 'Accepted Requests'),
                       ],
                     ),
-                  ),
-                ],
-              );
-            } else {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('You are not logged in'),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Login'),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          UpcomingRequestsTab(),
+                          AcceptedRequestsTab(),
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              );
-            }
-          },
-        ),
-      ),
+                );
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('You are not logged in'),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Login'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      }),
     );
   }
 }
