@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/feedback/feedback_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/notification/notification_bloc.dart';
+import 'package:travelwave_mobile/blocs/pasenger/passenger_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride/ridehistory/ride_history_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/user/user_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
@@ -45,6 +48,15 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CreateRideBloc(localData: data),
         ),
+        BlocProvider(
+          create: (context) => NotificationBloc(),
+        ),
+        BlocProvider(
+          create: (context) => PassengerBloc(localdata: data),
+        ),
+        BlocProvider(
+          create: (context) => RideHistoryBloc(localdata: data),
+        ),
       ],
       child: Sizer(
         builder: (context, orientation, deviceType) {
@@ -52,7 +64,7 @@ class MyApp extends StatelessWidget {
             title: 'TravelWave',
             theme: lightTheme(),
             debugShowCheckedModeBanner: false,
-            home: DriverFormScreen(),
+            home: const SecondScreen(),
           );
         },
       ),

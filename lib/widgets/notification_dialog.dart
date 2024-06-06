@@ -13,20 +13,22 @@ Future<dynamic> notificationDialogBox(
       return AlertDialog(
         title: const Text('New Ride Request'),
         content: Text(msg),
+        icon: const Icon(Icons.notifications_sharp),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Decline'),
+            child: const Text('Close'),
           ),
           TextButton(
             onPressed: () {
               // Handle accept action
+              BlocProvider.of<RideRequestBloc>(context)
+                  .add(const GetRideRequest());
               Navigator.of(context).pop();
-              // BlocProvider.of<RideRequestBloc>(context).add(AcceptRideRequest(rideRequest: rideRequest));
             },
-            child: const Text('Accept'),
+            child: const Text('Refetch'),
           ),
         ],
       );

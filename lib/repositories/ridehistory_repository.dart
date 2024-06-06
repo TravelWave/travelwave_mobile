@@ -94,19 +94,22 @@ class RideHistoryRepository {
     }
   }
 
-  Future<RideHistory> getRideHistoryByUser(String id) async {
+  Future<List<RideHistory>> getRideHistoryByUser(String id) async {
     final url = Uri.parse("$_baseUrl$id");
+    print(url);
+    print(token);
 
     try {
-      final response = await http.put(
+      final response = await http.get(
         url,
         headers: {
           'Authorization': 'Bearer $token',
         },
       );
-
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        return RideHistory.fromJson(jsonDecode(response.body));
+        return RideHistory.fromJsonList(jsonDecode(response.body));
         // Feedback submitted successfully
       }
       throw Exception('Failed to get ride info');

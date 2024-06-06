@@ -49,4 +49,9 @@ class RideHistory {
     data['total_expenditure'] = totalExpenditure;
     return data;
   }
+
+  static List<RideHistory> fromJsonList(json) {
+    if (json == null) return [];
+    return json.map((e) => RideHistory.fromJson(e)).toList();
+  }
 }
