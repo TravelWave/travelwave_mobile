@@ -33,6 +33,16 @@ class UserInfo {
     iat = json['iat'];
   }
 
+  UserInfo.fromJson2(Map<String, dynamic> json) {
+    userId = json['userId'];
+    fullName = json['full_name'];
+    phoneNumber = json['phone_number'];
+    isStaff = json['is_staff'];
+    isDriver = json['is_driver'] ?? false;
+    rating = json['rating'];
+    isActive = json['is_active'];
+    iat = json['iat'];
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['userId'] = userId;

@@ -44,6 +44,10 @@ class RideRequestBloc extends Bloc<RideRequestEvent, RideRequestState> {
             );
             rides.add(
               RideRequestWithLocation(
+                endLatitude: request.endLatitude,
+                endLongitude: request.endLongitude,
+                startLatitude: request.startLatitude,
+                startLongitude: request.startLongitude,
                 id: request.id,
                 passenger: request.passengerId,
                 startLocation: startLocation,

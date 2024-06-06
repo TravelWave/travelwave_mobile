@@ -6,7 +6,8 @@ Future<String> getLocationFromCoordinates(
     List<Placemark> placemarks =
         await placemarkFromCoordinates(latitude, longitude);
     Placemark place = placemarks.first;
-    String location = '${place.street}, ${place.locality}, ${place.country}';
+    String location =
+        "${place.name} ${place.subLocality} ${place.locality}, ${place.country}";
     return location;
   } catch (e) {
     print('Error: $e');

@@ -67,6 +67,10 @@ class RideRequestWithLocation {
   final String startLocation;
   final String endLocation;
   final String requestTime;
+  double startLatitude;
+  double startLongitude;
+  double endLatitude;
+  double endLongitude;
   final String status;
   final bool isPooled;
 
@@ -78,6 +82,10 @@ class RideRequestWithLocation {
     required this.startLocation,
     required this.endLocation,
     required this.requestTime,
+    required this.endLatitude,
+    required this.endLongitude,
+    required this.startLatitude,
+    required this.startLongitude,
     required this.status,
     required this.isPooled,
     required this.isScheduled,

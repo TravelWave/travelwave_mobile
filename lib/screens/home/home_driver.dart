@@ -5,6 +5,7 @@ import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/notification/notification_bloc.dart';
 import 'package:travelwave_mobile/blocs/notification/notification_event.dart';
 import 'package:travelwave_mobile/blocs/notification/notification_state.dart';
+import 'package:travelwave_mobile/blocs/pasenger/passenger_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
@@ -17,6 +18,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
 import 'package:travelwave_mobile/data/decode_token.dart';
+import 'package:travelwave_mobile/screens/home/ride_detail.dart';
 
 import 'package:travelwave_mobile/screens/home/search.dart';
 import 'package:travelwave_mobile/screens/home/search_location.dart';
@@ -175,7 +177,7 @@ class _HomePageDriverState extends State<HomePageDriver>
                             ? const Padding(
                                 padding: EdgeInsets.all(5),
                                 child: CircularProgressIndicator())
-                            : Text('Create Ride'),
+                            : const Text('Create Ride'),
                       ),
                     ],
                   ),
@@ -260,7 +262,7 @@ class _HomePageDriverState extends State<HomePageDriver>
                           ),
                           const SizedBox(width: 10),
                           Text(state.userInfo.fullName ?? ""),
-                          Spacer(),
+                          const Spacer(),
                           Switch(
                             value: isOnline,
                             onChanged: (value) {
@@ -343,108 +345,189 @@ class UpcomingRequestsTab extends StatelessWidget {
               child: ListView.builder(
                 itemCount: upcomingRequest.length, // Example data count
                 itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.all(5.0),
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Text(
-                              getRelativeTimeString(
-                                  upcomingRequest[index].requestTime),
-                              style: TextStyle(
-                                color: PrimaryColors.gray500,
+                  return GestureDetector(
+                    onTap: () {
+                      BlocProvider.of<PassengerBloc>(context).add(
+                          PassengerFetch(id: upcomingRequest[index].passenger));
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) =>
+                            BlocConsumer<PassengerBloc, PassengerBlocState>(
+                          listener: (context, state) {
+                            if (state is PassengerBlocError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                          "Something went wrong Please try again later")));
+                            }
+                          },
+                          builder: (context, state) {
+                            print(state);
+                            if (state is PassengerBlocSuccess) {
+                              return RideDetailsModal(
+                                passengerData: state.passenger,
+                                rideData: upcomingRequest[index],
+                              );
+                            }
+                            if (state is PassengerBlocError) {
+                              return emptyWidget(
+                                  msg:
+                                      "An error occured while fetching passenger data",
+                                  retry: () {
+                                    BlocProvider.of<PassengerBloc>(context).add(
+                                        PassengerFetch(
+                                            id: upcomingRequest[index]
+                                                .passenger));
+                                  });
+                            }
+
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: EdgeInsets.all(5.0),
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Text(
+                                getRelativeTimeString(
+                                    upcomingRequest[index].requestTime),
+                                style: TextStyle(
+                                  color: PrimaryColors.gray500,
+                                ),
                               ),
                             ),
-                          ),
-                          Text(
-                            'Ride Request ${index + 1}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              'Ride Request ${index + 1}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            upcomingRequest[index].status,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              upcomingRequest[index].status,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                              'Start: ${upcomingRequest[index].startLocation}'),
-                          Text(
-                              'Destination: ${upcomingRequest[index].endLocation}'),
-                          SizedBox(height: 5.v),
-                          if (upcomingRequest[index].isPooled ||
-                              upcomingRequest[index].isScheduled)
-                            Wrap(
-                              spacing: 8,
-                              children: [
-                                if (upcomingRequest[index].isPooled)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: PrimaryColors.amberA400,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Text(
-                                        "Pooled",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
-                                      ),
-                                    ),
+                            SizedBox(height: 5),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Start:  ',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: PrimaryColors.amber500),
                                   ),
-                                if (upcomingRequest[index].isScheduled)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: PrimaryColors.amberA400,
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Text(
-                                        "Scheduled",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 12),
+                                  TextSpan(
+                                      text:
+                                          upcomingRequest[index].startLocation,
+                                      style:
+                                          const TextStyle(color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Destination:  ',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: PrimaryColors.amber500),
+                                  ),
+                                  TextSpan(
+                                      text: upcomingRequest[index].endLocation,
+                                      style: TextStyle(color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5.v),
+                            if (upcomingRequest[index].isPooled ||
+                                upcomingRequest[index].isScheduled)
+                              Wrap(
+                                spacing: 8,
+                                children: [
+                                  if (upcomingRequest[index].isPooled)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: PrimaryColors.amberA400,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          "Pooled",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
                                       ),
                                     ),
-                                  )
+                                  if (upcomingRequest[index].isScheduled)
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: PrimaryColors.amberA400,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Text(
+                                          "Scheduled",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                    )
+                                ],
+                              ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    BlocProvider.of<RideRequestBloc>(context)
+                                        .add(
+                                      AcceptRideRequest(
+                                        rideRequest: upcomingRequest[index],
+                                      ),
+                                    );
+                                    // Accept ride logic
+                                  },
+                                  child: Text('Accept'),
+                                ),
+                                SizedBox(width: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    BlocProvider.of<RideRequestBloc>(context)
+                                        .add(
+                                      DeclineRideRequest(
+                                          upcomingRequest[index].id),
+                                    );
+                                  },
+                                  child: Text('Decline'),
+                                ),
                               ],
                             ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  BlocProvider.of<RideRequestBloc>(context).add(
-                                    AcceptRideRequest(
-                                      rideRequest: upcomingRequest[index],
-                                    ),
-                                  );
-                                  // Accept ride logic
-                                },
-                                child: Text('Accept'),
-                              ),
-                              SizedBox(width: 10),
-                              ElevatedButton(
-                                onPressed: () {
-                                  BlocProvider.of<RideRequestBloc>(context).add(
-                                    DeclineRideRequest(
-                                        upcomingRequest[index].id),
-                                  );
-                                },
-                                child: Text('Decline'),
-                              ),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -502,15 +585,45 @@ class AcceptedRequestsTab extends StatelessWidget {
                       children: [
                         Text(
                           'Accepted Ride ${index + 1}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 5),
-                        Text('Start: ${acceptedRequest[index].startLocation}'),
-                        Text(
-                            'Destination: ${acceptedRequest[index].endLocation}'),
+                        const SizedBox(height: 5),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Start:  ',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: PrimaryColors.amber500),
+                              ),
+                              TextSpan(
+                                  text: acceptedRequest[index].startLocation,
+                                  style: const TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Destination:  ',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: PrimaryColors.amber500),
+                              ),
+                              TextSpan(
+                                  text: acceptedRequest[index].endLocation,
+                                  style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
                         SizedBox(height: 5.v),
                         if (acceptedRequest[index].isPooled ||
                             acceptedRequest[index].isScheduled)
