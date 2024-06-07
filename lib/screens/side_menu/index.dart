@@ -75,8 +75,9 @@ class _SideMenuState extends State<SideMenu> {
                                   ),
                                   SizedBox(height: 10.v),
                                   Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                            horizontal: 20)
+                                        .copyWith(left: 10),
                                     child: Text(
                                       state.userInfo.fullName ?? "",
                                       style: Theme.of(context)
@@ -129,8 +130,8 @@ class _SideMenuState extends State<SideMenu> {
                           // Handle home tile tap
                         },
                       ),
-                      const Divider(),
-                      if (!state.userInfo.isDriver)
+                      if (!state.userInfo.isDriver) ...[
+                        const Divider(),
                         ListTile(
                           leading: Image.asset(
                             ImageConstant.imgComplain,
@@ -149,8 +150,7 @@ class _SideMenuState extends State<SideMenu> {
                             ));
                           },
                         ),
-                      const Divider(),
-                      if (!state.userInfo.isDriver)
+                        const Divider(),
                         ListTile(
                           leading: Image.asset(
                             ImageConstant.imgReferral,
@@ -169,6 +169,7 @@ class _SideMenuState extends State<SideMenu> {
                             ));
                           },
                         ),
+                      ],
                       const Divider(),
                       ListTile(
                         leading: Image.asset(
