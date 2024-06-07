@@ -151,7 +151,7 @@ class _HomePageDriverState extends State<HomePageDriver>
                         },
                       ),
                       CheckboxListTile(
-                        title: const Text('Allow Shared Ride'),
+                        title: const Text('Allow Scheduled Ride'),
                         value: isScheduled,
                         onChanged: (value) {
                           setState(() {
