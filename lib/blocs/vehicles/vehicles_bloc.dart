@@ -23,6 +23,18 @@ class VehiclesBloc extends Bloc<VehiclesEvent, VehiclesState> {
           emit(VehiclesFetchError());
         }
       }
+      if (event is CreateVehiclesByDriver) {
+        emit(VehiclesFetching());
+        try {
+          final vehicles = await VehicleRepository(
+                  token: await localdata.readFromStorage("Token"))
+              .createvehicleDriver(event.vehicle);
+          emit(VehiclesFetchSuccess(vehicle: vehicles));
+        } catch (e) {
+          print(e);
+          emit(VehiclesFetchError());
+        }
+      }
     });
   }
 }

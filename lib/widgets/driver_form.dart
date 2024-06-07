@@ -1,58 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
+import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/models/driver_model.dart';
 
 class DriverFormScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormBuilderState>();
 
   DriverFormScreen({super.key});
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController makeController = TextEditingController();
+  final TextEditingController modelController = TextEditingController();
+  final TextEditingController colorController = TextEditingController();
+  final TextEditingController plateController = TextEditingController();
+  final TextEditingController seatController = TextEditingController();
+  final TextEditingController yearController = TextEditingController();
+  final TextEditingController licenseController = TextEditingController();
+  final TextEditingController driverLicenseController = TextEditingController();
+  final TextEditingController driverLicenseExpController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Driver Information Form'),
+        centerTitle: true,
+        title: Text(
+          "Driver's Vehicle Information Form",
+          style: TextStyle(fontSize: 15),
+        ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: FormBuilder(
           key: _formKey,
           child: ListView(
             children: [
-              SizedBox(height: 7.v),
+              const Text(
+                  "Provide the following information to register your vehicle and become a driver once approved by the admin."),
+              SizedBox(height: 10.v),
               FormBuilderTextField(
-                name: 'name',
+                name: 'Vehicle name',
+                controller: nameController,
                 decoration: InputDecoration(
-                  labelText: 'Name',
+                  labelText: 'Vehicle Name',
                   border: OutlineInputBorder(),
                 ),
                 validator: FormBuilderValidators.required(),
               ),
               SizedBox(height: 16.0),
               FormBuilderTextField(
-                name: 'make',
+                name: 'Vehicle make',
+                controller: makeController,
                 decoration: InputDecoration(
-                  labelText: 'Make',
+                  labelText: 'Vehicle Make',
                   border: OutlineInputBorder(),
                 ),
                 validator: FormBuilderValidators.required(),
               ),
               SizedBox(height: 16.0),
               FormBuilderTextField(
-                name: 'model',
+                name: 'Vehicle model',
+                controller: modelController,
                 decoration: InputDecoration(
-                  labelText: 'Model',
+                  labelText: 'Vehicle Model',
                   border: OutlineInputBorder(),
                 ),
                 validator: FormBuilderValidators.required(),
               ),
               SizedBox(height: 16.0),
               FormBuilderTextField(
-                name: 'color',
+                name: 'Vehicle color',
+                controller: colorController,
                 decoration: InputDecoration(
-                  labelText: 'Color',
+                  labelText: 'Vehicle Color',
                   border: OutlineInputBorder(),
                 ),
                 validator: FormBuilderValidators.required(),
@@ -60,6 +84,7 @@ class DriverFormScreen extends StatelessWidget {
               SizedBox(height: 16.0),
               FormBuilderTextField(
                 name: 'license_plate',
+                controller: plateController,
                 decoration: InputDecoration(
                   labelText: 'License Plate',
                   border: OutlineInputBorder(),
@@ -69,6 +94,7 @@ class DriverFormScreen extends StatelessWidget {
               SizedBox(height: 16.0),
               FormBuilderTextField(
                 name: 'number_of_seats',
+                controller: seatController,
                 decoration: InputDecoration(
                   labelText: 'Number of Seats',
                   border: OutlineInputBorder(),
@@ -82,6 +108,7 @@ class DriverFormScreen extends StatelessWidget {
               SizedBox(height: 16.0),
               FormBuilderTextField(
                 name: 'year',
+                controller: yearController,
                 decoration: InputDecoration(
                   labelText: 'Year',
                   border: OutlineInputBorder(),
@@ -97,6 +124,7 @@ class DriverFormScreen extends StatelessWidget {
               SizedBox(height: 16.0),
               FormBuilderTextField(
                 name: 'driver_license',
+                controller: licenseController,
                 decoration: InputDecoration(
                   labelText: 'Driver License',
                   border: OutlineInputBorder(),
@@ -107,6 +135,7 @@ class DriverFormScreen extends StatelessWidget {
               FormBuilderDateTimePicker(
                 name: 'driver_license_expiration_date',
                 initialDate: DateTime.now(),
+                controller: driverLicenseExpController,
                 fieldHintText: 'Driver License Expiration Date',
                 inputType: InputType.date,
                 format: DateFormat('yyyy-MM-dd'),
@@ -120,12 +149,28 @@ class DriverFormScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.saveAndValidate() ?? false) {
-                    print(_formKey.currentState?.value);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Form submitted successfully!')),
+                    final val = _formKey.currentState?.value;
+
+                    BlocProvider.of<VehiclesBloc>(context).add(
+                      CreateVehiclesByDriver(
+                        vehicle: DriverModel(
+                          isBusy: false,
+                          isVerified: false,
+                          name: val?['Vehicle name'],
+                          make: val?['Vehicle make'],
+                          model: val?['Vehicle model'],
+                          color: val?['Vehicle color'],
+                          licensePlate: val?['license_plate'],
+                          numberOfSeats: int.parse(val?['number_of_seats']),
+                          year: int.parse(val?['year']),
+                          driverLicense: val?['driver_license'],
+                          driverLicenseExpirationDate:
+                              val?['driver_license_expiration_date']
+                                      .toString() ??
+                                  "",
+                        ),
+                      ),
                     );
-                  } else {
-                    print('Validation failed');
                   }
                 },
                 child: Text('Submit'),

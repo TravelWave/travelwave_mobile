@@ -13,3 +13,10 @@ class FetchVehiclesByDriver extends VehiclesEvent {
   @override
   List<Object> get props => [id];
 }
+
+class CreateVehiclesByDriver extends VehiclesEvent {
+  final DriverModel vehicle;
+  const CreateVehiclesByDriver({required this.vehicle});
+  @override
+  List<Object> get props => [vehicle];
+}
