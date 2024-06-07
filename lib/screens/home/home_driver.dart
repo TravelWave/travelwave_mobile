@@ -8,6 +8,7 @@ import 'package:travelwave_mobile/blocs/notification/notification_state.dart';
 import 'package:travelwave_mobile/blocs/pasenger/passenger_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
+import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/models/create_ride.dart';
 import 'package:travelwave_mobile/models/riderequest_model.dart';
@@ -31,11 +32,13 @@ import 'package:travelwave_mobile/services/utils/app_constant.dart';
 import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/services/utils/formatter.dart';
 import 'package:travelwave_mobile/services/utils/location.dart';
+import 'package:travelwave_mobile/widgets/driver_form.dart';
 import 'package:travelwave_mobile/widgets/notification_dialog.dart';
 import 'package:travelwave_mobile/widgets/res_handle.dart';
 
 class HomePageDriver extends StatefulWidget {
-  const HomePageDriver({super.key});
+  final String driverId;
+  const HomePageDriver({super.key, required this.driverId});
 
   @override
   _HomePageDriverState createState() => _HomePageDriverState();
@@ -198,127 +201,215 @@ class _HomePageDriverState extends State<HomePageDriver>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: const SideMenu(),
-      body: BlocConsumer<NotificationBloc, NotificationState>(
-          listener: (context, state) {
-        if (state is NotificationReceived) {
-          notificationDialogBox(context, msg: state.message);
+    return BlocBuilder<VehiclesBloc, VehiclesState>(
+      builder: (context, state) {
+        print(state);
+        if (state is VehiclesFetchError) {
+          return Scaffold(
+            body: emptyWidget(
+              msg: "Can't get vehicle data Please retry",
+              retry: () {
+                BlocProvider.of<VehiclesBloc>(context)
+                    .add(FetchVehiclesByDriver(id: widget.driverId));
+              },
+            ),
+          );
         }
-      }, builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25.0),
-          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              if (state is AuthenticationAuthenticated) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: GestureDetector(
-                              onTap: () {
-                                _scaffoldKey.currentState?.openDrawer();
-                              },
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFF1B1),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: const Icon(Iconsax.menu_1),
+        if (state is VehiclesFetchSuccess) {
+          if (state.vehicle == null) {
+            return DriverFormScreen();
+          }
+          if (state.vehicle?.isVerified == false) {
+            return Scaffold(
+                appBar: AppBar(
+                  title: Text("Pending..."),
+                ),
+                body: RefreshIndicator(
+                  onRefresh: () async {
+                    BlocProvider.of<VehiclesBloc>(context)
+                        .add(FetchVehiclesByDriver(id: widget.driverId));
+                  },
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Container(
+                      height:
+                          MediaQuery.of(context).size.height - kToolbarHeight,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(ImageConstant.imgwatch),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20.h),
+                              child: Text(
+                                "We will look through your documents and reach out to you within",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 15.h,
-                          ),
-                          Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                child: Avatar(
-                                    textStyle: const TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                    name: state.userInfo.fullName,
-                                    shape: AvatarShape.circle(50)),
+                            SizedBox(
+                              height: 15.v,
+                            ),
+                            Text(
+                              "12 Hours",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                            ),
+                            SizedBox(
+                              height: 20.v,
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  BlocProvider.of<VehiclesBloc>(context).add(
+                                      FetchVehiclesByDriver(
+                                          id: widget.driverId));
+                                },
+                                child: Text("Refresh"))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ));
+          }
+          if (state.vehicle!.isVerified) {
+            return Scaffold(
+              key: _scaffoldKey,
+              drawer: const SideMenu(),
+              body: BlocConsumer<NotificationBloc, NotificationState>(
+                  listener: (context, state) {
+                if (state is NotificationReceived) {
+                  notificationDialogBox(context, msg: state.message);
+                }
+              }, builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 25.0),
+                  child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                    builder: (context, state) {
+                      if (state is AuthenticationAuthenticated) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _scaffoldKey.currentState?.openDrawer();
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFFFF1B1),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: const Icon(Iconsax.menu_1),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15.h,
+                                  ),
+                                  Stack(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 30,
+                                        child: Avatar(
+                                            textStyle: const TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.white),
+                                            name: state.userInfo.fullName,
+                                            shape: AvatarShape.circle(50)),
+                                      ),
+                                      Positioned(
+                                        bottom: 0,
+                                        right: 0,
+                                        child: CircleAvatar(
+                                          radius: 6,
+                                          backgroundColor: isOnline
+                                              ? Colors.green
+                                              : PrimaryColors.gray200,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(state.userInfo.fullName ?? ""),
+                                  const Spacer(),
+                                  Switch(
+                                    value: isOnline,
+                                    onChanged: (value) {
+                                      if (!isOnline && notCreated) {
+                                        _showRideOptionsModal(context, value);
+                                      } else {
+                                        setState(() {
+                                          isOnline = value;
+                                        });
+                                      }
+                                    },
+                                    activeColor: Colors.green,
+                                    inactiveThumbColor: PrimaryColors.gray700,
+                                  ),
+                                ],
                               ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: CircleAvatar(
-                                  radius: 6,
-                                  backgroundColor: isOnline
-                                      ? Colors.green
-                                      : PrimaryColors.gray200,
-                                ),
+                            ),
+                            TabBar(
+                              controller: _tabController,
+                              indicatorColor: PrimaryColors.amber500,
+                              tabs: const [
+                                Tab(text: 'Upcoming Requests'),
+                                Tab(text: 'Accepted Requests'),
+                              ],
+                            ),
+                            Expanded(
+                              child: TabBarView(
+                                controller: _tabController,
+                                children: [
+                                  UpcomingRequestsTab(),
+                                  AcceptedRequestsTab(),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text('You are not logged in'),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Login'),
                               ),
                             ],
                           ),
-                          const SizedBox(width: 10),
-                          Text(state.userInfo.fullName ?? ""),
-                          const Spacer(),
-                          Switch(
-                            value: isOnline,
-                            onChanged: (value) {
-                              if (!isOnline && notCreated) {
-                                _showRideOptionsModal(context, value);
-                              } else {
-                                setState(() {
-                                  isOnline = value;
-                                });
-                              }
-                            },
-                            activeColor: Colors.green,
-                            inactiveThumbColor: PrimaryColors.gray700,
-                          ),
-                        ],
-                      ),
-                    ),
-                    TabBar(
-                      controller: _tabController,
-                      indicatorColor: PrimaryColors.amber500,
-                      tabs: const [
-                        Tab(text: 'Upcoming Requests'),
-                        Tab(text: 'Accepted Requests'),
-                      ],
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          UpcomingRequestsTab(),
-                          AcceptedRequestsTab(),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text('You are not logged in'),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Login'),
-                      ),
-                    ],
+                        );
+                      }
+                    },
                   ),
                 );
-              }
-            },
+              }),
+            );
+          }
+        }
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
           ),
         );
-      }),
+      },
     );
   }
 }

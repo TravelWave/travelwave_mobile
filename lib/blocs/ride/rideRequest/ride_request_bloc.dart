@@ -44,6 +44,7 @@ class RideRequestBloc extends Bloc<RideRequestEvent, RideRequestState> {
             );
             rides.add(
               RideRequestWithLocation(
+                shortestPath: request.shortestPath,
                 endLatitude: request.endLatitude,
                 endLongitude: request.endLongitude,
                 startLatitude: request.startLatitude,
@@ -106,14 +107,37 @@ class RideRequestBloc extends Bloc<RideRequestEvent, RideRequestState> {
             emit(AcceptRideRequestError(error: res['message']));
             return;
           }
-
-          final updatedRideInfo = currstate.rideInfo
-              .where((request) => request.id != event.rideRequest.id)
-              .toList();
-          print(updatedRideInfo);
-          print(currstate.rideInfo);
-
-          emit(GetRidesSucess(rideInfo: updatedRideInfo));
+          final rideRequest =
+              await RideRequestRepository(token: token).getRideRequests();
+          List<RideRequestWithLocation> rides = [];
+          for (var request in rideRequest) {
+            String startLocation = await getLocationFromCoordinates(
+              request.startLatitude,
+              request.startLongitude,
+            );
+            String endLocation = await getLocationFromCoordinates(
+              request.endLatitude,
+              request.endLongitude,
+            );
+            rides.add(
+              RideRequestWithLocation(
+                shortestPath: request.shortestPath,
+                endLatitude: request.endLatitude,
+                endLongitude: request.endLongitude,
+                startLatitude: request.startLatitude,
+                startLongitude: request.startLongitude,
+                id: request.id,
+                passenger: request.passengerId,
+                startLocation: startLocation,
+                endLocation: endLocation,
+                requestTime: request.requestTime,
+                status: request.status,
+                isPooled: request.isPooled,
+                isScheduled: request.isScheduled,
+              ),
+            );
+          }
+          emit(GetRidesSucess(rideInfo: rides));
         } catch (e) {
           emit(AcceptRideRequestError(error: e.toString()));
         }

@@ -7,13 +7,14 @@ class RideRequest {
   double endLongitude;
   String requestTime;
   String status;
-
+  String shortestPath;
   bool isPooled;
   bool isScheduled;
 
   RideRequest({
     required this.id,
     required this.passengerId,
+    required this.shortestPath,
     required this.startLatitude,
     required this.startLongitude,
     required this.endLatitude,
@@ -34,6 +35,7 @@ class RideRequest {
       endLongitude: (json['end_longitude'] ?? 0).toDouble(),
       requestTime: json['request_time'] ?? '',
       status: json['status'] ?? '',
+      shortestPath: json['shortest_path'] ?? '',
       isPooled: json['is_pooled'] ?? false,
       isScheduled: json['is_scheduled'] ?? false,
     );
@@ -49,7 +51,7 @@ class RideRequest {
     data['end_longitude'] = endLongitude;
     data['request_time'] = requestTime;
     data['status'] = status;
-
+    data['shortest_path'] = shortestPath;
     data['is_pooled'] = isPooled;
     data['is_scheduled'] = isScheduled;
 
@@ -73,6 +75,7 @@ class RideRequestWithLocation {
   double endLongitude;
   final String status;
   final bool isPooled;
+  String shortestPath;
 
   final bool isScheduled;
 
@@ -81,6 +84,7 @@ class RideRequestWithLocation {
     required this.passenger,
     required this.startLocation,
     required this.endLocation,
+    required this.shortestPath,
     required this.requestTime,
     required this.endLatitude,
     required this.endLongitude,

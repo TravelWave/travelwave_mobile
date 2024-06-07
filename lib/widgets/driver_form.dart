@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
+import 'package:travelwave_mobile/constants.dart';
 
 class DriverFormScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormBuilderState>();
@@ -20,6 +21,7 @@ class DriverFormScreen extends StatelessWidget {
           key: _formKey,
           child: ListView(
             children: [
+              SizedBox(height: 7.v),
               FormBuilderTextField(
                 name: 'name',
                 decoration: InputDecoration(
@@ -93,12 +95,6 @@ class DriverFormScreen extends StatelessWidget {
                 ]),
               ),
               SizedBox(height: 16.0),
-              FormBuilderSwitch(
-                name: 'is_busy',
-                title: Text('Is Busy'),
-                initialValue: false,
-              ),
-              SizedBox(height: 16.0),
               FormBuilderTextField(
                 name: 'driver_license',
                 decoration: InputDecoration(
@@ -120,13 +116,7 @@ class DriverFormScreen extends StatelessWidget {
                 ),
                 validator: FormBuilderValidators.required(),
               ),
-              SizedBox(height: 16.0),
-              FormBuilderSwitch(
-                name: 'is_verified',
-                title: Text('Is Verified'),
-                initialValue: false,
-              ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 32.v),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.saveAndValidate() ?? false) {

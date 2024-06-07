@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 
 import 'package:travelwave_mobile/screens/authentication/welcome.dart';
 import 'package:travelwave_mobile/screens/home/home.dart';
@@ -87,8 +88,12 @@ class SecondScreen extends StatelessWidget {
         //   // }
         // }
         if (state is AuthenticationAuthenticated) {
-          if (!state.userInfo.isDriver) {
-            return const HomePageDriver();
+          if (state.userInfo.isDriver) {
+            BlocProvider.of<VehiclesBloc>(context)
+                .add(FetchVehiclesByDriver(id: state.userInfo.userId!));
+            return HomePageDriver(
+              driverId: state.userInfo.userId!,
+            );
           } else {
             return const MainPage();
           }
