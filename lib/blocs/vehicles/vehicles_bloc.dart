@@ -19,7 +19,6 @@ class VehiclesBloc extends Bloc<VehiclesEvent, VehiclesState> {
               .getvehicleDriver(event.id);
           emit(VehiclesFetchSuccess(vehicle: vehicles));
         } catch (e) {
-          print(e);
           emit(VehiclesFetchError());
         }
       }

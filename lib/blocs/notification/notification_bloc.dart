@@ -8,5 +8,10 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       emit(NotificationInitial());
       emit(NotificationReceived(event.message, event.userId));
     });
+
+    on<CancelNewNotificationReceived>((event, emit) {
+      emit(NotificationInitial());
+      emit(CancelNotificationReceived(event.message, event.userId));
+    });
   }
 }

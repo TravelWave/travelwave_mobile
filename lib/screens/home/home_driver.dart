@@ -76,6 +76,11 @@ class _HomePageDriverState extends State<HomePageDriver>
           .add(NewNotificationReceived(data['message'], data['userId']));
     });
 
+    socket?.on('new notification cancel', (data) {
+      BlocProvider.of<NotificationBloc>(context)
+          .add(CancelNewNotificationReceived(data['message'], data['userId']));
+    });
+
     socket?.on('disconnect', (_) {
       print('disconnected');
     });
