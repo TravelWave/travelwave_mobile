@@ -16,3 +16,13 @@ class NewNotificationReceived extends NotificationEvent {
   @override
   List<Object> get props => [message];
 }
+
+class CancelNewNotificationReceived extends NotificationEvent {
+  final String message;
+  final String userId;
+
+  const CancelNewNotificationReceived(this.message, this.userId);
+
+  @override
+  List<Object> get props => [message];
+}

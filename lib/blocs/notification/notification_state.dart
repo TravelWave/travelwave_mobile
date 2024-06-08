@@ -19,4 +19,14 @@ class NotificationReceived extends NotificationState {
   List<Object> get props => [message];
 }
 
+class CancelNotificationReceived extends NotificationState {
+  final String message;
+  final String userId;
+
+  const CancelNotificationReceived(this.message, this.userId);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class NotificationHandled extends NotificationState {}
