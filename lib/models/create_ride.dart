@@ -1,11 +1,8 @@
-import 'dart:ffi';
-
 class Ride {
   int numPassenger;
   int seats;
   double longitude;
   double latitude;
-
   bool isPooled;
   bool isScheduled;
 

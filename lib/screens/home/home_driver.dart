@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/models/create_ride.dart';
 import 'package:travelwave_mobile/models/riderequest_model.dart';
-
-import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
-import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
-import 'package:travelwave_mobile/data/decode_token.dart';
-
-import 'package:travelwave_mobile/screens/home/search.dart';
-import 'package:travelwave_mobile/screens/home/search_location.dart';
-import 'package:travelwave_mobile/screens/location/index.dart';
-import 'package:travelwave_mobile/screens/notification/notifications.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
-import 'package:travelwave_mobile/screens/transport/ride_request.dart';
-import 'package:travelwave_mobile/screens/transport/select_transport.dart';
 import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/services/utils/formatter.dart';
 import 'package:travelwave_mobile/services/utils/location.dart';

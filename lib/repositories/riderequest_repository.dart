@@ -9,8 +9,9 @@ class RideRequestRepository {
 
   final String token;
   RideRequestRepository({required this.token});
+
   Future<List<RideRequest>> getRideRequest(String id) async {
-    final url = Uri.parse(_baseUrl + id);
+    final url = Uri.parse('$_baseUrl/id');
 
     try {
       final response = await http.get(
@@ -54,7 +55,7 @@ class RideRequestRepository {
   }
 
   Future<bool> createRideRequest(RideRequest ridebody) async {
-    final url = Uri.parse(_baseUrl);
+    final url = Uri.parse('$_baseUrl/createOneRideRequest/');
 
     try {
       final response = await http.post(

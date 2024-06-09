@@ -258,102 +258,102 @@ class _CancelRideScreenState extends State<CancelRideScreen> {
   /// Section Widget
   Widget _buildForm(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(
-          left: 6.h,
-          right: 5.h,
-        ),
-        child: ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          separatorBuilder: (context, index) {
-            return SizedBox(
-              height: 15.v,
-            );
-          },
-          itemCount: item.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (selected == index) {
-                    selected = null;
-                  } else {
-                    selected = index;
-                  }
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 9.h,
-                  vertical: 18.v,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                  // border: Border.all(
-                  //   color: PrimaryColors.amberA400,
-                  //   width: 1.h,
-                  // ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: selected != index
-                          ? PrimaryColors.black900.withOpacity(0.24)
-                          : PrimaryColors.amberA400.withOpacity(0.4),
-                      spreadRadius: 1.h,
-                      blurRadius: 1.h,
-                      offset: const Offset(
-                        0,
-                        0,
-                      ),
-                    )
-                  ],
-                  borderRadius: BorderRadiusStyle.roundedBorder8,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        height: 20.adaptSize,
-                        width: 20.adaptSize,
-                        // margin: EdgeInsets.only(bottom: 4.v),
-                        // padding: EdgeInsets.symmetric(
-                        //   horizontal: 5.h,
-                        //   vertical: 6.v,
-                        // ),
-                        decoration: selected == index
-                            ? BoxDecoration(
-                                borderRadius: BorderRadiusStyle.roundedBorder4,
-                                color: Colors.green,
-                                border:
-                                    Border.all(width: 1, color: Colors.green))
-                            : BoxDecoration(
-                                borderRadius: BorderRadiusStyle.roundedBorder4,
-                                color: Theme.of(context).colorScheme.background,
-                                border: Border.all(
-                                    width: 1, color: PrimaryColors.gray500)),
-                        child: selected == index
-                            ? const FittedBox(
-                                fit: BoxFit.contain,
-                                child: Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const SizedBox()),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 14.h,
-                        // bottom: 4.v,
-                      ),
-                      child: Text(
-                        item[index],
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    )
-                  ],
-                ),
+      padding: EdgeInsets.only(
+        left: 6.h,
+        right: 5.h,
+      ),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        separatorBuilder: (context, index) {
+          return SizedBox(
+            height: 15.v,
+          );
+        },
+        itemCount: item.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                if (selected == index) {
+                  selected = null;
+                } else {
+                  selected = index;
+                }
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 9.h,
+                vertical: 18.v,
               ),
-            );
-          },
-        ));
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.background,
+                // border: Border.all(
+                //   color: PrimaryColors.amberA400,
+                //   width: 1.h,
+                // ),
+                boxShadow: [
+                  BoxShadow(
+                    color: selected != index
+                        ? PrimaryColors.black900.withOpacity(0.24)
+                        : PrimaryColors.amberA400.withOpacity(0.4),
+                    spreadRadius: 1.h,
+                    blurRadius: 1.h,
+                    offset: const Offset(
+                      0,
+                      0,
+                    ),
+                  )
+                ],
+                borderRadius: BorderRadiusStyle.roundedBorder8,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      height: 20.adaptSize,
+                      width: 20.adaptSize,
+                      // margin: EdgeInsets.only(bottom: 4.v),
+                      // padding: EdgeInsets.symmetric(
+                      //   horizontal: 5.h,
+                      //   vertical: 6.v,
+                      // ),
+                      decoration: selected == index
+                          ? BoxDecoration(
+                              borderRadius: BorderRadiusStyle.roundedBorder4,
+                              color: Colors.green,
+                              border: Border.all(width: 1, color: Colors.green))
+                          : BoxDecoration(
+                              borderRadius: BorderRadiusStyle.roundedBorder4,
+                              color: Theme.of(context).colorScheme.background,
+                              border: Border.all(
+                                  width: 1, color: PrimaryColors.gray500)),
+                      child: selected == index
+                          ? const FittedBox(
+                              fit: BoxFit.contain,
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const SizedBox()),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 14.h,
+                      // bottom: 4.v,
+                    ),
+                    child: Text(
+                      item[index],
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

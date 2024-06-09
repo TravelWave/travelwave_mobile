@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
 import 'package:travelwave_mobile/models/create_ride.dart';
+import 'package:travelwave_mobile/models/riderequest_model.dart';
 import 'package:travelwave_mobile/repositories/ride_repository.dart';
+import 'package:travelwave_mobile/repositories/riderequest_repository.dart';
 
 part 'create_ride_event.dart';
 part 'create_ride_state.dart';
@@ -30,14 +32,11 @@ class CreateRideBloc extends Bloc<CreateRideEvent, CreateRideState> {
           print("object");
           await RideRepository(token: token).createOneRide(event.rideInfo);
         }
-        emit(CreateRideSuccess());
+        emit(const CreateRideSuccess());
       } catch (e) {
         print(e);
         emit(CreateRideError(e.toString()));
       }
     });
-    //  on<CreateRideEvent>((event, emit) {
-    //   // TODO: implement event handler
-    // });
   }
 }
