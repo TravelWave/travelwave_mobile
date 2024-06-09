@@ -1,4 +1,6 @@
 import 'package:latlong2/latlong.dart';
+import 'package:travelwave_mobile/models/accepted_ride_request_model.dart';
+import 'package:travelwave_mobile/screens/home/home_driver.dart';
 
 abstract class AvailableRidesEvent {}
 
@@ -33,4 +35,9 @@ class JoinScheduledRideRequestEvent extends AvailableRidesEvent {
     required this.source,
     required this.destination,
   });
+}
+
+class MakePooledAccepted extends AvailableRidesEvent {
+  final AcceptedRideRequestModel rideInfo;
+  MakePooledAccepted({required this.rideInfo});
 }

@@ -32,16 +32,9 @@ class RideInfo {
   });
 
   RideInfo.fromJson(Map<String, dynamic> json) {
-    print('about to do fromJson ...');
     sId = json['_id'];
     vehicle = json['vehicle'];
     driver = json['driver'];
-    // if (json['passengers'] != null) {
-    //   passengers = <UserInfo>[];
-    //   json['passengers'].forEach((v) {
-    //     passengers!.add(UserInfo.fromJson(v));
-    //   });
-    // }
     numberOfPassengers = json['number_of_passengers'];
     latitude = json['latitude'];
     longitude = json['longitude'];
@@ -51,7 +44,6 @@ class RideInfo {
     shortestPath = json['shortest_path'];
     isPooled = json['is_pooled'];
     isScheduled = json['is_scheduled'];
-    print('after from json in ride request ...');
   }
 
   Map<String, dynamic> toJson() {

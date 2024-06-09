@@ -9,7 +9,9 @@ import 'package:travelwave_mobile/models/pass_riderequest_model.dart';
 import 'package:travelwave_mobile/models/ride_info_model.dart';
 
 class PassRideRequestRepository {
-  static const _baseUrl = 'http://localhost:8000/v1/ride-requests';
+  // static const _baseUrl = 'http://localhost:8000/v1/ride-requests';
+  static const _baseUrl =
+      'https://travelwave-backend.onrender.com/v1/ride-requests';
 
   final String token;
   PassRideRequestRepository({required this.token});
@@ -18,18 +20,14 @@ class PassRideRequestRepository {
     final url = Uri.parse('$_baseUrl/createOneScheduledRideRequest/');
 
     try {
-      print('about to sent http ...');
       final response = await http.post(
         url,
         headers: {'Authorization': 'Bearer $token'},
         body: ridebody.toJson(),
       );
-      print(response.statusCode);
-      print(response.body);
 
       if (response.statusCode == 201) {
         return true;
-        // Feedback submitted successfully
       }
       return false;
     } catch (e) {
@@ -70,7 +68,6 @@ class PassRideRequestRepository {
 
       if (response.statusCode == 200) {
         return true;
-        // Feedback submitted successfully
       }
       throw Exception('Failed to get ride info');
     } catch (e) {
@@ -106,19 +103,14 @@ class PassRideRequestRepository {
         // }
       );
 
-      print(response.statusCode);
-      print(response.body);
       if (response.statusCode == 200) {
         final res =
             AcceptedRideRequestModel.fromJson(jsonDecode(response.body));
-        print('RESULT: $res');
         return res;
       } else {
-        print('failed in the else statement ...');
         throw Exception('Join Request Refused');
       }
     } catch (e) {
-      print('failed in catch ...');
       throw Exception('Join Request Refused');
     }
   }
@@ -131,8 +123,7 @@ class PassRideRequestRepository {
     final url = Uri.parse(
         'http://localhost:8000/v1/ride-requests/createPooledRideRequest/$id/');
     try {
-      print('about to call httpp ...');
-
+      print('requesting pooled ride ...');
       final response = await http.post(
         url,
         headers: {'Authorization': 'Bearer $token'},
@@ -143,27 +134,26 @@ class PassRideRequestRepository {
           "end_longitude": "38.71189435187503",
         },
 
-        //  body: {
+        // body: {
         //   "start_latitude": start.latitude.toString(),
         //   "start_longitude": start.longitude.toString(),
         //   "end_latitude": end.latitude.toString(),
         //   "end_longitude": end.longitude.toString(),
         // }
       );
-
       print(response.statusCode);
-      print(response.body);
+      print('RESPONSE: ${response.body}');
+
       if (response.statusCode == 200) {
         final res =
             AcceptedRideRequestModel.fromJson(jsonDecode(response.body));
-        print('RESULT: $res');
+        print('res: $res');
+        print('yaaay ....');
         return res;
       } else {
-        print('failed in the else statement ...');
         throw Exception('Join Request Refused');
       }
     } catch (e) {
-      print('failed in catch ...');
       throw Exception('Join Request Refused');
     }
   }
@@ -191,11 +181,10 @@ class PassRideRequestRepository {
       final response = await http.post(
         url,
         headers: {'Authorization': 'Bearer $token'},
-        body: {"latitude": "8.85", "longitude": "38.81666"},
-        // body: {
-        //   "latitude": location.latitude.toString(),
-        //   "longitude": location.longitude.toString(),
-        // },
+        body: {
+          "latitude": location.latitude.toString(),
+          "longitude": location.longitude.toString(),
+        },
       );
 
       if (response.statusCode == 200) {
@@ -222,7 +211,10 @@ class PassRideRequestRepository {
       final response = await http.post(
         url,
         headers: {'Authorization': 'Bearer $token'},
-        body: {"latitude": "8.85", "longitude": "38.81666"},
+        body: {
+          "latitude": "8.85",
+          "longitude": "38.81666",
+        },
         // body: {
         //   "latitude": location.latitude.toString(),
         //   "longitude": location.longitude.toString(),

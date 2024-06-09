@@ -45,7 +45,8 @@ class _LocationScreenConfirmBottomsheetState
         myLocation = value;
       });
     });
-    print('about to trigger GetRideRoutes event ...');
+    print('userId: ${widget.message.userId}');
+    print('rideId: ${widget.message.rideId}');
     context.read<RideRoutesBloc>().add(
           GetRideRoutes(
             driverId: widget.message.userId!,

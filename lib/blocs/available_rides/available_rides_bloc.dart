@@ -15,6 +15,9 @@ class AvailableRidesBloc
 
   AvailableRidesBloc({required this.localData})
       : super(AvailableRidesInitialState()) {
+    on<MakePooledAccepted>((event, emit) {
+      emit(AskJoinRideStateSuccess(acceptedRideRequest: event.rideInfo));
+    });
     on<GetAvailableScheduledRides>((event, emit) async {
       emit(AvailableScheduledRidesLoadingState());
 
@@ -88,10 +91,14 @@ class AvailableRidesBloc
         final response = await PassRideRequestRepository(token: token)
             .askToJoinPooledRide(
                 "665f994aa2269aa745df5ac7", event.source, event.destination);
+        print('printing the ride id: ${event.rideId} ...');
+        // final response = await PassRideRequestRepository(token: token)
+        //     .askToJoinPooledRide(event.rideId, event.source, event.destination);
+        print("passengerId: ${response.passengerId}");
 
         print('after the join pooled request repo call ..');
 
-        emit(AskJoinRideStateSuccess(acceptedRideRequest: response));
+        emit(JoinRideStateLoading());
       } catch (e) {
         emit(JoinRideStateFailure(error: e.toString()));
       }
@@ -113,6 +120,7 @@ class AvailableRidesBloc
         emit(JoinScheduledRideStateFailure(error: e.toString()));
       }
     });
+    // on<MakePooledAccepted>((event, emit) {});
   }
 }
 

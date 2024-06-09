@@ -59,3 +59,5 @@ class JoinScheduledRideStateFailure extends AvailableRidesState {
   final String error;
   JoinScheduledRideStateFailure({required this.error});
 }
+
+class JoinPooledRideStateLoad extends AvailableRidesState {}

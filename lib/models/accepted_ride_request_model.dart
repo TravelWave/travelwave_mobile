@@ -5,7 +5,8 @@ class AcceptedRideRequestModel {
   String? rideId;
   String? eta;
   double? distance;
-  double? detourDistance;
+  String? detourDistance;
+  String? passengerId;
 
   AcceptedRideRequestModel({
     this.userId,
@@ -15,16 +16,18 @@ class AcceptedRideRequestModel {
     this.eta,
     this.distance,
     this.detourDistance,
+    this.passengerId,
   });
 
   AcceptedRideRequestModel.fromJson(Map<String, dynamic> json) {
-    userId = json['userId'];
+    userId = json['userId'] ?? json['driverId'];
     message = json['message'];
     fareAmount = json['fareAmount'];
     rideId = json['rideId'];
-    eta = json['eta'];
-    distance = json['distance'];
-    detourDistance = json['detourDistance'];
+    // eta = json['eta'];
+    distance = json['distance'] ?? json['totalDistance'];
+    // detourDistance = json['detourDistance'];
+    passengerId = json['passengerId'];
   }
 
   Map<String, dynamic> toJson() {

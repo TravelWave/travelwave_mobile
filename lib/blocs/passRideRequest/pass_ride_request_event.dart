@@ -14,6 +14,8 @@ class CreatePassScheduledRideRequest extends PassRideRequestEvent {
   CreatePassScheduledRideRequest({required this.rideInfo});
 }
 
+class MakeItAccepted extends PassRideRequestEvent {}
+
 class CancelPassRideRequest extends PassRideRequestEvent {}
 
 class SchedulePassRideRequest extends PassRideRequestEvent {}

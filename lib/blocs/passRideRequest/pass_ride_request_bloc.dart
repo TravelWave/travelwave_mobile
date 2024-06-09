@@ -41,13 +41,16 @@ class PassRideRequestBloc
         final ok = await PassRideRequestRepository(token: token)
             .createRideRequest(event.rideInfo);
         if (ok) {
-          emit(PassRideRequestSuccess());
+          emit(PassRideRequestLoading());
         } else {
           throw Exception('Failed to create ride request');
         }
       } catch (e) {
         emit(PassRideRequestFailure(e.toString()));
       }
+    });
+    on<MakeItAccepted>((event, emit) {
+      emit(PassRideRequestSuccess());
     });
   }
 }

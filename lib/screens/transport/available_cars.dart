@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:travelwave_mobile/models/accepted_ride_request_model.dart';
 import 'package:travelwave_mobile/screens/home/home_transport.dart';
 import 'package:travelwave_mobile/screens/location/index.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class AvailableCarsPage extends StatefulWidget {
   final String source;
@@ -27,7 +28,11 @@ class AvailableCarsPage extends StatefulWidget {
 }
 
 class _AvailableCarsPageState extends State<AvailableCarsPage> {
-  late LatLng myLocation;
+  LatLng myLocation = const LatLng(9.0192, 38.7525);
+  final socketUrl = 'ws://localhost:8000/';
+  // final socketUrl = 'wss://travelwave-backend.onrender.com';
+  late final AcceptedRideRequestModel rideInfo;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +40,26 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
       setState(() {
         myLocation = value;
       });
+    });
+
+    final socket = io.io(socketUrl, <String, dynamic>{
+      'transports': ['websocket']
+    });
+
+    socket.on('connect', (data) {
+      print('shared connected');
+    });
+
+    socket.on('new notification accepted pooled', (data) {
+      print('shared data: $data');
+      rideInfo = AcceptedRideRequestModel.fromJson(data);
+      context
+          .read<AvailableRidesBloc>()
+          .add(MakePooledAccepted(rideInfo: rideInfo));
+    });
+
+    socket.on('disconnect', (data) {
+      print('shared disconnected');
     });
   }
 
@@ -55,26 +80,15 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
       body: BlocBuilder<AvailableRidesBloc, AvailableRidesState>(
         builder: (context, state) {
           if (state is AvailableRidesInitialState) {
-            if (widget.scheduled) {
-              context.read<AvailableRidesBloc>().add(
-                    GetAvailableScheduledRides(currentLocation: myLocation),
-                  );
-            } else {
-              context.read<AvailableRidesBloc>().add(
-                    GetAvailableRides(currentLocation: myLocation),
-                  );
-            }
-            return Container();
-          } else if (state is JoinRideStateFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Ride Join Request Refused.'),
-                backgroundColor: Colors.red,
-              ),
-            );
             context.read<AvailableRidesBloc>().add(
                   GetAvailableRides(currentLocation: myLocation),
                 );
+            return Container();
+          } else if (state is JoinRideStateFailure) {
+            context.read<AvailableRidesBloc>().add(
+                  GetAvailableRides(currentLocation: myLocation),
+                );
+
             return Container();
           } else if (state is JoinRideStateLoading) {
             return const Center(
@@ -136,24 +150,11 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
           } else if (state is AvailableRidesLoadingState) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is AskJoinRideStateSuccess) {
-            print(
-                'reached in the success state and about to send to confirmation page. ..');
-
-            final AcceptedRideRequestModel response = AcceptedRideRequestModel(
-              userId: "665f8fc8a2269aa745df5a43",
-              eta: "10",
-              distance: 1234,
-              fareAmount: 200,
-              rideId: "66656c98e31f671f7c145fc9",
-              message:
-                  "A Red Sedan, Toyota Camry color Red with license plate ABC123 is on the way to pick you up. ETA: 10 second",
-            );
-            print('response: $response');
-            print('about to send to confirmation page ...');
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) {
-                  return LocationScreenConfirmBottomsheet(message: response);
+                  return LocationScreenConfirmBottomsheet(
+                      message: state.acceptedRideRequest);
                 },
               ),
             );
@@ -360,7 +361,7 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                                   .add(
                                                     JoinRideRequestEvent(
                                                       rideId: state
-                                                          .rideList[index].sId!,
+                                                          .rideList[index].id!,
                                                       source: start,
                                                       destination: end,
                                                     ),

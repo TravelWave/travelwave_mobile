@@ -13,16 +13,11 @@ class RideRoutesBloc extends Bloc<RideRoutesEvent, RideRouteState> {
       const token =
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRkYWRmMWYzMTBmNzczZWE1MDI3ZWYiLCJmdWxsX25hbWUiOiJVc2VyIiwicGhvbmVfbnVtYmVyIjoiKzI1MTk2NjAxOTQyOSIsImlzX3N0YWZmIjp0cnVlLCJpc19kcml2ZXIiOmZhbHNlLCJyYXRpbmciOjUsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzE2NDA5Mzg1fQ.RmkV69hCB0nGyIsRQymTTp6UqGWluRVZ6pLquXshGnA";
       try {
-        print('fetching driver data ...');
         final driver = await PassRideRequestRepository(token: token)
             .getUserInfo(event.driverId);
-        print('done fetching driver data ...');
-
-        print('fetching ride info ...');
 
         final rideInfo = await PassRideRequestRepository(token: token)
             .getRideInfo(event.rideId);
-        print('done fetching ride info ...');
 
         emit(
           RideRoutesStateSuccess(

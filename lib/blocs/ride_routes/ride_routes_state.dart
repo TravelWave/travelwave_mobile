@@ -9,7 +9,6 @@ class RideRoutesStateInitial extends RideRouteState {}
 class RideRoutesStateLoading extends RideRouteState {}
 
 class RideRoutesStateSuccess extends RideRouteState {
-  // final RideInfo rideInfo;
   final DriverInfo userInfo;
   final RideInfo rideInfo;
 

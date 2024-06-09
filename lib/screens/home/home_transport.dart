@@ -23,6 +23,7 @@ import 'package:travelwave_mobile/screens/location/index.dart';
 import 'package:travelwave_mobile/screens/notification/notifications.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/screens/transport/available_cars.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,9 +36,14 @@ class _HomePageState extends State<HomePage> {
   bool shareRide = false;
   bool scheduled = false;
   LatLng myLocation = const LatLng(9.0192, 38.7525);
+
   MapController mapController = MapController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime selectedDateTime = DateTime.now();
+
+  final socketUrl = 'ws://localhost:8000/';
+  // final socketUrl = 'wss://travelwave-backend.onrender.com';
+  late final AcceptedRideRequestModel rideInfo;
 
   @override
   void initState() {
@@ -48,7 +54,21 @@ class _HomePageState extends State<HomePage> {
       });
     });
 
+    final socket = io.io(socketUrl, <String, dynamic>{
+      'transports': ['websocket']
+    });
 
+    socket.on('connect', (data) {
+      print('connected');
+    });
+    socket.on('new notification accepted', (data) {
+      rideInfo = AcceptedRideRequestModel.fromJson(data);
+      context.read<PassRideRequestBloc>().add(MakeItAccepted());
+    });
+
+    socket.on('disconnect', (data) {
+      print('disconnected');
+    });
   }
 
   Future<void> pickDateTime() async {
@@ -269,8 +289,7 @@ class _HomePageState extends State<HomePage> {
                                           : Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
-                                    
-),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -514,7 +533,6 @@ class _HomePageState extends State<HomePage> {
         return BlocListener<PassRideRequestBloc, PassRideRequestState>(
           listener: (context, state) {
             if (state is PassScheduledRideRequestSuccess) {
-              print('scheduling successfull. ...');
               final rideInfo = AcceptedRideRequestModel(
                 userId: "664dadf1f310f773ea5027ef",
                 message:
@@ -551,15 +569,6 @@ class _HomePageState extends State<HomePage> {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) {
-                    final rideInfo = AcceptedRideRequestModel(
-                      userId: "664dadf1f310f773ea5027ef",
-                      message:
-                          "A Red Sedan, Toyota Camry color Red with license plate ABC123 is on the way to pick you up.",
-                      fareAmount: 271.1823,
-                      rideId: "665f9843a2269aa745df5a8f",
-                      eta: "0 second",
-                      distance: 27,
-                    );
                     return LocationScreenConfirmBottomsheet(
                       message: rideInfo,
                     );
@@ -657,8 +666,7 @@ class _HomePageState extends State<HomePage> {
                               status: 'pending',
                               scheduledTime: scheduledTime.toString(),
                             );
-                            print(
-                                'about to trigger scheduled ride request ....');
+
                             context.read<PassRideRequestBloc>().add(
                                   CreatePassScheduledRideRequest(
                                       rideInfo: rideInfo),
@@ -704,6 +712,7 @@ class _HomePageState extends State<HomePage> {
                               scheduledTime: scheduledTime.toString(),
                             );
 
+                            print(rideInfo);
                             context
                                 .read<PassRideRequestBloc>()
                                 .add(CreatePassRideRequest(rideInfo: rideInfo));
