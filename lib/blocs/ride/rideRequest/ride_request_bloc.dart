@@ -80,35 +80,34 @@ class RideRequestBloc extends Bloc<RideRequestEvent, RideRequestState> {
         emit(GetRidesSucess(rideInfo: updatedRideInfo));
       }
       if (event is AcceptRideRequest) {
-        final isPooled = event.rideRequest.isPooled;
+        final isPooled = event.isPooled;
         final currstate = state as GetRidesSucess;
 
-        final isScheduled = event.rideRequest.isScheduled;
+        final isScheduled = event.isScheduled;
         emit(GetRidesLoading());
         try {
           Map res = {};
           final token = await localData.readFromStorage('Token');
           if (isPooled && isScheduled) {
             res = await RideRequestRepository(token: token)
-                .acceptPooledRideRequest(
-                    event.rideRequest.id, event.rideRequest.passenger);
+                .acceptPooledRideRequest(event.requestId, event.passengerId);
           } else if (isScheduled && !isPooled) {
             res = await RideRequestRepository(token: token)
-                .acceptRideRequestScheduled(event.rideRequest.id);
+                .acceptRideRequestScheduled(event.requestId);
           } else if (!isScheduled && isPooled) {
             res = await RideRequestRepository(token: token)
-                .acceptPooledRideRequest(
-                    event.rideRequest.id, event.rideRequest.passenger);
+                .acceptPooledRideRequest(event.requestId, event.passengerId);
           } else {
             print("object");
             res = await RideRequestRepository(token: token)
-                .acceptRideRequest(event.rideRequest.id);
+                .acceptRideRequest(event.requestId);
           }
           print(res);
           if (res['status'] == 'error') {
             emit(AcceptRideRequestError(error: res['message']));
             return;
           }
+
           final rideRequest =
               await RideRequestRepository(token: token).getRideRequests();
           List<RideRequestWithLocation> rides = [];

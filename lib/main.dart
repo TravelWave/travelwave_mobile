@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/feedback/feedback_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/messages/message_bloc.dart';
 import 'package:travelwave_mobile/blocs/notification/notification_bloc.dart';
 import 'package:travelwave_mobile/blocs/pasenger/passenger_bloc_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride/acceptRide/accept_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/ridehistory/ride_history_bloc.dart';
@@ -60,6 +62,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => VehiclesBloc(localdata: data),
+        ),
+        BlocProvider(
+          create: (context) => AcceptRideBloc(localdata: data),
+        ),
+        BlocProvider(
+          create: (context) => MessageBloc(),
         ),
       ],
       child: Sizer(

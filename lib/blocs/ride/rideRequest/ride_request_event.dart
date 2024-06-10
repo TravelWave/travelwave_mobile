@@ -39,7 +39,16 @@ class DeclineRideRequest extends RideRequestEvent {
 }
 
 class AcceptRideRequest extends RideRequestEvent {
-  final RideRequestWithLocation rideRequest;
+  final bool isPooled;
+  final bool isScheduled;
+  final String requestId;
+  final String rideId;
+  final String passengerId;
 
-  const AcceptRideRequest({required this.rideRequest});
+  const AcceptRideRequest(
+      {required this.isPooled,
+      required this.isScheduled,
+      required this.requestId,
+      required this.rideId,
+      required this.passengerId});
 }

@@ -1,5 +1,6 @@
 class RideRequest {
   String id;
+  String? rideId;
   String passengerId;
   double startLatitude;
   double startLongitude;
@@ -13,6 +14,7 @@ class RideRequest {
 
   RideRequest({
     required this.id,
+    required this.rideId,
     required this.passengerId,
     required this.shortestPath,
     required this.startLatitude,
@@ -25,8 +27,9 @@ class RideRequest {
     required this.isScheduled,
   });
 
-  factory RideRequest.fromJson(Map<String, dynamic> json) {
+  factory RideRequest.fromJson(Map<String, dynamic> json, String? id) {
     return RideRequest(
+      rideId: id,
       id: json['_id'] ?? '',
       passengerId: json['passenger'] ?? '',
       startLatitude: (json['start_latitude'] ?? 0).toDouble(),
@@ -59,12 +62,13 @@ class RideRequest {
   }
 
   static List<RideRequest> fromJsonList(List<dynamic> json) {
-    return json.map((e) => RideRequest.fromJson(e)).toList();
+    return json.map((e) => RideRequest.fromJson(e, null)).toList();
   }
 }
 
 class RideRequestWithLocation {
   final String id;
+  final String? rideId;
   final String passenger;
   final String startLocation;
   final String endLocation;
@@ -81,6 +85,7 @@ class RideRequestWithLocation {
 
   RideRequestWithLocation({
     required this.id,
+    this.rideId,
     required this.passenger,
     required this.startLocation,
     required this.endLocation,

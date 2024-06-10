@@ -31,7 +31,9 @@ class RideRequestRepository {
   }
 
   Future<List<RideRequest>> getRideRequests() async {
-    final url = Uri.parse(_baseUrl);
+    final url = Uri.parse(
+        "https://travelwave-backend.onrender.com/v1/ride-requests/scheduled");
+    // final url = Uri.parse(_baseUrl);
     print(_baseUrl);
 
     try {
@@ -43,6 +45,7 @@ class RideRequestRepository {
       );
 
       if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
         return RideRequest.fromJsonList(jsonDecode(response.body));
 
         // Feedback submitted successfully
@@ -92,9 +95,10 @@ class RideRequestRepository {
         },
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return {
-          "message": jsonDecode(response.body)["message"],
+          "data": RideRequest.fromJson(jsonDecode(response.body), null),
+          // "message": jsonDecode(response.body)["message"],
           "status": "success"
         };
         // Feedback submitted successfully
@@ -122,7 +126,10 @@ class RideRequestRepository {
       print(response.statusCode);
       if (response.statusCode == 201 || response.statusCode == 200) {
         return {
-          "message": jsonDecode(response.body)["message"],
+          "data": RideRequest.fromJson(
+              jsonDecode(response.body)["updatedRideRequest"],
+              jsonDecode(response.body)['ride']),
+          // "message": jsonDecode(response.body)["message"],
           "status": "success"
         };
         // Feedback submitted successfully
@@ -147,10 +154,13 @@ class RideRequestRepository {
           'Authorization': 'Bearer $token',
         },
       );
-
-      if (response.statusCode == 201) {
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return {
-          "message": jsonDecode(response.body)["message"],
+          "data": RideRequest.fromJson(
+              jsonDecode(response.body)["updatedRideRequest"],
+              jsonDecode(response.body)["ride"]),
           "status": "success"
         };
         // Feedback submitted successfully
@@ -175,10 +185,12 @@ class RideRequestRepository {
           'Authorization': 'Bearer $token',
         },
       );
-
-      if (response.statusCode == 200) {
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return {
-          "message": jsonDecode(response.body)["message"],
+          "data": RideRequest.fromJson(jsonDecode(response.body)["ride"],
+              jsonDecode(response.body)["ride"]),
           "status": "success"
         };
         // Feedback submitted successfully
