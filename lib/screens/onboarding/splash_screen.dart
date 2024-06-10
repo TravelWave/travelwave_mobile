@@ -7,7 +7,6 @@ import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 import 'package:travelwave_mobile/screens/authentication/welcome.dart';
 import 'package:travelwave_mobile/screens/home/home.dart';
 import 'package:travelwave_mobile/screens/home/home_driver.dart';
-import 'package:travelwave_mobile/screens/home/home_transport.dart';
 import 'package:travelwave_mobile/screens/onboarding/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {

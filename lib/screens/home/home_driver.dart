@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/notification/notification_bloc.dart';
 import 'package:travelwave_mobile/blocs/notification/notification_event.dart';
@@ -13,6 +12,7 @@ import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/models/create_ride.dart';
 import 'package:travelwave_mobile/models/riderequest_model.dart';
+ 
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
@@ -31,6 +31,7 @@ import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/screens/transport/ride_request.dart';
 import 'package:travelwave_mobile/screens/transport/select_transport.dart';
 import 'package:travelwave_mobile/services/utils/app_constant.dart';
+ 
 import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/services/utils/formatter.dart';
 import 'package:travelwave_mobile/services/utils/location.dart';

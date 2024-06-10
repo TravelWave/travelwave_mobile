@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:travelwave_mobile/models/create_ride.dart';
-
-import 'package:travelwave_mobile/models/riderequest_model.dart';
 
 class RideRepository {
   static const String _baseUrl =
@@ -10,6 +7,7 @@ class RideRepository {
 
   final String token;
   RideRepository({required this.token});
+
   Future<void> createOneRide(Ride rideinfo) async {
     final url = Uri.parse('$_baseUrl/createOneRide/');
 

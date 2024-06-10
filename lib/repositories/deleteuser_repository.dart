@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:ffi';
 import 'package:http/http.dart' as http;
-
-import 'package:travelwave_mobile/models/ridehistory_model.dart';
 import 'package:travelwave_mobile/services/utils/app_constant.dart';
 
 class DeleteUserRepository {

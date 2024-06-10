@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travelwave_mobile/screens/transport/available_cars.dart';
 
 class SelectTransportPage extends StatelessWidget {
   const SelectTransportPage({super.key});
@@ -47,13 +46,13 @@ class SelectTransportPage extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const AvailableCarsPage();
-                            },
-                          ),
-                        );
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (context) {
+                        //       // return const AvailableCarsPage();
+                        //     },
+                        //   ),
+                        // );
                       },
                       child: Container(
                         height: 150,
@@ -89,13 +88,13 @@ class SelectTransportPage extends StatelessWidget {
                     const SizedBox(width: 20),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const AvailableCarsPage();
-                            },
-                          ),
-                        );
+                        // Navigator.of(context).push(
+                        //   MaterialPageRoute(
+                        //     builder: (context) {
+                        //       return const AvailableCarsPage();
+                        //     },
+                        //   ),
+                        // );
                       },
                       child: Container(
                         height: 150,

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_event.dart';
+import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_state.dart';
 
 import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/models/accepted_ride_request_model.dart';
 import 'package:travelwave_mobile/screens/location/cancel_ride.dart';
 import 'package:travelwave_mobile/screens/location/message_screen.dart';
-import 'package:travelwave_mobile/screens/payment/index.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 import 'package:travelwave_mobile/widgets/custom_icon_button.dart';
@@ -16,7 +20,13 @@ import 'package:travelwave_mobile/widgets/custom_image_view.dart';
 // ignore_for_file: must_be_immutable
 
 class LocationScreenConfirmBottomsheet extends StatefulWidget {
-  const LocationScreenConfirmBottomsheet({super.key});
+ 
+  final AcceptedRideRequestModel message;
+  const LocationScreenConfirmBottomsheet({
+    super.key,
+    required this.message,
+  });
+
 
   @override
   State<LocationScreenConfirmBottomsheet> createState() =>
@@ -26,10 +36,9 @@ class LocationScreenConfirmBottomsheet extends StatefulWidget {
 class _LocationScreenConfirmBottomsheetState
     extends State<LocationScreenConfirmBottomsheet> {
   bool shareRide = false;
-
   LatLng myLocation = const LatLng(9.0192, 38.7525);
-
   MapController mapController = MapController();
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +47,14 @@ class _LocationScreenConfirmBottomsheetState
         myLocation = value;
       });
     });
+    print('userId: ${widget.message.userId}');
+    print('rideId: ${widget.message.rideId}');
+    context.read<RideRoutesBloc>().add(
+          GetRideRoutes(
+            driverId: widget.message.userId!,
+            rideId: widget.message.rideId!,
+          ),
+        );
   }
 
   TileLayer get openStreetMapTileLayer => TileLayer(
@@ -54,11 +71,6 @@ class _LocationScreenConfirmBottomsheetState
       position.latitude,
       position.longitude,
     );
-  }
-
-  void onMapTap(TapPosition tapPosition, point) async {
-    String locationName = await getLocationName(point);
-    print('Location name: $locationName');
   }
 
   Future<String> getLocationName(LatLng location) async {
@@ -108,95 +120,131 @@ class _LocationScreenConfirmBottomsheetState
         ),
       ),
       drawer: const SideMenu(),
-      body: Stack(children: [
-        SizedBox(
-          width: double.infinity,
-          child: FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              onTap: (tapPosition, point) {},
-              initialCenter: const LatLng(9.0192, 38.7525),
-              initialZoom: 15,
-              interactionOptions: const InteractionOptions(
-                flags: ~InteractiveFlag.doubleTapZoom,
-              ),
-            ),
-            children: [
-              openStreetMapTileLayer,
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    point: myLocation,
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.red[900],
-                      size: 40,
-                    ),
+      body: BlocListener<RideRoutesBloc, RideRouteState>(
+        listener: (context, state) {
+          if (state is RideRoutesStateInitial) {
+            context.read<RideRoutesBloc>().add(
+                  GetRideRoutes(
+                    driverId: widget.message.userId!,
+                    rideId: widget.message.rideId!,
                   ),
-                ],
+                );
+          } else if (state is RideRoutesStateFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(''),
               ),
-            ],
-          ),
-        ),
-        // Container(
-        //   height: MediaQuery.of(context).size.height,
-        //   width: MediaQuery.of(context).size.width,
-        //   color: Colors.black.withOpacity(0.4),
-        // ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 9.v),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadiusStyle.customBorderTL24,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            );
+            Navigator.of(context).pop();
+          }
+        },
+        child: BlocBuilder<RideRoutesBloc, RideRouteState>(
+          builder: (context, state) {
+            if (state is! RideRoutesStateSuccess) {
+              context.read<RideRoutesBloc>().add(
+                    GetRideRoutes(
+                      driverId: widget.message.userId!,
+                      rideId: widget.message.rideId!,
+                    ),
+                  );
+            }
+            return Stack(
               children: [
-                CustomImageView(
-                  imagePath: ImageConstant.imgArrowRight,
-                  height: 24.adaptSize,
-                  width: 24.adaptSize,
-                  alignment: Alignment.centerRight,
-                  margin: EdgeInsets.only(right: 10.h),
-                ),
-                SizedBox(height: 25.v),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 15.h),
-                    child: Text(
-                      "Your driver is coming in 3:35",
-                      style: Theme.of(context).textTheme.titleMedium,
+                SizedBox(
+                  width: double.infinity,
+                  child: FlutterMap(
+                    mapController: mapController,
+                    options: MapOptions(
+                      onTap: (tapPosition, point) {},
+                      initialCenter: const LatLng(9.0192, 38.7525),
+                      initialZoom: 15,
+                      interactionOptions: const InteractionOptions(
+                        flags: ~InteractiveFlag.doubleTapZoom,
+                      ),
                     ),
+                    children: [
+                      openStreetMapTileLayer,
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: myLocation,
+                            child: Icon(
+                              Icons.location_on,
+                              color: Colors.red[900],
+                              size: 40,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 12.v),
-                const Divider(),
-                SizedBox(height: 15.v),
-                _buildRowsergioramasi(context),
-                SizedBox(height: 16.v),
-                const Divider(),
-                SizedBox(height: 12.v),
-                _buildRowpaymentmetho(context),
-                SizedBox(height: 13.v),
-                _buildRowtelevision(context),
-                SizedBox(height: 27.v),
-                _buildRowcallone(context),
-                SizedBox(height: 38.v)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: (state is! RideRoutesStateSuccess)
+                      ? const CircularProgressIndicator()
+                      : Container(
+                          padding: EdgeInsets.symmetric(vertical: 9.v),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background,
+                            borderRadius: BorderRadiusStyle.customBorderTL24,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomImageView(
+                                imagePath: ImageConstant.imgArrowRight,
+                                height: 24.adaptSize,
+                                width: 24.adaptSize,
+                                alignment: Alignment.centerRight,
+                                margin: EdgeInsets.only(right: 10.h),
+                              ),
+                              SizedBox(height: 25.v),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 15.h),
+                                  child: Text(
+                                    widget.message.message!,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 12.v),
+                              const Divider(),
+                              SizedBox(height: 15.v),
+                              buildRowUserProfile(
+                                context,
+                                state.userInfo.fullName!,
+                                state.userInfo.rating!,
+                                widget.message.distance!,
+                              ),
+                              SizedBox(height: 16.v),
+                              const Divider(),
+                              SizedBox(height: 12.v),
+                              buildRowPaymentMethod(context),
+                              SizedBox(height: 27.v),
+                              buildRowCall(
+                                  context, state.userInfo.phoneNumber!),
+                              SizedBox(height: 38.v),
+                            ],
+                          ),
+                        ),
+                ),
               ],
-            ),
-          ),
+            );
+          },
         ),
-      ]),
+      ),
     );
   }
 
   /// Section Widget
-  Widget _buildRowsergioramasi(BuildContext context) {
+  Widget buildRowUserProfile(BuildContext context, String driverName,
+      int driverRating, double distance) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.h),
       child: Row(
@@ -206,9 +254,7 @@ class _LocationScreenConfirmBottomsheetState
             imagePath: ImageConstant.imgRectangle553,
             height: 59.v,
             width: 54.h,
-            radius: BorderRadius.circular(
-              4.h,
-            ),
+            radius: BorderRadius.circular(4.h),
             margin: EdgeInsets.only(top: 2.v),
           ),
           Padding(
@@ -218,7 +264,7 @@ class _LocationScreenConfirmBottomsheetState
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 4.h),
-                  child: Text("Sergio Ramasis",
+                  child: Text(driverName,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: PrimaryColors.gray900, fontSize: 18.fSize)),
                 ),
@@ -229,12 +275,13 @@ class _LocationScreenConfirmBottomsheetState
                       height: 16.adaptSize,
                       width: 16.adaptSize,
                     ),
-                    Text("800m 5 mins away",
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  color: PrimaryColors.gray500,
-                                  fontSize: 10.fSize,
-                                )),
+                    Text(
+                      "${(distance / 1000).toStringAsFixed(2)} km away",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: PrimaryColors.gray500,
+                            fontSize: 10.fSize,
+                          ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 4.v),
@@ -253,14 +300,14 @@ class _LocationScreenConfirmBottomsheetState
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 3.h),
-                        child: Text("4.9 (531 reviews)",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: PrimaryColors.gray500,
-                                  fontSize: 10.fSize,
-                                )),
+                        child: Text(
+                          "$driverRating rating",
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: PrimaryColors.gray500,
+                                    fontSize: 10.fSize,
+                                  ),
+                        ),
                       )
                     ],
                   ),
@@ -281,7 +328,7 @@ class _LocationScreenConfirmBottomsheetState
   }
 
   /// Section Widget
-  Widget _buildRowpaymentmetho(BuildContext context) {
+  Widget buildRowPaymentMethod(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
         left: 15.h,
@@ -296,12 +343,12 @@ class _LocationScreenConfirmBottomsheetState
               bottom: 5.v,
             ),
             child: Text(
-              "Payment method",
+              "Total Amount",
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           Text(
-            "\$220.00",
+            "\$${widget.message.fareAmount}",
             style: Theme.of(context).textTheme.headlineMedium,
           )
         ],
@@ -310,68 +357,7 @@ class _LocationScreenConfirmBottomsheetState
   }
 
   /// Section Widget
-  Widget _buildRowtelevision(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return const PaymentCheckOutScreen();
-          },
-        ));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 15.h),
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.h,
-          vertical: 5.v,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadiusStyle.roundedBorder4,
-          color: PrimaryColors.yellow50,
-          border: Border.all(
-            color: PrimaryColors.amberA400,
-            width: 1.h,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            CustomImageView(
-              imagePath: ImageConstant.imgTelevision,
-              height: 35.v,
-              width: 45.h,
-              margin: EdgeInsets.only(
-                top: 5.v,
-                bottom: 6.v,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 13.h,
-                top: 3.v,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "**** **** **** 8970",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Text(
-                    "Expires: 12/26",
-                    style: Theme.of(context).textTheme.titleSmall,
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Section Widget
-  Widget _buildRowcallone(BuildContext context) {
+  Widget buildRowCall(BuildContext context, String driverPhone) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 14.h),
       child: Row(
@@ -414,20 +400,24 @@ class _LocationScreenConfirmBottomsheetState
           ),
           const Spacer(),
           CustomElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
                   builder: (context) {
                     return const CancelRideScreen();
                   },
-                ));
-              },
-              width: 189.h,
-              center: true,
-              text: "Cancel Ride",
-              buttonTextStyle: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: Theme.of(context).colorScheme.background))
+                ),
+              );
+            },
+            width: 189.h,
+            center: true,
+            text: "Cancel Ride",
+            buttonTextStyle: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Theme.of(context).colorScheme.background),
+          ),
         ],
       ),
     );

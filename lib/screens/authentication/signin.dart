@@ -6,7 +6,6 @@ import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_event.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
 import 'package:travelwave_mobile/constants.dart';
-import 'package:travelwave_mobile/data/decode_token.dart';
 import 'package:travelwave_mobile/screens/authentication/forgot_password.dart';
 import 'package:travelwave_mobile/screens/authentication/signup.dart';
 

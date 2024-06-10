@@ -1,7 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 
 Future<Position> getCurrentLocation() async {
-  bool serviceEnabled;
+  // bool serviceEnabled;
   LocationPermission permission;
 
   // Check if the app has permission to access the user's location

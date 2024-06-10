@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travelwave_mobile/blocs/auth/auth_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/ridehistory/ride_history_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';

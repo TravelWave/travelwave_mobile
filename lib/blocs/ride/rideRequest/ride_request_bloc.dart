@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
-import 'package:travelwave_mobile/models/create_ride.dart';
 import 'package:travelwave_mobile/models/riderequest_model.dart';
 import 'package:travelwave_mobile/repositories/riderequest_repository.dart';
 import 'package:travelwave_mobile/services/utils/formatter.dart';
@@ -12,6 +12,22 @@ part 'ride_request_state.dart';
 class RideRequestBloc extends Bloc<RideRequestEvent, RideRequestState> {
   final LocalStorage localData;
   RideRequestBloc({required this.localData}) : super(RideRequestInitial()) {
+    on<CreateRideRequest>((event, emit) async {
+      emit(RideRequestedLoading());
+      final token = await localData.readFromStorage('Token');
+
+      try {
+        final ok = await RideRequestRepository(token: token)
+            .createRideRequest(event.rideRequest);
+        if (ok) {
+          emit(RideRequestedSucess());
+        } else {
+          throw Exception('Failed to create ride request');
+        }
+      } catch (e) {
+        emit(RideRequestedError(e.toString()));
+      }
+    });
     on<RideRequestEvent>((event, emit) async {
       final token = await localData.readFromStorage('Token');
       if (event is CreateRideRequest) {
