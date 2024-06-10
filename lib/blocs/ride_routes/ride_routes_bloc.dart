@@ -10,8 +10,7 @@ class RideRoutesBloc extends Bloc<RideRoutesEvent, RideRouteState> {
     on<GetRideRoutes>((event, emit) async {
       emit(RideRoutesStateLoading());
       // final token = await localData.readFromStorage('Token');
-      const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRkYWRmMWYzMTBmNzczZWE1MDI3ZWYiLCJmdWxsX25hbWUiOiJVc2VyIiwicGhvbmVfbnVtYmVyIjoiKzI1MTk2NjAxOTQyOSIsImlzX3N0YWZmIjp0cnVlLCJpc19kcml2ZXIiOmZhbHNlLCJyYXRpbmciOjUsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzE2NDA5Mzg1fQ.RmkV69hCB0nGyIsRQymTTp6UqGWluRVZ6pLquXshGnA";
+      final token = await localData.readFromStorage('Token');
       try {
         final driver = await PassRideRequestRepository(token: token)
             .getUserInfo(event.driverId);
@@ -27,6 +26,17 @@ class RideRoutesBloc extends Bloc<RideRoutesEvent, RideRouteState> {
         );
       } catch (e) {
         emit(RideRoutesStateFailure(error: e.toString()));
+      }
+    });
+    on<CancelRideRequest>((event, emit) async {
+      emit(RideRoutesStateLoading());
+      // final token = await localData.readFromStorage('Token');
+      final token = await localData.readFromStorage('Token');
+      try {
+        await PassRideRequestRepository(token: token)
+            .cancelRideRequest(event.requestId);
+      } catch (e) {
+        print(e);
       }
     });
   }

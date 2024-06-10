@@ -15,6 +15,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     on<MessageEvent>((event, emit) async {
       if (event is FetchChatHistory) {
         emit(MessageLoading());
+        print(event.recieverId);
         final res =
             await ChatRepository(token: await data.readFromStorage("Token"))
                 .getChatHistory(recieverId: event.recieverId);
@@ -24,7 +25,10 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       if (event is SentMessage) {
         final updatedChats = List<Chats>.from((state as MessageSuccess).chats);
         emit(MessageLoading());
+        print(updatedChats.length);
+
         updatedChats.add(event.chat);
+        print(updatedChats.length);
         emit(MessageSuccess(chats: updatedChats));
       }
       if (event is GetMessage) {

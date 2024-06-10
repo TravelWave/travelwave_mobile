@@ -7,6 +7,8 @@ import 'package:travelwave_mobile/models/available_rides_model.dart';
 import 'package:travelwave_mobile/models/driver_info.dart';
 import 'package:travelwave_mobile/models/pass_riderequest_model.dart';
 import 'package:travelwave_mobile/models/ride_info_model.dart';
+import 'package:travelwave_mobile/services/utils/app_constant.dart';
+import 'package:travelwave_mobile/services/utils/location.dart';
 
 class PassRideRequestRepository {
   // static const _baseUrl = 'http://localhost:8000/v1/ride-requests';
@@ -56,8 +58,9 @@ class PassRideRequestRepository {
   }
 
   Future<bool> cancelRideRequest(String id) async {
-    final url = Uri.parse(_baseUrl + id);
-
+    final url = Uri.parse('$_baseUrl/$id');
+    print(
+        "--------------------------------------- RIDE Cancel _____________________");
     try {
       final response = await http.delete(
         url,
@@ -66,12 +69,14 @@ class PassRideRequestRepository {
         },
       );
 
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         return true;
       }
-      throw Exception('Failed to get ride info');
+      throw Exception('Failed to cancel ride');
     } catch (e) {
-      throw Exception('Failed to  get ride info: $e');
+      throw Exception('Failed to  cancel ride: $e');
     }
   }
 
@@ -80,28 +85,27 @@ class PassRideRequestRepository {
     LatLng start,
     LatLng end,
   ) async {
-    final url = Uri.parse(
-        'http://localhost:8000/v1/ride-requests/createScheduledPooledRideRequest/$id/');
+    final url = Uri.parse('$_baseUrl/createScheduledPooledRideRequest/$id/');
     try {
       print('about to call httpp ...');
 
-      final response = await http.post(
-        url,
-        headers: {'Authorization': 'Bearer $token'},
-        body: {
-          "start_latitude": "8.995481382007103",
-          "start_longitude": "38.827046178861494",
-          "end_latitude": "9.032659481621629",
-          "end_longitude": "38.71189435187503",
-        },
+      final response = await http.post(url,
+          headers: {
+            'Authorization': 'Bearer $token'
+          },
+          // body: {
+          //   "start_latitude": "8.995481382007103",
+          //   "start_longitude": "38.827046178861494",
+          //   "end_latitude": "9.032659481621629",
+          //   "end_longitude": "38.71189435187503",
+          // },
 
-        //  body: {
-        //   "start_latitude": start.latitude.toString(),
-        //   "start_longitude": start.longitude.toString(),
-        //   "end_latitude": end.latitude.toString(),
-        //   "end_longitude": end.longitude.toString(),
-        // }
-      );
+          body: {
+            "start_latitude": start.latitude.toString(),
+            "start_longitude": start.longitude.toString(),
+            "end_latitude": end.latitude.toString(),
+            "end_longitude": end.longitude.toString(),
+          });
 
       if (response.statusCode == 200) {
         final res =
@@ -120,27 +124,44 @@ class PassRideRequestRepository {
     LatLng start,
     LatLng end,
   ) async {
-    final url = Uri.parse(
-        'http://localhost:8000/v1/ride-requests/createPooledRideRequest/$id/');
+    print(token);
+    print(id);
+    final url = Uri.parse('$_baseUrl/createPooledRideRequest/$id');
     try {
       print('requesting pooled ride ...');
-      final response = await http.post(
-        url,
-        headers: {'Authorization': 'Bearer $token'},
-        body: {
-          "start_latitude": "8.995481382007103",
-          "start_longitude": "38.827046178861494",
-          "end_latitude": "9.032659481621629",
-          "end_longitude": "38.71189435187503",
-        },
+      print(start.latitude);
+      print(start.longitude);
+      print(end.longitude);
+      print(end.longitude);
+      print({
+        "start_latitude": start.latitude.toString(),
+        "start_longitude": start.longitude,
+        "end_latitude": end.latitude,
+        "end_longitude": end.longitude,
+      });
+      final response = await http.post(url,
+          headers: {'Authorization': 'Bearer $token'},
+          body: jsonEncode({
+            "start_latitude": start.latitude.toString(),
+            "start_longitude": start.longitude.toString(),
+            "end_latitude": end.latitude.toString(),
+            "end_longitude": end.longitude.toString(),
+          })
 
-        // body: {
-        //   "start_latitude": start.latitude.toString(),
-        //   "start_longitude": start.longitude.toString(),
-        //   "end_latitude": end.latitude.toString(),
-        //   "end_longitude": end.longitude.toString(),
-        // }
-      );
+          // body: {
+          //   "start_latitude": "8.995481382007103",
+          //   "start_longitude": "38.827046178861494",
+          //   "end_latitude": "9.032659481621629",
+          //   "end_longitude": "38.71189435187503",
+          // },
+
+          // body: {
+          // "start_latitude": start.latitude,
+          // "start_longitude": start.longitude,
+          // "end_latitude": end.latitude,
+          // "end_longitude": end.longitude,
+          // }
+          );
       print(response.statusCode);
       print('RESPONSE: ${response.body}');
 
@@ -154,16 +175,19 @@ class PassRideRequestRepository {
         throw Exception('Join Request Refused');
       }
     } catch (e) {
+      print(e);
       throw Exception('Join Request Refused');
     }
   }
 
   Future<DriverInfo> getUserInfo(String id) async {
-    final url = Uri.parse('http://localhost:8000/v1/users/$id');
+    final url = Uri.parse('$baseUrl/users/$id');
+    print(id);
     try {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
         final userInfo = DriverInfo.fromJson(jsonDecode(response.body));
         return userInfo;
       } else {
@@ -175,15 +199,17 @@ class PassRideRequestRepository {
   }
 
   Future<List<AvailableRides>> getRidePooledScheduled(LatLng location) async {
-    final url = Uri.parse('http://localhost:8000/v1/rides/pooled/');
+    final url = Uri.parse('$baseUrl/rides/pooled/');
 
     try {
+      final pos = await getCurrentLocation();
+      print(pos);
       final response = await http.post(
         url,
         headers: {'Authorization': 'Bearer $token'},
         body: {
-          "latitude": location.latitude.toString(),
-          "longitude": location.longitude.toString(),
+          "latitude": pos.latitude.toString(),
+          "longitude": pos.longitude.toString(),
         },
       );
 
@@ -205,20 +231,21 @@ class PassRideRequestRepository {
   }
 
   Future<List<AvailableRides>> getRidePooled(LatLng location) async {
-    final url = Uri.parse('http://localhost:8000/v1/rides/pooled/');
+    final url = Uri.parse('$baseUrl/rides/pooled/');
 
     try {
+      final pos = await getCurrentLocation();
       final response = await http.post(
         url,
         headers: {'Authorization': 'Bearer $token'},
-        body: {
-          "latitude": "8.85",
-          "longitude": "38.81666",
-        },
         // body: {
-        //   "latitude": location.latitude.toString(),
-        //   "longitude": location.longitude.toString(),
+        //   "latitude": "8.85",
+        //   "longitude": "38.81666",
         // },
+        body: {
+          "latitude": pos.latitude.toString(),
+          "longitude": pos.longitude.toString(),
+        },
       );
 
       if (response.statusCode == 200) {
@@ -239,7 +266,7 @@ class PassRideRequestRepository {
   }
 
   Future<RideInfo> getRideInfo(String id) async {
-    final url = Uri.parse('http://localhost:8000/v1/rides/$id');
+    final url = Uri.parse('$baseUrl/rides/$id');
     try {
       final response = await http.get(
         url,
@@ -247,7 +274,7 @@ class PassRideRequestRepository {
           'Authorization': 'Bearer $token',
         },
       );
-
+      print(response.body);
       if (response.statusCode == 200) {
         final rideInfo = RideInfo.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);

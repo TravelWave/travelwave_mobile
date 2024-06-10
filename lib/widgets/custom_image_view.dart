@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:travelwave_mobile/constants.dart';
 
 enum ImageType { svg, png, network, file, unknown }
 
@@ -28,6 +30,7 @@ class CustomImageView extends StatelessWidget {
       this.height,
       this.width,
       this.color,
+      this.icon,
       this.fit,
       this.alignment,
       this.onTap,
@@ -40,6 +43,7 @@ class CustomImageView extends StatelessWidget {
   String? imagePath;
 
   double? height;
+  IconData? icon;
 
   double? width;
 
@@ -162,6 +166,12 @@ class CustomImageView extends StatelessWidget {
           );
       }
     }
-    return const SizedBox();
+    return icon != null
+        ? Icon(
+            icon,
+            size: 25,
+            color: color ?? PrimaryColors.gray600,
+          )
+        : const SizedBox();
   }
 }

@@ -236,18 +236,18 @@ class RideDetailsModal extends StatelessWidget {
                       Spacer(),
                       // ElevatedButton.icon(
                       //   onPressed: () async {
-                      //     final url = 'tel:${passengerData.phoneNumber!}';
-                      //     if (await canLaunchUrlString(url)) {
-                      //       await launchUrlString(url);
-                      //     } else {
-                      //       // Handle the case where the phone dialer can't be launched
-                      //       ScaffoldMessenger.of(context).showSnackBar(
-                      //         SnackBar(
-                      //           content: Text('Could not launch phone dialer'),
-                      //         ),
-                      //       );
-                      //     }
-                      //   },
+                      //   final url = 'tel:${passengerData.phoneNumber!}';
+                      //   if (await canLaunchUrlString(url)) {
+                      //     await launchUrlString(url);
+                      //   } else {
+                      //     // Handle the case where the phone dialer can't be launched
+                      //     ScaffoldMessenger.of(context).showSnackBar(
+                      //       SnackBar(
+                      //         content: Text('Could not launch phone dialer'),
+                      //       ),
+                      //     );
+                      //   }
+                      // },
                       //   icon: Icon(Icons.phone),
                       //   label: Text('Call'),
                       //   style: ElevatedButton.styleFrom(

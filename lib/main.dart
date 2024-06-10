@@ -24,10 +24,8 @@ import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
 
-
 import 'package:travelwave_mobile/screens/onboarding/splash_screen.dart';
 import 'package:travelwave_mobile/widgets/driver_form.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -66,7 +64,6 @@ class MyApp extends StatelessWidget {
           create: (context) => CreateRideBloc(localData: data),
         ),
         BlocProvider(
-
           create: (context) => PassRideRequestBloc(localData: data),
         ),
         BlocProvider(
@@ -74,12 +71,8 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => RideRoutesBloc(localData: data),
-
-      
         ),
-         BlocProvider(
-       
-
+        BlocProvider(
           create: (context) => NotificationBloc(),
         ),
         BlocProvider(
@@ -96,7 +89,6 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => MessageBloc(),
- 
         ),
       ],
       child: Sizer(
@@ -105,9 +97,7 @@ class MyApp extends StatelessWidget {
             title: 'TravelWave',
             theme: lightTheme(),
             debugShowCheckedModeBanner: false,
-
             home: const SplashScreen(),
-
           );
         },
       ),

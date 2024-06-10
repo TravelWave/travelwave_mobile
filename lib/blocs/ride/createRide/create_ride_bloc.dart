@@ -21,12 +21,13 @@ class CreateRideBloc extends Bloc<CreateRideEvent, CreateRideState> {
       try {
         final token = await localData.readFromStorage('Token');
         if (isPooled && isScheduled) {
+          print("dsjdhj");
           await RideRepository(token: token)
               .createScheduledPooledRide(event.rideInfo);
-        } else if (isScheduled && !isPooled) {
+        } else if (isScheduled) {
           await RideRepository(token: token)
               .createOneScheduledRide(event.rideInfo);
-        } else if (!isScheduled && isPooled) {
+        } else if (isPooled) {
           await RideRepository(token: token).createPooledRide(event.rideInfo);
         } else {
           print("object");

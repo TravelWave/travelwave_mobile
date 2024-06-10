@@ -164,62 +164,68 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.v),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const ForgotPasswordPage();
-                                  },
+                      SizedBox(height: 13.v),
+                      Padding(
+                        padding: EdgeInsets.only(right: 25.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return const ForgotPasswordPage();
+                                    },
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Forgot password?',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
                                 ),
-                              );
-                            },
-                            child: const Text(
-                              'Forgot password?',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 10.v),
-                      GestureDetector(
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<SignInBloc>().add(
-                                  SignInUser(
-                                      phoneNumber:
-                                          "+251${phoneNumberController.text.substring(1)}",
-                                      password: passwordController.text),
-                                );
-                          }
-                        },
-                        child: Container(
-                          height: 45.v,
-                          width: 300.h,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(10.v),
-                          ),
-                          child: Center(
-                            child: state is SignInLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : const Text(
-                                    'Sign In',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                      SizedBox(height: 13.v),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 25.h),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<SignInBloc>().add(
+                                    SignInUser(
+                                        phoneNumber:
+                                            "+251${phoneNumberController.text.substring(1)}",
+                                        password: passwordController.text),
+                                  );
+                            }
+                          },
+                          child: Container(
+                            height: 45.v,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(10.v),
+                            ),
+                            child: Center(
+                              child: state is SignInLoading
+                                  ? const CircularProgressIndicator(
                                       color: Colors.white,
+                                    )
+                                  : const Text(
+                                      'Sign In',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
+                            ),
                           ),
                         ),
                       ),

@@ -3,9 +3,11 @@ import 'package:travelwave_mobile/models/pass_riderequest_model.dart';
 abstract class PassRideRequestEvent {}
 
 class CreatePassRideRequest extends PassRideRequestEvent {
-  final PassRideRequest rideInfo;
+  // final PassRideRequest rideInfo;
+  final String fromLoc;
+  final String toLoc;
 
-  CreatePassRideRequest({required this.rideInfo});
+  CreatePassRideRequest({required this.fromLoc, required this.toLoc});
 }
 
 class CreatePassScheduledRideRequest extends PassRideRequestEvent {

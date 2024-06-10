@@ -4,14 +4,13 @@ import 'package:travelwave_mobile/blocs/available_rides/available_rides_event.da
 import 'package:travelwave_mobile/blocs/available_rides/available_rides_state.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
+import 'package:travelwave_mobile/main.dart';
 import 'package:travelwave_mobile/models/available_rides_model.dart';
 import 'package:travelwave_mobile/repositories/pass_riderequest_repository.dart';
 
 class AvailableRidesBloc
     extends Bloc<AvailableRidesEvent, AvailableRidesState> {
   final LocalStorage localData;
-  final token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRkYWRmMWYzMTBmNzczZWE1MDI3ZWYiLCJmdWxsX25hbWUiOiJVc2VyIiwicGhvbmVfbnVtYmVyIjoiKzI1MTk2NjAxOTQyOSIsImlzX3N0YWZmIjp0cnVlLCJpc19kcml2ZXIiOmZhbHNlLCJyYXRpbmciOjUsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzE2NDA5Mzg1fQ.RmkV69hCB0nGyIsRQymTTp6UqGWluRVZ6pLquXshGnA';
 
   AvailableRidesBloc({required this.localData})
       : super(AvailableRidesInitialState()) {
@@ -20,7 +19,7 @@ class AvailableRidesBloc
     });
     on<GetAvailableScheduledRides>((event, emit) async {
       emit(AvailableScheduledRidesLoadingState());
-
+      final token = await data.readFromStorage('Token');
       try {
         final response = await PassRideRequestRepository(token: token)
             .getRidePooledScheduled(event.currentLocation);
@@ -52,8 +51,9 @@ class AvailableRidesBloc
     });
     on<GetAvailableRides>((event, emit) async {
       emit(AvailableRidesLoadingState());
-
       try {
+        final token = await data.readFromStorage('Token');
+
         final response = await PassRideRequestRepository(token: token)
             .getRidePooled(event.currentLocation);
 
@@ -84,13 +84,14 @@ class AvailableRidesBloc
     });
     on<JoinRideRequestEvent>((event, emit) async {
       emit(JoinRideStateLoading());
-      const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjVmOGZjOGEyMjY5YWE3NDVkZjVhNDMiLCJmdWxsX25hbWUiOiJEcml2ZXIgMyIsInBob25lX251bWJlciI6IisyNTE5ODg5MDI3MTIiLCJpc19zdGFmZiI6dHJ1ZSwiaXNfZHJpdmVyIjp0cnVlLCJyYXRpbmciOjUsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzE3OTIxMzgyfQ.SxJBEx9J16Vv3GgQGw3hfI9Zv0KdzXJposCA5AeL3mA";
+      final token = await data.readFromStorage("Token");
       try {
         print('about to join the ride ...');
+        // final response = await PassRideRequestRepository(token: token)
+        //     .askToJoinPooledRide(
+        //         "665f994aa2269aa745df5ac7", event.source, event.destination);
         final response = await PassRideRequestRepository(token: token)
-            .askToJoinPooledRide(
-                "665f994aa2269aa745df5ac7", event.source, event.destination);
+            .askToJoinPooledRide(event.rideId, event.source, event.destination);
         print('printing the ride id: ${event.rideId} ...');
         // final response = await PassRideRequestRepository(token: token)
         //     .askToJoinPooledRide(event.rideId, event.source, event.destination);
@@ -105,13 +106,12 @@ class AvailableRidesBloc
     });
     on<JoinScheduledRideRequestEvent>((event, emit) async {
       emit(JoinScheduledRideStateLoading());
-      const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjVmOGZjOGEyMjY5YWE3NDVkZjVhNDMiLCJmdWxsX25hbWUiOiJEcml2ZXIgMyIsInBob25lX251bWJlciI6IisyNTE5ODg5MDI3MTIiLCJpc19zdGFmZiI6dHJ1ZSwiaXNfZHJpdmVyIjp0cnVlLCJyYXRpbmciOjUsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzE3OTIxMzgyfQ.SxJBEx9J16Vv3GgQGw3hfI9Zv0KdzXJposCA5AeL3mA";
+      final token = await data.readFromStorage('Token');
       try {
         print('about to join the ride ...');
         final response = await PassRideRequestRepository(token: token)
             .askToJoinPooledScheduledRide(
-                "665f994aa2269aa745df5ac7", event.source, event.destination);
+                event.rideId, event.source, event.destination);
 
         print('after the join pooled request repo call ..');
 
