@@ -7,6 +7,7 @@ class DriverInfo {
   String? password;
   bool? isDriver;
   bool? isActive;
+  String? imgProfile;
   String? createdAt;
   String? updatedAt;
   String? id;
@@ -19,6 +20,7 @@ class DriverInfo {
       this.phoneNumber,
       this.password,
       this.isDriver,
+      this.imgProfile,
       this.isActive,
       this.createdAt,
       this.updatedAt,
@@ -28,6 +30,7 @@ class DriverInfo {
     isStaff = json['is_staff'];
     rating = json['rating'];
     sId = json['_id'];
+    imgProfile = json['profile_picture'];
     fullName = json['full_name'];
     phoneNumber = json['phone_number'];
     password = json['password'];
@@ -35,7 +38,7 @@ class DriverInfo {
     isActive = json['is_active'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    fullName = json['fullName'];
+
     id = json['id'];
   }
 

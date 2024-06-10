@@ -32,8 +32,8 @@ class RideRequestRepository {
   }
 
   Future<List<RideRequest>> getRideRequests() async {
-    final url = Uri.parse(
-        "https://travelwave-backend.onrender.com/v1/ride-requests/scheduled");
+    final url =
+        Uri.parse("https://travelwave-backend.onrender.com/v1/ride-requests/");
     // final url = Uri.parse(_baseUrl);
     print(_baseUrl);
 
@@ -57,10 +57,8 @@ class RideRequestRepository {
     }
   }
 
-
   Future<Map> createRideRequest(RideRequest ridebody) async {
     final url = Uri.parse(_baseUrl);
- 
 
     try {
       final response = await http.post(

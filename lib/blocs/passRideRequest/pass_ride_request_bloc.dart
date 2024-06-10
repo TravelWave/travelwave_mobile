@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:travelwave_mobile/blocs/passRideRequest/pass_ride_request_event.dart';
 import 'package:travelwave_mobile/blocs/passRideRequest/pass_ride_request_state.dart';
 import 'package:travelwave_mobile/data/local_data.dart';
+import 'package:travelwave_mobile/models/pass_riderequest_model.dart';
 import 'package:travelwave_mobile/repositories/pass_riderequest_repository.dart';
+import 'package:travelwave_mobile/screens/home/home_transport.dart';
 
 class PassRideRequestBloc
     extends Bloc<PassRideRequestEvent, PassRideRequestState> {
@@ -13,12 +15,9 @@ class PassRideRequestBloc
     on<CreatePassScheduledRideRequest>((event, emit) async {
       emit(PassScheduledRideRequestLoading());
 
-      // final token = await localData.readFromStorage('Token');
-      const token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRkYWRmMWYzMTBmNzczZWE1MDI3ZWYiLCJmdWxsX25hbWUiOiJVc2VyIiwicGhvbmVfbnVtYmVyIjoiKzI1MTk2NjAxOTQyOSIsImlzX3N0YWZmIjp0cnVlLCJpc19kcml2ZXIiOmZhbHNlLCJyYXRpbmciOjUsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzE2NDA5Mzg1fQ.RmkV69hCB0nGyIsRQymTTp6UqGWluRVZ6pLquXshGnA';
-
       try {
         print('about to request ....');
+        final token = await localData.readFromStorage('Token');
         final ok = await PassRideRequestRepository(token: token)
             .createScheduledRideRequest(event.rideInfo);
         if (ok) {
@@ -33,13 +32,24 @@ class PassRideRequestBloc
     on<CreatePassRideRequest>((event, emit) async {
       emit(PassRideRequestLoading());
 
-      // final token = await localData.readFromStorage('Token');
-      const token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjRkYWRmMWYzMTBmNzczZWE1MDI3ZWYiLCJmdWxsX25hbWUiOiJVc2VyIiwicGhvbmVfbnVtYmVyIjoiKzI1MTk2NjAxOTQyOSIsImlzX3N0YWZmIjp0cnVlLCJpc19kcml2ZXIiOmZhbHNlLCJyYXRpbmciOjUsImlzX2FjdGl2ZSI6dHJ1ZSwiaWF0IjoxNzE2NDA5Mzg1fQ.RmkV69hCB0nGyIsRQymTTp6UqGWluRVZ6pLquXshGnA';
-
       try {
+        final token = await localData.readFromStorage('Token');
+        final start = await getLocation(event.fromLoc);
+        final end = await getLocation(event.toLoc);
+        print(start);
+        print("aftr geting location");
+        PassRideRequest rideInfo = PassRideRequest(
+          startLatitude: start.latitude,
+          startLongitude: start.longitude,
+          endLatitude: end.latitude,
+          endLongitude: end.longitude,
+          requestTime: DateTime.now().toString(),
+          status: 'pending',
+          scheduledTime: DateTime.now().toString(),
+        );
+
         final ok = await PassRideRequestRepository(token: token)
-            .createRideRequest(event.rideInfo);
+            .createRideRequest(rideInfo);
         if (ok) {
           emit(PassRideRequestLoading());
         } else {
@@ -53,10 +63,4 @@ class PassRideRequestBloc
       emit(PassRideRequestSuccess());
     });
   }
-}
-
-int getIntervalInMinutes(DateTime startTime, DateTime endTime) {
-  final duration = endTime.difference(startTime);
-  final minutes = duration.inMinutes.remainder(Duration.minutesPerHour);
-  return minutes;
 }

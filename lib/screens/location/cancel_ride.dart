@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_event.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 import 'package:travelwave_mobile/widgets/custom_image_view.dart';
 
 class CancelRideScreen extends StatefulWidget {
-  const CancelRideScreen({super.key});
+  final String requestId;
+  const CancelRideScreen({super.key, required this.requestId});
 
   @override
   State<CancelRideScreen> createState() => _CancelRideScreenState();
@@ -81,6 +85,7 @@ void showCancelDialog(context) {
                       onPressed: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
+                        Navigator.of(context).pop();
                         // print("object");
                         // reviewDialog(context);
                       },
@@ -152,6 +157,9 @@ class _CancelRideScreenState extends State<CancelRideScreen> {
                 SizedBox(height: 60.v),
                 CustomElevatedButton(
                   onPressed: () {
+                    BlocProvider.of<RideRoutesBloc>(context).add(
+                      CancelRideRequest(requestId: widget.requestId),
+                    );
                     showCancelDialog(context);
                   },
                   text: "Submit",
@@ -175,53 +183,32 @@ class _CancelRideScreenState extends State<CancelRideScreen> {
   PreferredSizeWidget _buildAppbar(BuildContext context) {
     return AppBar(
       elevation: 0,
-      leadingWidth: 32.h,
-      leading: InkWell(
-        onTap: () {
-          Navigator.of(context);
-        },
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 8.h,
-            top: 16.v,
-            bottom: 15.v,
-          ),
-          child: CustomImageView(
-            imagePath: ImageConstant.imgArrowLeft,
-            height: 24.adaptSize,
-            width: 24.adaptSize,
-            fit: BoxFit.contain,
-          ),
-        ),
-      ),
-      title: Padding(
-        padding: EdgeInsets.only(left: 5.h),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 1.v,
-                  ),
-                  child: Text("Back",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: PrimaryColors.gray800,
-                          ))),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Padding(
-                  padding: EdgeInsets.only(left: 97.h),
-                  child: Text("Cancel Taxi",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: PrimaryColors.gray800,
-                          ))),
-            )
-          ],
-        ),
+      leadingWidth: 40.h,
+      // leading: InkWell(
+      //   onTap: () {
+      //     Navigator.of(context);
+      //   },
+      //   child: Padding(
+      //     padding: EdgeInsets.only(
+      //       left: 8.h,
+      //       top: 16.v,
+      //       bottom: 15.v,
+      //     ),
+      //     child: CustomImageView(
+      //       imagePath: ImageConstant.imgArrowLeft,
+      //       height: 24.adaptSize,
+      //       width: 24.adaptSize,
+      //       fit: BoxFit.contain,
+      //     ),
+      //   ),
+      // ),
+      centerTitle: true,
+      title: GestureDetector(
+        onTap: () {},
+        child: Text("Cancel Taxi",
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: PrimaryColors.gray800,
+                )),
       ),
     );
     // return CustomAppBar(

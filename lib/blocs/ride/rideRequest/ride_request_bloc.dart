@@ -17,13 +17,10 @@ class RideRequestBloc extends Bloc<RideRequestEvent, RideRequestState> {
       final token = await localData.readFromStorage('Token');
 
       try {
-        final ok = await RideRequestRepository(token: token)
+        await RideRequestRepository(token: token)
             .createRideRequest(event.rideRequest);
-        if (ok) {
-          emit(RideRequestedSucess());
-        } else {
-          throw Exception('Failed to create ride request');
-        }
+
+        emit(RideRequestedSucess());
       } catch (e) {
         emit(RideRequestedError(e.toString()));
       }

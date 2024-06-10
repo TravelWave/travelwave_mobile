@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:travelwave_mobile/blocs/messages/message_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_event.dart';
 import 'package:travelwave_mobile/blocs/ride_routes/ride_routes_state.dart';
@@ -13,20 +14,21 @@ import 'package:travelwave_mobile/models/accepted_ride_request_model.dart';
 import 'package:travelwave_mobile/screens/location/cancel_ride.dart';
 import 'package:travelwave_mobile/screens/location/message_screen.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
+import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
 import 'package:travelwave_mobile/widgets/custom_icon_button.dart';
 import 'package:travelwave_mobile/widgets/custom_image_view.dart';
+import 'package:travelwave_mobile/widgets/res_handle.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 // ignore_for_file: must_be_immutable
 
 class LocationScreenConfirmBottomsheet extends StatefulWidget {
- 
   final AcceptedRideRequestModel message;
   const LocationScreenConfirmBottomsheet({
     super.key,
     required this.message,
   });
-
 
   @override
   State<LocationScreenConfirmBottomsheet> createState() =>
@@ -93,18 +95,6 @@ class _LocationScreenConfirmBottomsheetState
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 15.h, top: 20.v),
-            child: IconButton(
-              icon: const Icon(
-                Icons.notifications_none_outlined,
-                size: 28,
-              ),
-              onPressed: () {},
-            ),
-          ),
-        ],
         leading: Container(
           padding: EdgeInsets.only(left: 30.h, top: 20.v),
           child: Builder(
@@ -184,7 +174,7 @@ class _LocationScreenConfirmBottomsheetState
                   right: 0,
                   bottom: 0,
                   child: (state is! RideRoutesStateSuccess)
-                      ? const CircularProgressIndicator()
+                      ? const SizedBox.shrink()
                       : Container(
                           padding: EdgeInsets.symmetric(vertical: 9.v),
                           decoration: BoxDecoration(
@@ -194,22 +184,21 @@ class _LocationScreenConfirmBottomsheetState
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              CustomImageView(
-                                imagePath: ImageConstant.imgArrowRight,
-                                height: 24.adaptSize,
-                                width: 24.adaptSize,
-                                alignment: Alignment.centerRight,
-                                margin: EdgeInsets.only(right: 10.h),
-                              ),
                               SizedBox(height: 25.v),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 15.h),
-                                  child: Text(
-                                    widget.message.message!,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 15.h),
+                                    child: Text(
+                                      textAlign: TextAlign.start,
+                                      widget.message.message!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -219,6 +208,7 @@ class _LocationScreenConfirmBottomsheetState
                               buildRowUserProfile(
                                 context,
                                 state.userInfo.fullName!,
+                                state.userInfo.imgProfile,
                                 state.userInfo.rating!,
                                 widget.message.distance!,
                               ),
@@ -244,19 +234,34 @@ class _LocationScreenConfirmBottomsheetState
 
   /// Section Widget
   Widget buildRowUserProfile(BuildContext context, String driverName,
-      int driverRating, double distance) {
+      String? driverProfilePicture, int driverRating, double distance) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomImageView(
-            imagePath: ImageConstant.imgRectangle553,
-            height: 59.v,
-            width: 54.h,
-            radius: BorderRadius.circular(4.h),
-            margin: EdgeInsets.only(top: 2.v),
-          ),
+          driverProfilePicture != null
+              ? networkImageLoader(
+                  shape: BoxShape.circle,
+                  height: 70,
+                  width: 70,
+                  url: driverProfilePicture!,
+                )
+              : CircleAvatar(
+                  radius: 35,
+                  child: Avatar(
+                      textStyle:
+                          const TextStyle(fontSize: 20, color: Colors.white),
+                      name: driverName,
+                      shape: AvatarShape.circle(50)),
+                ),
+          // CustomImageView(
+          //   imagePath: ImageConstant.imgRectangle553,
+          //   height: 59.v,
+          //   width: 54.h,
+          //   radius: BorderRadius.circular(4.h),
+          //   margin: EdgeInsets.only(top: 2.v),
+          // ),
           Padding(
             padding: EdgeInsets.only(left: 5.h),
             child: Column(
@@ -348,7 +353,7 @@ class _LocationScreenConfirmBottomsheetState
             ),
           ),
           Text(
-            "\$${widget.message.fareAmount}",
+            "\$${widget.message.fareAmount?.toStringAsFixed(2)}",
             style: Theme.of(context).textTheme.headlineMedium,
           )
         ],
@@ -366,6 +371,19 @@ class _LocationScreenConfirmBottomsheetState
           Padding(
             padding: EdgeInsets.symmetric(vertical: 2.v),
             child: CustomIconButton(
+              onTap: () async {
+                final url = 'tel:${driverPhone}';
+                if (await canLaunchUrlString(url)) {
+                  await launchUrlString(url);
+                } else {
+                  // Handle the case where the phone dialer can't be launched
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Could not launch phone dialer'),
+                    ),
+                  );
+                }
+              },
               height: 50.adaptSize,
               width: 50.adaptSize,
               padding: EdgeInsets.all(7.h),
@@ -382,10 +400,12 @@ class _LocationScreenConfirmBottomsheetState
             ),
             child: CustomIconButton(
               onTap: () {
+                BlocProvider.of<MessageBloc>(context)
+                    .add(FetchChatHistory(recieverId: widget.message.userId!));
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
                     return MessageScreen(
-                      recieverId: "",
+                      recieverId: widget.message.userId!,
                     );
                   },
                 ));
@@ -405,7 +425,9 @@ class _LocationScreenConfirmBottomsheetState
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const CancelRideScreen();
+                    return CancelRideScreen(
+                      requestId: widget.message.requestId ?? '',
+                    );
                   },
                 ),
               );

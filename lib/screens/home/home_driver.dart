@@ -8,11 +8,12 @@ import 'package:travelwave_mobile/blocs/pasenger/passenger_bloc_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/acceptRide/accept_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/createRide/create_ride_bloc.dart';
 import 'package:travelwave_mobile/blocs/ride/rideRequest/ride_request_bloc.dart';
+
 import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/models/create_ride.dart';
 import 'package:travelwave_mobile/models/riderequest_model.dart';
- 
+
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:geolocator/geolocator.dart';
 import 'package:iconsax/iconsax.dart';
@@ -31,7 +32,7 @@ import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/screens/transport/ride_request.dart';
 import 'package:travelwave_mobile/screens/transport/select_transport.dart';
 import 'package:travelwave_mobile/services/utils/app_constant.dart';
- 
+
 import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/services/utils/formatter.dart';
 import 'package:travelwave_mobile/services/utils/location.dart';
@@ -97,9 +98,11 @@ class _HomePageDriverState extends State<HomePageDriver>
     // });
 
     socket?.on('new notification cancel', (data) {
+      print("--------------------- cancel ------------------");
       print(data);
       BlocProvider.of<NotificationBloc>(context).add(
-          CancelNewNotificationReceived(data['message'], data['passengerId']));
+          CancelNewNotificationReceived(
+              "The Ride has been Canceled", data['userId']));
     });
 
     socket?.on('disconnect', (_) {
@@ -433,7 +436,7 @@ class _HomePageDriverState extends State<HomePageDriver>
                                         Switch(
                                           value: isOnline,
                                           onChanged: (value) {
-                                            if (!isOnline && notCreated) {
+                                            if (!isOnline) {
                                               _showRideOptionsModal(
                                                   context, value);
                                             } else {
@@ -563,7 +566,8 @@ class UpcomingRequestsTab extends StatelessWidget {
           if (state is GetRidesSucess) {
             print(state.rideInfo);
             final List<RideRequestWithLocation> upcomingRequest = state.rideInfo
-                .where((request) => request.status == 'pending')
+                .where((request) =>
+                    request.status == 'pending' && request.isScheduled)
                 .toList();
             upcomingRequest
                 .sort((a, b) => b.requestTime.compareTo(a.requestTime));

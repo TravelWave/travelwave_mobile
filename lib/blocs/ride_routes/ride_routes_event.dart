@@ -13,3 +13,11 @@ class GetRideRoutes extends RideRoutesEvent {
 }
 
 class CreateRideRoutes extends RideRoutesEvent {}
+
+class CancelRideRequest extends RideRoutesEvent {
+  final String requestId;
+
+  CancelRideRequest({
+    required this.requestId,
+  });
+}

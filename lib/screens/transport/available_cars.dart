@@ -29,8 +29,8 @@ class AvailableCarsPage extends StatefulWidget {
 
 class _AvailableCarsPageState extends State<AvailableCarsPage> {
   LatLng myLocation = const LatLng(9.0192, 38.7525);
-  final socketUrl = 'ws://localhost:8000/';
-  // final socketUrl = 'wss://travelwave-backend.onrender.com';
+  // final socketUrl = 'ws://localhost:8000/';
+  final socketUrl = 'wss://travelwave-backend.onrender.com';
   late final AcceptedRideRequestModel rideInfo;
 
   @override
@@ -235,7 +235,7 @@ class _AvailableCarsPageState extends State<AvailableCarsPage> {
                                                 ),
                                                 child: Text(
                                                   state.rideList[index].vehicle!
-                                                      .name!,
+                                                      .driver!,
                                                   style: TextStyle(
                                                     color: Colors.grey[700],
                                                     fontSize: 13,

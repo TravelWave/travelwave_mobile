@@ -7,6 +7,7 @@ import 'package:travelwave_mobile/blocs/vehicles/vehicles_bloc.dart';
 import 'package:travelwave_mobile/screens/authentication/welcome.dart';
 import 'package:travelwave_mobile/screens/home/home.dart';
 import 'package:travelwave_mobile/screens/home/home_driver.dart';
+import 'package:travelwave_mobile/screens/home/home_transport.dart';
 import 'package:travelwave_mobile/screens/onboarding/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -94,7 +95,7 @@ class SecondScreen extends StatelessWidget {
               driverId: state.userInfo.userId!,
             );
           } else {
-            return const MainPage();
+            return const HomePage();
           }
         }
         return const SplashScreen();

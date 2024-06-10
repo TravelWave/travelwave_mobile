@@ -64,6 +64,8 @@ class _MessageScreenState extends State<MessageScreen> {
     socket?.emit('joinRoom', user?.userId);
 
     socket?.on('new message', (data) {
+      print("object in new message");
+      print(data);
       BlocProvider.of<MessageBloc>(context)
           .add(GetMessage(chat: Chats.fromJson(data)));
     });
@@ -73,11 +75,11 @@ class _MessageScreenState extends State<MessageScreen> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   socket?.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    socket?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +91,9 @@ class _MessageScreenState extends State<MessageScreen> {
         body: BlocBuilder<MessageBloc, MessageState>(
           builder: (context, state) {
             if (state is MessageSuccess) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _scrollToBottom();
+              });
               chats = state.chats;
               if (chats.isEmpty) {
                 return const Center(
@@ -312,6 +317,7 @@ class _MessageScreenState extends State<MessageScreen> {
                           skinToneConfig: const SkinToneConfig(),
                           categoryViewConfig: const CategoryViewConfig(),
                           bottomActionBarConfig: const BottomActionBarConfig(),
+                          searchViewConfig: const SearchViewConfig(),
                         ),
                       ),
                     ),
@@ -342,13 +348,10 @@ class _MessageScreenState extends State<MessageScreen> {
         child: Row(
           children: [
             SizedBox(width: 16.h),
-            const Icon(Icons.arrow_back_ios),
-            Expanded(
-              child: Text(
-                "Back",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            )
+            const Icon(
+              Icons.arrow_back,
+              size: 30,
+            ),
           ],
         ),
       ),
@@ -426,6 +429,9 @@ class _MessageScreenState extends State<MessageScreen> {
               scrollPadding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               controller: message,
+              onChanged: (value) => setState(() {
+                message.text = value;
+              }),
               style: Theme.of(context).textTheme.bodyMedium,
               obscureText: false,
               textInputAction: TextInputAction.done,
@@ -448,7 +454,8 @@ class _MessageScreenState extends State<MessageScreen> {
                   child: Container(
                     margin: EdgeInsets.fromLTRB(30.h, 14.v, 9.h, 14.v),
                     child: CustomImageView(
-                      imagePath: ImageConstant.imgUser,
+                      color: _emojiShowing ? PrimaryColors.amber500 : null,
+                      icon: Icons.emoji_emotions_outlined,
                       height: 24.adaptSize,
                       width: 24.adaptSize,
                     ),
@@ -606,9 +613,10 @@ class _MessageScreenState extends State<MessageScreen> {
           //     ),
           //   ),
           CustomImageView(
-            imagePath: ImageConstant.imgTelevisionIndigo100,
+            icon: Icons.send,
             height: 32.adaptSize,
             width: 32.adaptSize,
+            color: message.text.isNotEmpty ? Colors.blue : null,
             onTap: () {
               sendMsgToServer(widget.recieverId, message.text);
               BlocProvider.of<MessageBloc>(context).add(SentMessage(

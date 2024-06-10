@@ -13,6 +13,7 @@ import 'package:travelwave_mobile/blocs/passRideRequest/pass_ride_request_event.
 import 'package:travelwave_mobile/blocs/passRideRequest/pass_ride_request_state.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_bloc.dart';
 import 'package:travelwave_mobile/blocs/signin/signin_state.dart';
+import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/models/accepted_ride_request_model.dart';
 import 'package:travelwave_mobile/models/pass_riderequest_model.dart';
 import 'package:travelwave_mobile/screens/home/home.dart';
@@ -24,6 +25,7 @@ import 'package:travelwave_mobile/screens/notification/notifications.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/screens/transport/available_cars.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:travelwave_mobile/services/utils/app_constant.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,8 +43,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime selectedDateTime = DateTime.now();
 
-  final socketUrl = 'ws://localhost:8000/';
-  // final socketUrl = 'wss://travelwave-backend.onrender.com';
+  final socketUrl = 'wss://travelwave-backend.onrender.com';
   late final AcceptedRideRequestModel rideInfo;
 
   @override
@@ -50,6 +51,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     getCurrentLocation().then((value) {
       setState(() {
+        print(value);
         myLocation = value;
       });
     });
@@ -62,6 +64,8 @@ class _HomePageState extends State<HomePage> {
       print('connected');
     });
     socket.on('new notification accepted', (data) {
+      print("new not recieved");
+      print(data);
       rideInfo = AcceptedRideRequestModel.fromJson(data);
       context.read<PassRideRequestBloc>().add(MakeItAccepted());
     });
@@ -101,34 +105,32 @@ class _HomePageState extends State<HomePage> {
       body: BlocBuilder<SignInBloc, SignInState>(
         builder: (context, state) {
           return Stack(children: [
-            SizedBox(
-              width: double.infinity,
-              child: FlutterMap(
-                mapController: mapController,
-                options: MapOptions(
-                  onTap: (tapPosition, point) {},
-                  initialCenter: const LatLng(9.0192, 38.7525),
-                  initialZoom: 15,
-                  interactionOptions: const InteractionOptions(
-                    flags: ~InteractiveFlag.doubleTapZoom,
-                  ),
-                ),
-                children: [
-                  openStreetMapTileLayer,
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: myLocation,
-                        child: Icon(
-                          Icons.location_on,
-                          color: Colors.red[900],
-                          size: 25,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+            FlutterMap(
+              mapController: mapController,
+              options: MapOptions(
+                onTap: (tapPosition, point) {
+                  print(tapPosition);
+                  print(point);
+                  mapController.move(point, 15);
+                },
+                initialCenter: myLocation,
+                initialZoom: 15,
               ),
+              children: [
+                openStreetMapTileLayer,
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: myLocation,
+                      child: const Icon(
+                        Icons.location_on,
+                        color: Colors.blue,
+                        size: 40,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             Positioned(
               top: 40,
@@ -143,46 +145,10 @@ class _HomePageState extends State<HomePage> {
                       height: 30,
                       width: 30,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFF1B1),
+                        color: PrimaryColors.amberA400,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: const Icon(Iconsax.menu_1),
-                    ),
-                  ),
-                  const SizedBox(width: 180),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const SearchPage();
-                          },
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF1B1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Icon(Icons.search),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: () {
-                      showNotifications(context);
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF1B1),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Icon(Iconsax.notification),
                     ),
                   ),
                 ],
@@ -209,37 +175,40 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Row(
                         children: [
-                          Container(
-                            height: 45,
-                            width: 230,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFBE7),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                                width: 1,
+                          Expanded(
+                            child: Container(
+                              height: 45,
+                              width: 230,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFBE7),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                selectAddress(
-                                  context,
-                                  shareRide,
-                                  selectedDateTime,
-                                );
-                              },
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  prefixIcon: Icon(
-                                    Icons.search,
-                                    color: Colors.grey[700],
+                              child: GestureDetector(
+                                onTap: () {
+                                  selectAddress(
+                                    context,
+                                    shareRide,
+                                    selectedDateTime,
+                                  );
+                                },
+                                child: TextField(
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    hintStyle: TextStyle(fontSize: 14.h),
+                                    prefixIcon: Icon(
+                                      Icons.search,
+                                      color: Colors.grey[700],
+                                    ),
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 0, top: 7),
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    hintText: 'Where would you go?',
                                   ),
-                                  contentPadding:
-                                      const EdgeInsets.only(left: 0, top: 7),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  hintText: 'Where would you go?',
                                 ),
                               ),
                             ),
@@ -392,10 +361,10 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 400,
           width: double.infinity,
           margin: const EdgeInsets.all(10),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 'Select address',
@@ -406,19 +375,18 @@ class _HomePageState extends State<HomePage> {
               ),
               Divider(color: Colors.grey[500], thickness: 1),
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () async {
-                  fromController.text = await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const LocationSearch();
-                      },
-                    ),
-                  );
-                },
-                child: SizedBox(
-                  height: 50,
-                  width: 300,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 30.h),
+                child: GestureDetector(
+                  onTap: () async {
+                    fromController.text = await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const LocationSearch();
+                        },
+                      ),
+                    );
+                  },
                   child: TextField(
                     enabled: false,
                     controller: fromController,
@@ -436,19 +404,18 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 10),
-              GestureDetector(
-                onTap: () async {
-                  toController.text = await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const LocationSearch();
-                      },
-                    ),
-                  );
-                },
-                child: SizedBox(
-                  height: 50,
-                  width: 300,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 27.h),
+                child: GestureDetector(
+                  onTap: () async {
+                    toController.text = await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const LocationSearch();
+                        },
+                      ),
+                    );
+                  },
                   child: TextField(
                     enabled: false,
                     controller: toController,
@@ -465,49 +432,52 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 80),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  if (shareRide) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return AvailableCarsPage(
-                            scheduled: false,
-                            source: fromController.text,
-                            destination: toController.text,
-                          );
-                        },
-                      ),
-                    );
-                  } else {
-                    confirmAddress(
-                      context,
-                      fromController.text,
-                      toController.text,
-                      shareRide,
-                      dateTime,
-                    );
-                  }
-                },
-                child: Container(
-                  height: 45,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(vertical: 15.v).copyWith(top: 20.v),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    if (shareRide) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AvailableCarsPage(
+                              scheduled: false,
+                              source: fromController.text,
+                              destination: toController.text,
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      confirmAddress(
+                        context,
+                        fromController.text,
+                        toController.text,
+                        shareRide,
+                        dateTime,
+                      );
+                    }
+                  },
+                  child: Container(
+                    height: 45,
+                    width: 300,
+                    decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Continue',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                    child: const Center(
+                      child: Text(
+                        'Continue',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -531,7 +501,7 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return BlocListener<PassRideRequestBloc, PassRideRequestState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is PassScheduledRideRequestSuccess) {
               final rideInfo = AcceptedRideRequestModel(
                 userId: "664dadf1f310f773ea5027ef",
@@ -550,23 +520,15 @@ class _HomePageState extends State<HomePage> {
               );
 
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacement(
+              await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return const MainPage();
-                        },
-                      ),
-                    );
-                    return Container();
+                    return const MainPage();
                   },
                 ),
               );
             } else if (state is PassRideRequestSuccess) {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacement(
+              await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) {
                     return LocationScreenConfirmBottomsheet(
@@ -587,10 +549,10 @@ class _HomePageState extends State<HomePage> {
           child: BlocBuilder<PassRideRequestBloc, PassRideRequestState>(
             builder: (context, state) {
               return Container(
-                height: 260,
                 width: double.infinity,
                 margin: const EdgeInsets.all(10),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
                       'Selected address',
@@ -649,99 +611,95 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            final start = await getLocation(fromLocation);
-                            final end = await getLocation(toLocation);
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15.v),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () async {
+                                final start = await getLocation(fromLocation);
+                                final end = await getLocation(toLocation);
 
-                            PassRideRequest rideInfo = PassRideRequest(
-                              startLatitude: start.latitude,
-                              startLongitude: start.longitude,
-                              endLatitude: end.latitude,
-                              endLongitude: end.longitude,
-                              requestTime: DateTime.now().toString(),
-                              status: 'pending',
-                              scheduledTime: scheduledTime.toString(),
-                            );
-
-                            context.read<PassRideRequestBloc>().add(
-                                  CreatePassScheduledRideRequest(
-                                      rideInfo: rideInfo),
+                                PassRideRequest rideInfo = PassRideRequest(
+                                  startLatitude: start.latitude,
+                                  startLongitude: start.longitude,
+                                  endLatitude: end.latitude,
+                                  endLongitude: end.longitude,
+                                  requestTime: DateTime.now().toString(),
+                                  status: 'pending',
+                                  scheduledTime: scheduledTime.toString(),
                                 );
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 280,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
+
+                                context.read<PassRideRequestBloc>().add(
+                                      CreatePassScheduledRideRequest(
+                                          rideInfo: rideInfo),
+                                    );
+                              },
+                              child: Container(
+                                height: 40.v,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                child: Center(
+                                  child:
+                                      state is PassScheduledRideRequestLoading
+                                          ? const CircularProgressIndicator()
+                                          : const Text(
+                                              'Schedule Ride',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                ),
                               ),
                             ),
-                            child: Center(
-                              child: state is PassScheduledRideRequestLoading
-                                  ? const CircularProgressIndicator()
-                                  : const Text(
-                                      'Schedule Ride',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: () async {
-                            final start = await getLocation(fromLocation);
-                            final end = await getLocation(toLocation);
-
-                            PassRideRequest rideInfo = PassRideRequest(
-                              startLatitude: start.latitude,
-                              startLongitude: start.longitude,
-                              endLatitude: end.latitude,
-                              endLongitude: end.longitude,
-                              requestTime: DateTime.now().toString(),
-                              status: 'pending',
-                              scheduledTime: scheduledTime.toString(),
-                            );
-
-                            print(rideInfo);
-                            context
-                                .read<PassRideRequestBloc>()
-                                .add(CreatePassRideRequest(rideInfo: rideInfo));
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 280,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
+                          SizedBox(
+                            width: 14.h,
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                context.read<PassRideRequestBloc>().add(
+                                    CreatePassRideRequest(
+                                        fromLoc: fromLocation,
+                                        toLoc: toLocation));
+                              },
+                              child: Container(
+                                height: 40.v,
+                                width: 280.h,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: state is PassRideRequestLoading
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          'Ride Now',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
                               ),
                             ),
-                            child: Center(
-                              child: state is PassRideRequestLoading
-                                  ? const CircularProgressIndicator()
-                                  : const Text(
-                                      'Ride Now',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
