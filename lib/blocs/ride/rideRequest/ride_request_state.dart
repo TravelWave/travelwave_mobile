@@ -31,6 +31,10 @@ class AcceptRideRequestError extends RideRequestState {
   const AcceptRideRequestError({required this.error});
 }
 
+class AcceptRideRequestSuccess extends RideRequestState {
+  const AcceptRideRequestSuccess();
+}
+
 class GetRidesLoading extends RideRequestState {}
 
 class GetRidesSucess extends RideRequestState {

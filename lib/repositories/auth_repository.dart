@@ -53,6 +53,8 @@ class AuthRepository {
           'password': password,
         },
       );
+      print(response.body);
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
         return {

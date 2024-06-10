@@ -17,8 +17,10 @@ class VehiclesBloc extends Bloc<VehiclesEvent, VehiclesState> {
           final vehicles = await VehicleRepository(
                   token: await localdata.readFromStorage("Token"))
               .getvehicleDriver(event.id);
+
           emit(VehiclesFetchSuccess(vehicle: vehicles));
         } catch (e) {
+          print(e);
           emit(VehiclesFetchError());
         }
       }
@@ -30,7 +32,6 @@ class VehiclesBloc extends Bloc<VehiclesEvent, VehiclesState> {
               .createvehicleDriver(event.vehicle);
           emit(VehiclesFetchSuccess(vehicle: vehicles));
         } catch (e) {
-          print(e);
           emit(VehiclesFetchError());
         }
       }

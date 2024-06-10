@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +12,7 @@ import 'package:travelwave_mobile/screens/referral/index.dart';
 import 'package:travelwave_mobile/screens/settings/index.dart';
 import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/widgets/log_out_dialog.dart';
+import 'package:travelwave_mobile/widgets/res_handle.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -65,14 +67,39 @@ class _SideMenuState extends State<SideMenu> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CircleAvatar(
-                                    radius: 35,
-                                    child: Avatar(
-                                        textStyle: const TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                        name: state.userInfo.fullName,
-                                        shape: AvatarShape.circle(50)),
-                                  ),
+                                  state.userInfo.profilePicture != null
+                                      ? networkImageLoader(
+                                          shape: BoxShape.circle,
+                                          height: 70,
+                                          width: 70,
+                                          url: state.userInfo.profilePicture!,
+                                        )
+                                      : CircleAvatar(
+                                          radius: 35,
+                                          child: Avatar(
+                                              textStyle: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                              name: state.userInfo.fullName,
+                                              shape: AvatarShape.circle(50)),
+                                        ),
+
+                                  // CircleAvatar(
+                                  //   radius: 35,
+                                  //   child: state.userInfo.profilePicture != null
+                                  //       ? networkImageLoader(
+                                  //           shape: BoxShape.circle,
+                                  //           height: 56,
+                                  //           width: 56,
+                                  //           url: state.userInfo.profilePicture!,
+                                  //         )
+                                  //       : Avatar(
+                                  //           textStyle: const TextStyle(
+                                  //               fontSize: 20,
+                                  //               color: Colors.white),
+                                  //           name: state.userInfo.fullName,
+                                  //           shape: AvatarShape.circle(50)),
+                                  // ),
                                   SizedBox(height: 10.v),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(

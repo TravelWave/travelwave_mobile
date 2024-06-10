@@ -1,13 +1,83 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart' as foundation;
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:travelwave_mobile/blocs/messages/message_bloc.dart';
 import 'package:travelwave_mobile/constants.dart';
+import 'package:travelwave_mobile/main.dart';
+import 'package:travelwave_mobile/models/chats.dart';
+import 'package:travelwave_mobile/models/user_info.dart';
+import 'package:travelwave_mobile/services/utils/app_constant.dart';
+import 'package:travelwave_mobile/services/utils/avater.dart';
+import 'package:travelwave_mobile/services/utils/global_https.dart';
 
 import 'package:travelwave_mobile/widgets/custom_icon_button.dart';
 import 'package:travelwave_mobile/widgets/custom_image_view.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
+import 'package:travelwave_mobile/widgets/res_handle.dart';
 
-class MessageScreen extends StatelessWidget {
-  MessageScreen({super.key});
+class MessageScreen extends StatefulWidget {
+  final String recieverId;
+  MessageScreen({super.key, required this.recieverId});
 
+  @override
+  State<MessageScreen> createState() => _MessageScreenState();
+}
+
+io.Socket? socket;
+UserInfo? user;
+
+class _MessageScreenState extends State<MessageScreen> {
   final message = TextEditingController();
+  final _scrollController = ScrollController();
+  bool _emojiShowing = false;
+  List<Chats> chats = [];
+  @override
+  void initState() {
+    initDataWithSocket();
+    super.initState();
+  }
+
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: 1),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void initDataWithSocket() async {
+    final token = await data.readFromStorage("Token");
+    user = UserInfo.fromJson(token);
+    print('${user?.userId} new');
+    print(token);
+    socket = io.io(socketUrl, <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': true,
+    });
+
+    socket?.on('connect', (_) {
+      print('connected');
+    });
+    socket?.emit('joinRoom', user?.userId);
+
+    socket?.on('new message', (data) {
+      BlocProvider.of<MessageBloc>(context)
+          .add(GetMessage(chat: Chats.fromJson(data)));
+    });
+
+    socket?.on('disconnect', (_) {
+      print('disconnected');
+    });
+  }
+
+  // @override
+  // void dispose() {
+  //   socket?.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -16,104 +86,242 @@ class MessageScreen extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: _buildAppbar(context),
-        body: SingleChildScrollView(
-          child: Container(
-            width: double.maxFinite,
-            padding: EdgeInsets.symmetric(
-              horizontal: 15.h,
-              vertical: 23.v,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomImageView(
-                      imagePath: ImageConstant.imgEllipse42,
-                      height: 36.adaptSize,
-                      width: 36.adaptSize,
-                      radius: BorderRadius.circular(
-                        18.h,
-                      ),
-                      margin: EdgeInsets.only(bottom: 18.v),
+        body: BlocBuilder<MessageBloc, MessageState>(
+          builder: (context, state) {
+            if (state is MessageSuccess) {
+              chats = state.chats;
+              if (chats.isEmpty) {
+                return const Center(
+                  child: Text("No chat history"),
+                );
+              }
+              return SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(children: [
+                  Container(
+                    width: double.maxFinite,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15.h,
+                      vertical: 23.v,
                     ),
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        final ismine =
+                            chats[index].senderId?.id == user?.userId;
+
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (!ismine)
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    chats[index].senderId?.profilePic != null
+                                        ? networkImageLoader(
+                                            shape: BoxShape.circle,
+                                            height: 35,
+                                            width: 35,
+                                            url: chats[index]
+                                                .senderId!
+                                                .profilePic!,
+                                          )
+                                        : CircleAvatar(
+                                            radius: 25,
+                                            child: Avatar(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                                name: chats[index]
+                                                    .senderId
+                                                    ?.fullName,
+                                                shape: AvatarShape.circle(50)),
+                                          ),
+                                    // CustomImageView(dssd
+                                    //   imagePath: ImageConstant.imgEllipse42,
+                                    //   height: 36.adaptSize,
+                                    //   width: 36.adaptSize,
+                                    //   radius: BorderRadius.circular(
+                                    //     18.h,
+                                    //   ),
+                                    //   margin: EdgeInsets.only(bottom: 18.v),
+                                    // ),
+                                    SizedBox(
+                                      width: 5.h,
+                                    ),
+                                    Wrap(
+                                        direction: Axis.vertical,
+                                        spacing: 9,
+                                        children: [
+                                          _buildGoodevening(context,
+                                              chats[index].message ?? ""),
+
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 48.h),
+                                            child: Text(
+                                              DateFormat.jm().format(
+                                                  DateTime.parse(
+                                                      chats[index].createdAt ??
+                                                          DateTime.now()
+                                                              .toString())),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
+                                            ),
+                                          ),
+                                          SizedBox(height: 18.v),
+                                          // _buildGoodevening(context,
+                                          //     "Welcome to Car2go Customer \nService"),
+                                        ]),
+                                  ],
+                                ),
+                              if (ismine) ...[
+                                _buildChatone(
+                                  context,
+                                  chats[index].message ?? "",
+                                ),
+                                SizedBox(height: 9.v),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    DateFormat.jm().format(DateTime.parse(
+                                        chats[index].createdAt ??
+                                            DateTime.now().toString())),
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ),
+                                SizedBox(height: 28.v),
+                              ],
+                            ]);
+                      },
+                      itemCount: chats.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                    ),
+
+                    // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     Row(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         CustomImageView(
+                    //           imagePath: ImageConstant.imgEllipse42,
+                    //           height: 36.adaptSize,
+                    //           width: 36.adaptSize,
+                    //           radius: BorderRadius.circular(
+                    //             18.h,
+                    //           ),
+                    //           margin: EdgeInsets.only(bottom: 18.v),
+                    //         ),
+                    //         SizedBox(
+                    //           width: 5.h,
+                    //         ),
+                    //         Wrap(direction: Axis.vertical, spacing: 9, children: [
+                    //           _buildGoodevening(context, "Good Evening!"),
+                    //           _buildGoodevening(context,
+                    //               "Welcome to Car2go Customer \nService"),
+                    //         ]),
+                    //       ],
+                    //     ),
+                    //     SizedBox(height: 9.v),
+                    //     Padding(
+                    //       padding: EdgeInsets.only(left: 48.h),
+                    //       child: Text(
+                    //         "8:29 pm",
+                    //         style: Theme.of(context).textTheme.bodySmall,
+                    //       ),
+                    //     ),
+                    //     SizedBox(height: 28.v),
+                    //     _buildChatone(
+                    //       context,
+                    //     ),
+                    //     SizedBox(height: 9.v),
+                    //     Align(
+                    //       alignment: Alignment.centerRight,
+                    //       child: Text(
+                    //         "8:29 pm",
+                    //         style: Theme.of(context).textTheme.bodySmall,
+                    //       ),
+                    //     ),
+                    //     SizedBox(height: 28.v),
+                    //     Row(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         CustomImageView(
+                    //           imagePath: ImageConstant.imgEllipse42,
+                    //           height: 36.adaptSize,
+                    //           width: 36.adaptSize,
+                    //           radius: BorderRadius.circular(
+                    //             18.h,
+                    //           ),
+                    //           margin: EdgeInsets.only(bottom: 18.v),
+                    //         ),
+                    //         SizedBox(
+                    //           width: 5.h,
+                    //         ),
+                    //         Wrap(direction: Axis.vertical, spacing: 9, children: [
+                    //           _buildGoodevening(context,
+                    //               "Welcome to Car2go Customer \nService"),
+                    //         ]),
+                    //       ],
+                    //     ),
+                    //     SizedBox(height: 9.v),
+                    //     Padding(
+                    //       padding: EdgeInsets.only(left: 47.h),
+                    //       child: Text(
+                    //         "8:29 pm",
+                    //         style: Theme.of(context).textTheme.bodySmall,
+                    //       ),
+                    //     ),
+                    //     SizedBox(height: 28.v),
+                    //     _buildChatone(
+                    //       context,
+                    //     ),
+                    //     SizedBox(height: 7.v),
+                    //     Align(
+                    //       alignment: Alignment.centerRight,
+                    //       child: Text(
+                    //         "Just now",
+                    //         style: Theme.of(context).textTheme.bodySmall,
+                    //       ),
+                    //     ),
+                    //     SizedBox(height: 5.v)
+                    //   ],
+                    // ),
+                  ),
+                  if (_emojiShowing)
                     SizedBox(
-                      width: 5.h,
-                    ),
-                    Wrap(direction: Axis.vertical, spacing: 9, children: [
-                      _buildGoodevening(context, "Good Evening!"),
-                      _buildGoodevening(
-                          context, "Welcome to Car2go Customer \nService"),
-                    ]),
-                  ],
-                ),
-                SizedBox(height: 9.v),
-                Padding(
-                  padding: EdgeInsets.only(left: 48.h),
-                  child: Text(
-                    "8:29 pm",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                SizedBox(height: 28.v),
-                _buildChatone(
-                  context,
-                ),
-                SizedBox(height: 9.v),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "8:29 pm",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                SizedBox(height: 28.v),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomImageView(
-                      imagePath: ImageConstant.imgEllipse42,
-                      height: 36.adaptSize,
-                      width: 36.adaptSize,
-                      radius: BorderRadius.circular(
-                        18.h,
+                      height: 250,
+                      child: EmojiPicker(
+                        textEditingController: message,
+                        scrollController: _scrollController,
+                        config: Config(
+                          height: 256,
+                          checkPlatformCompatibility: true,
+                          emojiViewConfig: EmojiViewConfig(
+                            // Issue: https://github.com/flutter/flutter/issues/28894
+                            emojiSizeMax: 28 *
+                                (foundation.defaultTargetPlatform ==
+                                        TargetPlatform.iOS
+                                    ? 1.2
+                                    : 1.0),
+                          ),
+                          swapCategoryAndBottomBar: false,
+                          skinToneConfig: const SkinToneConfig(),
+                          categoryViewConfig: const CategoryViewConfig(),
+                          bottomActionBarConfig: const BottomActionBarConfig(),
+                        ),
                       ),
-                      margin: EdgeInsets.only(bottom: 18.v),
                     ),
-                    SizedBox(
-                      width: 5.h,
-                    ),
-                    Wrap(direction: Axis.vertical, spacing: 9, children: [
-                      _buildGoodevening(
-                          context, "Welcome to Car2go Customer \nService"),
-                    ]),
-                  ],
-                ),
-                SizedBox(height: 9.v),
-                Padding(
-                  padding: EdgeInsets.only(left: 47.h),
-                  child: Text(
-                    "8:29 pm",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                SizedBox(height: 28.v),
-                _buildChatone(
-                  context,
-                ),
-                SizedBox(height: 7.v),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    "Just now",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-                SizedBox(height: 5.v)
-              ],
-            ),
-          ),
+                ]),
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
         bottomNavigationBar: _buildRowcloseone(context),
       ),
@@ -126,53 +334,27 @@ class MessageScreen extends StatelessWidget {
       scrolledUnderElevation: 0.0,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
-      leadingWidth: 32.h,
-      leading: InkWell(
+      leadingWidth: 150.h,
+      leading: GestureDetector(
         onTap: () {
-          Navigator.of(context);
+          Navigator.pop(context);
         },
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 8.h,
-            top: 16.v,
-            bottom: 15.v,
-          ),
-          child: CustomImageView(
-            imagePath: ImageConstant.imgArrowLeft,
-            height: 24.adaptSize,
-            width: 24.adaptSize,
-            fit: BoxFit.contain,
-          ),
-        ),
-      ),
-      title: Padding(
-        padding: EdgeInsets.only(left: 5.h),
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 1.v,
-                  ),
-                  child: Text("Back",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: PrimaryColors.gray800,
-                          ))),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Padding(
-                  padding: EdgeInsets.only(left: 97.h),
-                  child: Text("Chat",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: PrimaryColors.gray800,
-                          ))),
+            SizedBox(width: 16.h),
+            const Icon(Icons.arrow_back_ios),
+            Expanded(
+              child: Text(
+                "Back",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             )
           ],
         ),
+      ),
+      title: Text(
+        "Chat",
+        style: Theme.of(context).textTheme.titleMedium,
       ),
     );
   }
@@ -205,7 +387,7 @@ class MessageScreen extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildChatone(BuildContext context) {
+  Widget _buildChatone(BuildContext context, String msg) {
     return Container(
       padding: EdgeInsets.only(left: 63.h),
       child: Align(
@@ -222,7 +404,7 @@ class MessageScreen extends StatelessWidget {
             ),
           ),
           child: Text(
-            "Welcome to Car2go Customer Service",
+            msg,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   height: 1.57,
                 ),
@@ -254,12 +436,22 @@ class MessageScreen extends StatelessWidget {
                 hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: PrimaryColors.blueGray100,
                     ),
-                suffixIcon: Container(
-                  margin: EdgeInsets.fromLTRB(30.h, 14.v, 9.h, 14.v),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imgUser,
-                    height: 24.adaptSize,
-                    width: 24.adaptSize,
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _emojiShowing = !_emojiShowing;
+                    });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _scrollToBottom();
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(30.h, 14.v, 9.h, 14.v),
+                    child: CustomImageView(
+                      imagePath: ImageConstant.imgUser,
+                      height: 24.adaptSize,
+                      width: 24.adaptSize,
+                    ),
                   ),
                 ),
                 suffixIconConstraints: BoxConstraints(
@@ -392,10 +584,49 @@ class MessageScreen extends StatelessWidget {
             ),
           ),
           _buildMessage(context),
+          // if (_emojiShowing)
+          //   EmojiPicker(
+          //     textEditingController: message,
+          //     scrollController: _scrollController,
+          //     config: Config(
+          //       height: 256,
+          //       checkPlatformCompatibility: true,
+          //       emojiViewConfig: EmojiViewConfig(
+          //         // Issue: https://github.com/flutter/flutter/issues/28894
+          //         emojiSizeMax: 28 *
+          //             (foundation.defaultTargetPlatform == TargetPlatform.iOS
+          //                 ? 1.2
+          //                 : 1.0),
+          //       ),
+          //       swapCategoryAndBottomBar: false,
+          //       skinToneConfig: const SkinToneConfig(),
+          //       categoryViewConfig: const CategoryViewConfig(),
+          //       bottomActionBarConfig: const BottomActionBarConfig(),
+          //       searchViewConfig: const SearchViewConfig(),
+          //     ),
+          //   ),
           CustomImageView(
             imagePath: ImageConstant.imgTelevisionIndigo100,
             height: 32.adaptSize,
             width: 32.adaptSize,
+            onTap: () {
+              sendMsgToServer(widget.recieverId, message.text);
+              BlocProvider.of<MessageBloc>(context).add(SentMessage(
+                  chat: Chats(
+                message: message.text,
+                createdAt: DateTime.now().toString(),
+                senderId: SenderId(
+                  id: user?.userId,
+                  fullName: user?.fullName,
+                ),
+                receiverId: SenderId(
+                  id: "",
+                  fullName: "Admin",
+                ),
+              )));
+
+              message.clear();
+            },
             margin: EdgeInsets.only(
               left: 7.h,
               top: 6.v,
