@@ -6,6 +6,7 @@ import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/side_menu/index.dart';
 import 'package:travelwave_mobile/services/utils/avater.dart';
 import 'package:travelwave_mobile/widgets/custom_button.dart';
+import 'package:travelwave_mobile/widgets/res_handle.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -64,14 +65,37 @@ class _ProfilePageState extends State<ProfilePage> {
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 24.v),
                             child: Center(
-                              child: CircleAvatar(
-                                radius: 40,
-                                child: Avatar(
-                                    textStyle: const TextStyle(
-                                        fontSize: 20, color: Colors.white),
-                                    name: state.userInfo.fullName,
-                                    shape: AvatarShape.circle(50)),
-                              ),
+                              child: state.userInfo.profilePicture != null
+                                  ? networkImageLoader(
+                                      shape: BoxShape.circle,
+                                      height: 70,
+                                      width: 70,
+                                      url: state.userInfo.profilePicture!,
+                                    )
+                                  : CircleAvatar(
+                                      radius: 40,
+                                      child: Avatar(
+                                          textStyle: const TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),
+                                          name: state.userInfo.fullName,
+                                          shape: AvatarShape.circle(50)),
+                                    ),
+                              //  CircleAvatar(
+                              //   radius: 40,
+                              //   child: state.userInfo.profilePicture != null
+                              //       ? networkImageLoader(
+                              //           shape: BoxShape.circle,
+                              //           height: 56,
+                              //           width: 56,
+                              //           url: state.userInfo.profilePicture!,
+                              //         )
+                              //       : Avatar(
+                              //           textStyle: const TextStyle(
+                              //               fontSize: 20, color: Colors.white),
+                              //           name: state.userInfo.fullName,
+                              //           shape: AvatarShape.circle(50)),
+                              // ),
                             ),
                           ),
                           Center(

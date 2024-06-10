@@ -1,4 +1,5 @@
 import 'package:geocoding/geocoding.dart';
+import 'package:latlong2/latlong.dart';
 
 Future<String> getLocationFromCoordinates(
     double latitude, double longitude) async {
@@ -6,7 +7,8 @@ Future<String> getLocationFromCoordinates(
     List<Placemark> placemarks =
         await placemarkFromCoordinates(latitude, longitude);
     Placemark place = placemarks.first;
-    String location = '${place.street}, ${place.locality}, ${place.country}';
+    String location =
+        "${place.name} ${place.subLocality} ${place.locality}, ${place.country}";
     return location;
   } catch (e) {
     print('Error: $e');
@@ -35,4 +37,38 @@ String getRelativeTimeString(String timestamp) {
     int years = (difference.inDays / 365).floor();
     return "$years year${years > 1 ? 's' : ''} ago";
   }
+}
+
+List<LatLng> decodePolyline(String encoded) {
+  List<LatLng> poly = [];
+  int index = 0;
+  int lat = 0;
+  int lng = 0;
+
+  while (index < encoded.length) {
+    int b;
+    int shift = 0;
+    int result = 0;
+    do {
+      b = encoded.codeUnitAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    int dlat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+    lat += dlat;
+
+    shift = 0;
+    result = 0;
+    do {
+      b = encoded.codeUnitAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    int dlng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+    lng += dlng;
+
+    // List<double> latlng = [lat * 1e-5, lng * 1e-5];
+    poly.add(LatLng(lat * 1e-5, lng * 1e-5));
+  }
+  return poly;
 }

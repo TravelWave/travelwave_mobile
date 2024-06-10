@@ -32,7 +32,9 @@ class RideRequestRepository {
   }
 
   Future<List<RideRequest>> getRideRequests() async {
-    final url = Uri.parse(_baseUrl);
+    final url = Uri.parse(
+        "https://travelwave-backend.onrender.com/v1/ride-requests/scheduled");
+    // final url = Uri.parse(_baseUrl);
     print(_baseUrl);
 
     try {
@@ -44,6 +46,7 @@ class RideRequestRepository {
       );
 
       if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
         return RideRequest.fromJsonList(jsonDecode(response.body));
 
         // Feedback submitted successfully
@@ -54,8 +57,10 @@ class RideRequestRepository {
     }
   }
 
-  Future<bool> createRideRequest(RideRequest ridebody) async {
-    final url = Uri.parse('$_baseUrl/createOneRideRequest/');
+
+  Future<Map> createRideRequest(RideRequest ridebody) async {
+    final url = Uri.parse(_baseUrl);
+ 
 
     try {
       final response = await http.post(
@@ -67,16 +72,22 @@ class RideRequestRepository {
       );
 
       if (response.statusCode == 200) {
-        return true;
+        return {
+          "message": jsonDecode(response.body)["message"],
+          "status": "success"
+        };
         // Feedback submitted successfully
       }
-      return false;
+      return {
+        "message": jsonDecode(response.body)["message"],
+        "status": "error"
+      };
     } catch (e) {
       throw Exception('Failed to create Ride Request: $e');
     }
   }
 
-  Future<bool> cancelRideRequest(String id) async {
+  Future<Map> cancelRideRequest(String id) async {
     final url = Uri.parse(_baseUrl + id);
 
     try {
@@ -87,11 +98,18 @@ class RideRequestRepository {
         },
       );
 
-      if (response.statusCode == 200) {
-        return true;
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return {
+          "data": RideRequest.fromJson(jsonDecode(response.body), null),
+          // "message": jsonDecode(response.body)["message"],
+          "status": "success"
+        };
         // Feedback submitted successfully
       }
-      throw Exception('Failed to get ride info');
+      return {
+        "message": jsonDecode(response.body)["message"],
+        "status": "error"
+      };
     } catch (e) {
       throw Exception('Failed to  get ride info: $e');
     }
@@ -108,9 +126,13 @@ class RideRequestRepository {
         },
       );
       print(response.body);
-      if (response.statusCode == 201) {
+      print(response.statusCode);
+      if (response.statusCode == 201 || response.statusCode == 200) {
         return {
-          "message": jsonDecode(response.body)["message"],
+          "data": RideRequest.fromJson(
+              jsonDecode(response.body)["updatedRideRequest"],
+              jsonDecode(response.body)['ride']),
+          // "message": jsonDecode(response.body)["message"],
           "status": "success"
         };
         // Feedback submitted successfully
@@ -125,7 +147,7 @@ class RideRequestRepository {
     }
   }
 
-  Future<bool> acceptRideRequestScheduled(String id) async {
+  Future<Map> acceptRideRequestScheduled(String id) async {
     final url = Uri.parse("$_baseUrl/$id/accept/scheduled/");
 
     try {
@@ -135,19 +157,27 @@ class RideRequestRepository {
           'Authorization': 'Bearer $token',
         },
       );
-
-      if (response.statusCode == 201) {
-        return true;
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return {
+          "data": RideRequest.fromJson(
+              jsonDecode(response.body)["updatedRideRequest"],
+              jsonDecode(response.body)["ride"]),
+          "status": "success"
+        };
         // Feedback submitted successfully
       }
-      throw Exception('Failed to accept ride requset');
+      return {
+        "message": jsonDecode(response.body)["message"],
+        "status": "error"
+      };
     } catch (e) {
       throw Exception('Failed to accept ride requset: $e');
     }
   }
 
-  Future<bool> acceptPooledRideRequest(
-      String rideId, String passengerId) async {
+  Future<Map> acceptPooledRideRequest(String rideId, String passengerId) async {
     final url = Uri.parse("$_baseUrl/accept-join-request/");
 
     try {
@@ -158,12 +188,21 @@ class RideRequestRepository {
           'Authorization': 'Bearer $token',
         },
       );
-
-      if (response.statusCode == 200) {
-        return true;
+      print(response.body);
+      print(response.statusCode);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return {
+          "data": RideRequest.fromJson(jsonDecode(response.body)["ride"],
+              jsonDecode(response.body)["ride"]),
+          "status": "success"
+        };
         // Feedback submitted successfully
       }
-      throw Exception('Failed to accept ride requset');
+
+      return {
+        "message": jsonDecode(response.body)["message"],
+        "status": "error"
+      };
     } catch (e) {
       throw Exception('Failed to accept ride requset: $e');
     }

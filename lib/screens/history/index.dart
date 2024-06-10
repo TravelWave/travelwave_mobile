@@ -1,13 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travelwave_mobile/blocs/ride/ridehistory/ride_history_bloc.dart';
 
 import 'package:travelwave_mobile/constants.dart';
 import 'package:travelwave_mobile/screens/history/widget/filter_list_tile.dart';
 import 'package:travelwave_mobile/screens/history/widget/history_filter.dart';
+import 'package:travelwave_mobile/widgets/res_handle.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key});
+  final String userId;
+  const HistoryScreen({super.key, required this.userId});
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -78,22 +82,44 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          HistoryFilter(
-            shuffle: shuffleList,
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return FilterList(
-                  item: items[index],
-                );
-              },
-            ),
-          ),
-        ],
+      body: BlocBuilder<RideHistoryBloc, RideHistoryState>(
+        builder: (context, state) {
+          print(state);
+          if (state is RideHistorySuccess) {
+            if (state.rideHistory.isEmpty) {
+              return emptyWidget(
+                msg:
+                    "No Completed Ride History Found, Try Our System and Enjoy the flexible Ride option available",
+                icon: Icons.history,
+                retry: () {
+                  BlocProvider.of<RideHistoryBloc>(context)
+                      .add(FetchRideHistory(id: widget.userId));
+                },
+              );
+            }
+            return Column(
+              children: [
+                // HistoryFilter(
+                //   shuffle: shuffleList,
+                // ),
+                Text("Completed Ride History"),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.rideHistory.length,
+                    itemBuilder: (context, index) {
+                      return FilterList(
+                        item: items[index],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }

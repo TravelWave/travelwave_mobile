@@ -20,11 +20,13 @@ import 'package:travelwave_mobile/widgets/custom_image_view.dart';
 // ignore_for_file: must_be_immutable
 
 class LocationScreenConfirmBottomsheet extends StatefulWidget {
+ 
   final AcceptedRideRequestModel message;
   const LocationScreenConfirmBottomsheet({
     super.key,
     required this.message,
   });
+
 
   @override
   State<LocationScreenConfirmBottomsheet> createState() =>
@@ -382,7 +384,9 @@ class _LocationScreenConfirmBottomsheetState
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
-                    return MessageScreen();
+                    return MessageScreen(
+                      recieverId: "",
+                    );
                   },
                 ));
               },

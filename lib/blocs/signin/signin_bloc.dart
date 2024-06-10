@@ -15,7 +15,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
         final res =
             await AuthRepository.loginUser(event.phoneNumber, event.password);
-        ;
+
+        print(res);
         if (res['status'] == 'error') {
           emit(SignInFailure(message: res['message']));
           return;

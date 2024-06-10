@@ -239,6 +239,8 @@ class ImageConstant {
   static String imglogout = '$imagePath/Logout.png';
   static String imgsetting = '$imagePath/Settings.png';
   static String imgsupport = '$imagePath/support.png';
+  static String imgride = 'assets/ride.png';
+  static String imgwatch = 'assets/image.png';
 
   static String imgTelevisionIndigo100 =
       '$imagePath/img_television_indigo_100.svg';
